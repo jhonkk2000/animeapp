@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">ANIMEAPP</string>
+
+    <string name="welcome">Bienvenido</string>
+    <string name="second_welcome">Tu lugar para ver tus series</string>
+
+    <string name="iniciar_sesion">Iniciar Sesión</string>
+    <string name="registrarte">Registrarte</string>
+
+    <string name="volviste">Volviste!</string>
+    <string name="correo_electronico">Correo electronico</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="olvidaste_tu">Olvidaste tu contraseña?</string>
+    <string name="recuperala">Recuperala</string>
+    <string name="o">O</string>
+
+    <string name="unete">Unete!</string>
+    <string name="repetir_c">Repetir contraseña</string>
+
+    <string name="ya_casi">Ya casi esta listo!</string>
+    <string name="nombre_de">Nombre de usuario</string>
+    <string name="fecha_nac">Fecha de nacimiento</string>
+    <string name="terminar_registro">Terminar registro</string>
+    <string name="volver">Volver</string>
+</resources>
