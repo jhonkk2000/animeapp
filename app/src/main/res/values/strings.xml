@@ -22,4 +22,7 @@
     <string name="fecha_nac">Fecha de nacimiento</string>
     <string name="terminar_registro">Terminar registro</string>
     <string name="volver">Volver</string>
+
+    <string name="recuperar">Recuperar</string>
+    <string name="enviar_solicitud">Enviar solicitud</string>
 </resources>

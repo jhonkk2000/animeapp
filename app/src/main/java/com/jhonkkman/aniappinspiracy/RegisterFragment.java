@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 public class RegisterFragment extends Fragment {
 
-    private AppCompatButton btn_register;
+    private AppCompatButton btn_register,btn_login;
     private NavController nav;
 
     @Override
@@ -23,8 +23,10 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         btn_register = view.findViewById(R.id.btn_register_register);
+        btn_login = view.findViewById(R.id.btn_login_register);
 
         onRegister();
+        onLogin();
 
         return view;
     }
@@ -34,6 +36,15 @@ public class RegisterFragment extends Fragment {
         nav = Navigation.findNavController(view);
     }
 
+    public void onLogin(){
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nav.navigate(R.id.action_registerFragment_to_loginFragment);
+                //closeFragment();
+            }
+        });
+    }
 
     public void onRegister(){
         btn_register.setOnClickListener(new View.OnClickListener() {
@@ -43,4 +54,11 @@ public class RegisterFragment extends Fragment {
             }
         });
     }
+
+    public void closeFragment(){
+        getActivity().getSupportFragmentManager().beginTransaction().hide(this).commit();
+
+    }
+
+
 }
