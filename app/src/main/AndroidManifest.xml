@@ -11,7 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aniappinspiracy">
-        <activity android:name=".SelectActivity"></activity>
+        <activity
+            android:name=".CenterActivity"
+            android:label="@string/title_activity_center"
+            android:theme="@style/Theme.Aniappinspiracy.NoActionBar"></activity>
+        <activity android:name=".GenFavActivity" />
+        <activity android:name=".AnimeFavActivity" />
         <activity android:name=".FormActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

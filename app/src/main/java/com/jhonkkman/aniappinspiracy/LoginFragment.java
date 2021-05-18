@@ -45,7 +45,7 @@ public class LoginFragment extends Fragment {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(),SelectActivity.class));
+                startActivity(new Intent(getContext(), AnimeFavActivity.class));
             }
         });
     }

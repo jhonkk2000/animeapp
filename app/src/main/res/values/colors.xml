@@ -14,4 +14,6 @@
     <color name="background_edittext">#F5F5F5</color>
     <color name="green_text">#009805</color>
     <color name="green_background">#57DC3D</color>
+    <color name="green_transparency">#9957DC3D</color>
+    <color name="transparency">#00FFFFFF</color>
 </resources>

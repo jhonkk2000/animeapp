@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,FormActivity.class));
+                startActivity(new Intent(MainActivity.this,FormActivity.class).putExtra("register",true));
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
