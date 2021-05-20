@@ -48,4 +48,41 @@
     <string name="menu_config">Configuracion</string>
     <string name="menu_acerca">Acerca de</string>
     <string name="username">Nombre de usuario</string>
+
+    <string name="season_anime">Invierno 2021</string>
+    <string name="continuar">Continuar viendo</string>
+    <string name="recomendaciones">Recomendaciones</string>
+    <string name="nombre_de_anime">Nombre de anime</string>
+    <string name="mejor_coincidencia">Mejor coincidencia</string>
+    <string name="mas_resultados">Mas resultados</string>
+    <string name="sypnosis">Sypnosis: Every day, Naoto Hachiouji is teased relentlessly by Hayase Nagatoro, a first year student he meets one day in the library while working on his manga.After reading his story and seeing his awkward de…</string>
+    <string name="en_emision">En emision</string>
+    <string name="fecha_estreno">Fecha de estreno: 12/05/2021</string>
+    <string name="serie_tv">Serie TV</string>
+    <string name="estrellas">10.00</string>
+
+    <string name="todos">Todos</string>
+    <string name="serie">Series</string>
+    <string name="peliculas">Peliculas</string>
+    <string name="ovas">Ovas</string>
+    <string name="diez">10</string>
+
+    <string-array name="letra">
+        <item>Letra</item>
+    </string-array>
+    <string-array name="categoria">
+        <item>Categoria</item>
+    </string-array>
+    <string-array name="tipo">
+        <item>Tipo</item>
+    </string-array>
+    <string-array name="rating">
+        <item>Rating</item>
+    </string-array>
+    <string-array name="genero">
+        <item>Genero</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

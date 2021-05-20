@@ -16,6 +16,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:navigationBarColor">@color/dark_red</item>
         <item name="drawableNavigationItemBackground">@drawable/menu_background_color_state</item>
+        <item name="listPreferredItemHeightSmall">50dp</item>
     </style>
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
@@ -25,12 +26,24 @@
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
+    <style name="SpinnerTheme" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/gray_text_hint</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="Widget.Custom.NavigationView" parent="Widget.Design.NavigationView">
         <item name="itemBackground">?attr/drawableNavigationItemBackground</item>
     </style>
+    <style name="TabItemCustom" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
     <style name="NavigationViewStyle">
-        <item name="android:textSize">20sp</item> <!-- menu item text size-->
+        <item name="android:textSize">18sp</item> <!-- menu item text size-->
         <item name="android:listPreferredItemHeightSmall">40dp</item><!-- menu item height-->
         <item name="android:textStyle">bold</item>
     </style>
