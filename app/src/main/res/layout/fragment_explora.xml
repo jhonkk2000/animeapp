@@ -136,13 +136,15 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_best_anime"
                         android:layout_width="130dp"
                         android:layout_height="180dp"
                         android:focusable="true"
                         android:clickable="true"
                         app:cardCornerRadius="15dp"
                         app:strokeColor="@color/dark_red"
-                        app:strokeWidth="4dp">
+                        app:strokeWidth="4dp"
+                        android:transitionName="anime_image">
 
                         <ImageView
                             android:layout_width="match_parent"

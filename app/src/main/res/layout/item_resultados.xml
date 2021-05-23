@@ -7,15 +7,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:gravity="center"
-            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="120dp"
@@ -23,6 +18,7 @@
                 android:focusable="true"
                 android:clickable="true"
                 app:strokeColor="@color/dark_red"
+                android:layout_marginRight="5dp"
                 app:strokeWidth="2dp"
                 app:cardCornerRadius="15dp">
 
@@ -32,31 +28,17 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ijiranaide_nagatoro_san"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.0"
-                    android:src="@drawable/ic_check"
-                    android:layout_gravity="center"/>
 
             </com.google.android.material.card.MaterialCardView>
 
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="0.3"
-            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="120dp"
                 android:layout_height="170dp"
                 android:clickable="true"
                 app:strokeColor="@color/dark_red"
+                android:layout_marginRight="5dp"
                 app:strokeWidth="2dp"
                 app:cardCornerRadius="15dp"
                 android:focusable="true">
@@ -67,24 +49,10 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ijiranaide_nagatoro_san"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.0"
-                    android:src="@drawable/ic_check"
-                    android:layout_gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
 
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="0.3"
-            android:layout_marginLeft="5dp"
-            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="120dp"
@@ -101,15 +69,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ijiranaide_nagatoro_san"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.0"
-                    android:src="@drawable/ic_check"
-                    android:layout_gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
-
-    </LinearLayout>
 
 </RelativeLayout>

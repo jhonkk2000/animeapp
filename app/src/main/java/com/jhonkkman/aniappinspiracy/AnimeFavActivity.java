@@ -2,15 +2,12 @@ package com.jhonkkman.aniappinspiracy;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
-import com.jhonkkman.aniappinspiracy.data.AdapterAni;
 
 public class AnimeFavActivity extends AppCompatActivity {
 

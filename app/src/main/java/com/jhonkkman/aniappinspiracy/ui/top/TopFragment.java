@@ -10,14 +10,17 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.jhonkkman.aniappinspiracy.AdapterPagerTop;
+import com.jhonkkman.aniappinspiracy.AdapterPager;
 import com.jhonkkman.aniappinspiracy.R;
+import com.jhonkkman.aniappinspiracy.TodosFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TopFragment extends Fragment {
 
     private TabLayout tabs;
     private ViewPager vp_top;
-    private ViewPager vp_top1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,8 +42,12 @@ public class TopFragment extends Fragment {
     }
 
     public void loadFragments(){
-        AdapterPagerTop adapterPagerTop = new AdapterPagerTop(getActivity().getSupportFragmentManager(),tabs.getTabCount());
-        vp_top.setAdapter(adapterPagerTop);
+        List<Fragment> fragments = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            fragments.add(new TodosFragment());
+        }
+        AdapterPager adapterPager = new AdapterPager(getActivity().getSupportFragmentManager(),tabs.getTabCount(),fragments);
+        vp_top.setAdapter(adapterPager);
         vp_top.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
         tabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_top));
 

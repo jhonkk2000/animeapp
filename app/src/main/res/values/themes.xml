@@ -17,6 +17,7 @@
         <item name="android:navigationBarColor">@color/dark_red</item>
         <item name="drawableNavigationItemBackground">@drawable/menu_background_color_state</item>
         <item name="listPreferredItemHeightSmall">50dp</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
