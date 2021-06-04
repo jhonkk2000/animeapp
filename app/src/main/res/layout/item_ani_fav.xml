@@ -28,6 +28,7 @@
                 app:cardCornerRadius="15dp">
 
                 <ImageView
+                    android:id="@+id/iv_anime_top1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -46,9 +47,12 @@
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_anime_fav_1"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/cual_es_tu_anime_fav"
+                android:textSize="12sp"
+                android:gravity="center"
                 android:textColor="@color/gray_text"
                 android:textStyle="bold"/>
 
@@ -70,6 +74,7 @@
                 android:focusable="true">
 
                 <ImageView
+                    android:id="@+id/iv_anime_top2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -85,9 +90,12 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_anime_fav_2"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/cual_es_tu_anime_fav"
+                android:gravity="center"
+                android:textSize="12sp"
                 android:textColor="@color/gray_text"
                 android:textStyle="bold"/>
 

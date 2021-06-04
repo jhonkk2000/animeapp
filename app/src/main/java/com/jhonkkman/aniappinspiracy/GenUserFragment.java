@@ -10,6 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GenUserFragment extends Fragment {
 
@@ -27,8 +32,9 @@ public class GenUserFragment extends Fragment {
         return view;
     }
     public void loadGen(){
+        List<GeneroItem> generoItems = new ArrayList<>();
         lym = new LinearLayoutManager(getContext());
-        adapter = new AdapterGen();
+        adapter = new AdapterGen(generoItems);
         rv_gen.setLayoutManager(lym);
         rv_gen.setAdapter(adapter);
     }

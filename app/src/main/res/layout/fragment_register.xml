@@ -20,17 +20,20 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/et_correo_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/correo_electronico"
+            android:textColorHint="@color/gray_text_hint"
             android:background="@drawable/background_edittext"
             android:paddingLeft="25dp"
             android:textStyle="bold"
             android:inputType="textEmailAddress"
             android:layout_marginTop="25dp"
-            android:textColor="@color/gray_text_hint"/>
+            android:textColor="@color/gray_text"/>
 
         <EditText
+            android:id="@+id/et_contra_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/contrasena"
@@ -38,10 +41,12 @@
             android:paddingLeft="25dp"
             android:textStyle="bold"
             android:inputType="textPassword"
+            android:textColorHint="@color/gray_text_hint"
             android:layout_marginTop="20dp"
-            android:textColor="@color/gray_text_hint"/>
+            android:textColor="@color/gray_text"/>
 
         <EditText
+            android:id="@+id/et_recontra_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/repetir_c"
@@ -50,7 +55,8 @@
             android:inputType="textPassword"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            android:textColor="@color/gray_text_hint"/>
+            android:textColorHint="@color/gray_text_hint"
+            android:textColor="@color/gray_text"/>
 
         <LinearLayout
             android:layout_width="match_parent"

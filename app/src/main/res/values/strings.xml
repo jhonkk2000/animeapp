@@ -19,7 +19,7 @@
 
     <string name="ya_casi">Ya casi esta listo!</string>
     <string name="nombre_de">Nombre de usuario</string>
-    <string name="fecha_nac">Fecha de nacimiento</string>
+    <string name="fecha_nac">Confirmo ser mayor de 16 años</string>
     <string name="terminar_registro">Terminar registro</string>
     <string name="volver">Volver</string>
 
@@ -92,27 +92,76 @@
     <string name="comentarios">Comentarios</string>
     <string name="numero_likes">12345</string>
     <string name="escribe_un">Escribe un comentario…</string>
+    <string name="cargando">Registrando nuevo usuario</string>
+    <string name="recover_cargando">Procesando solicitud</string>
 
     <string name="comentario">Comentario acerca de la serie que tal te parecio, recomendaciones a otrasseries, y todo lo que te alcance con 150 caracteres, mas nada porque si no me</string>
 
     <string-array name="letra">
         <item>Letra</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+        <item>F</item>
+        <item>G</item>
+        <item>H</item>
+        <item>I</item>
+        <item>J</item>
+        <item>K</item>
+        <item>L</item>
+        <item>M</item>
+        <item>N</item>
+        <item>O</item>
+        <item>P</item>
+        <item>Q</item>
+        <item>R</item>
+        <item>S</item>
+        <item>T</item>
+        <item>U</item>
+        <item>V</item>
+        <item>W</item>
+        <item>X</item>
+        <item>Y</item>
+        <item>Z</item>
     </string-array>
     <string-array name="categoria">
         <item>Categoria</item>
+        <item>Todas la edades</item>
+        <item>Niños</item>
+        <item>Mayores de 13 años</item>
+        <item>Mayores de 17 años</item>
     </string-array>
     <string-array name="tipo">
         <item>Tipo</item>
+        <item>TV</item>
+        <item>OVA</item>
+        <item>Movie</item>
+        <item>Special</item>
+        <item>Ona</item>
+        <item>Music</item>
     </string-array>
     <string-array name="rating">
         <item>Rating</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
     </string-array>
     <string-array name="genero">
         <item>Genero</item>
     </string-array>
 
     <string-array name="comentario_mas">
-        <item>Comentario mas relevante</item>
+        <item>Comentarios recientes</item>
+        <item>Comentarios mas relevante</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

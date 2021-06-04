@@ -1,27 +1,20 @@
 package com.jhonkkman.aniappinspiracy;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
-import com.jhonkkman.aniappinspiracy.data.models.AnimeTopResource;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-
-import static com.jhonkkman.aniappinspiracy.data.api.ApiClientData.getClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppCompatButton btn_register,btn_login;
+    public static Activity activityMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +22,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         btn_register = findViewById(R.id.btn_register_main);
         btn_login = findViewById(R.id.btn_login_main);
+        activityMain = this;
         onRegister();
         onLogin();
+        verifySession();
     }
 
     public void onRegister(){
@@ -41,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
+    }
+
+    public void verifySession(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            startActivity(new Intent(this,CenterActivity.class));
+            //startActivity(new Intent(this,AnimeFavActivity.class));
+            finish();
+        }
     }
 
     public void onLogin(){

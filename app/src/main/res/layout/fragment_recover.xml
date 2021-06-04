@@ -20,15 +20,17 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/et_correo_recover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/correo_electronico"
+            android:textColorHint="@color/gray_text_hint"
             android:background="@drawable/background_edittext"
             android:paddingLeft="25dp"
             android:inputType="textEmailAddress"
             android:textStyle="bold"
             android:layout_marginTop="25dp"
-            android:textColor="@color/gray_text_hint"/>
+            android:textColor="@color/gray_text"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_send_recover"

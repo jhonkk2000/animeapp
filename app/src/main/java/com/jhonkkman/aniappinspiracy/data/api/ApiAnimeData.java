@@ -1,22 +1,39 @@
 package com.jhonkkman.aniappinspiracy.data.api;
 
+import com.jhonkkman.aniappinspiracy.data.models.AnimeGenResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeSearchRequest;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeTopResource;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeTopSeasonResource;
+import com.jhonkkman.aniappinspiracy.data.models.GaleriaResource;
+import com.jhonkkman.aniappinspiracy.data.models.PersonajesResource;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiAnimeData {
 
-    @GET("anime/42361")
-    Call<AnimeResource> getAnime();
+    @GET("genre/anime/{id}")
+    Call<AnimeGenResource> getGeneroAnime(@Path("id")int id);
 
-    @GET("season/2021/winter")
-    Call<AnimeTopResource> getAnimeTop();
+    @GET("anime/{id}")
+    Call<AnimeResource> getAnime(@Path("id")int id);
+
+    @GET("anime/{id}/characters_staff")
+    Call<PersonajesResource> getPersonajes(@Path("id")int id);
+
+    @GET("anime/{id}/pictures")
+    Call<GaleriaResource> getGaleria(@Path("id")int id);
+
+    @GET("season/{year}/{season}")
+    Call<AnimeTopSeasonResource> getAnimeTopSeason(@Path("year") int year,@Path("season") String season);
 
     @GET("search/anime")
     Call<AnimeSearchRequest> getAnimeSearch(@Query("q") String name,@Query("page") int page);
+
+    @GET("top/anime")
+    Call<AnimeTopResource> getAnimeTop();
 
 }

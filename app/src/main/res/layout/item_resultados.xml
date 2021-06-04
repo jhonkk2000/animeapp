@@ -13,6 +13,7 @@
 
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_resultado_1"
                 android:layout_width="120dp"
                 android:layout_height="170dp"
                 android:focusable="true"
@@ -23,6 +24,7 @@
                 app:cardCornerRadius="15dp">
 
                 <ImageView
+                    android:id="@+id/iv_resultado_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -34,6 +36,7 @@
 
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_resultado_2"
                 android:layout_width="120dp"
                 android:layout_height="170dp"
                 android:clickable="true"
@@ -44,6 +47,7 @@
                 android:focusable="true">
 
                 <ImageView
+                    android:id="@+id/iv_resultado_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -55,6 +59,7 @@
 
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_resultado_3"
                 android:layout_width="120dp"
                 android:clickable="true"
                 android:layout_height="170dp"
@@ -64,6 +69,7 @@
                 android:focusable="true">
 
                 <ImageView
+                    android:id="@+id/iv_resultado_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"

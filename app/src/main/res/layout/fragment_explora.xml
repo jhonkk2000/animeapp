@@ -28,6 +28,7 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/et_nombre_anime"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:background="@drawable/background_edittext"
@@ -38,6 +39,7 @@
                     android:hint="@string/nombre_de_anime" />
 
                 <ImageButton
+                    android:id="@+id/btn_buscar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_explorar_icon"
@@ -51,6 +53,7 @@
                 android:orientation="horizontal">
 
                 <Spinner
+                    android:id="@+id/sp_letra"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:entries="@array/letra"
@@ -60,6 +63,7 @@
                     android:background="@drawable/spinner_background"
                     android:theme="@style/SpinnerTheme"/>
                 <Spinner
+                    android:id="@+id/sp_categoria"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="0.5"
@@ -71,6 +75,7 @@
                     android:theme="@style/SpinnerTheme"/>
 
                 <Spinner
+                    android:id="@+id/sp_tipo"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="0.3"
@@ -89,6 +94,7 @@
                 android:orientation="horizontal">
 
                 <Spinner
+                    android:id="@+id/sp_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:entries="@array/rating"
@@ -98,6 +104,7 @@
                     android:background="@drawable/spinner_background"
                     android:theme="@style/SpinnerTheme"/>
                 <Spinner
+                    android:id="@+id/sp_generos"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="0.9"

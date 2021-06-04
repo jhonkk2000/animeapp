@@ -24,14 +24,14 @@ public class PerfilFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
         rv_change_img = view.findViewById(R.id.rv_change_img);
-        loadImg();
+        //loadImg();
 
         return view;
     }
 
     public void loadImg(){
         lym = new LinearLayoutManager(getContext());
-        adapter = new AdapterResultados();
+        //adapter = new AdapterResultados();
         rv_change_img.setLayoutManager(lym);
         rv_change_img.setAdapter(adapter);
     }

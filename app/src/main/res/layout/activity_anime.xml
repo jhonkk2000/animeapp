@@ -20,15 +20,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:id="@+id/yt_trailer"
                     android:layout_width="match_parent"
                     android:layout_height="240dp"
                     app:autoPlay="false"
-                    app:showYouTubeButton="false"
+                    app:showYouTubeButton="true"
                     app:showSeekBar="false"
                     app:showFullScreenButton="false"
                     app:showVideoCurrentTime="false"
-                    app:showVideoDuration="false"
-                    app:videoId="Bw5jwgdbqKc">
+                    app:showVideoDuration="false">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -39,6 +39,7 @@
                         android:layout_marginBottom="10dp">
 
                         <TextView
+                            android:id="@+id/tv_title_anime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
@@ -46,6 +47,7 @@
                             android:textStyle="bold"/>
 
                         <TextView
+                            android:id="@+id/tv_year_anime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
@@ -53,6 +55,7 @@
                             android:textStyle="bold"/>
 
                         <TextView
+                            android:id="@+id/tv_generos_anime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
@@ -84,6 +87,7 @@
                             android:layout_marginTop="5dp">
 
                             <TextView
+                                android:id="@+id/tv_finalizado"
                                 android:layout_width="110dp"
                                 android:layout_height="wrap_content"
                                 android:text="@string/finalizar"
@@ -98,6 +102,7 @@
                                 android:paddingBottom="5dp"/>
 
                             <TextView
+                                android:id="@+id/tv_en_emision"
                                 android:layout_width="110dp"
                                 android:layout_height="wrap_content"
                                 android:text="@string/en_emision"
@@ -110,8 +115,6 @@
                                 android:textStyle="bold"
                                 android:paddingTop="5dp"
                                 android:paddingBottom="5dp"/>
-
-
 
                         </FrameLayout>
 
@@ -127,6 +130,7 @@
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/ic_estrella_icon"/>
                             <TextView
+                                android:id="@+id/tv_stars_anime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/estrellas"
@@ -169,6 +173,7 @@
                 app:strokeWidth="4dp">
 
                 <ImageView
+                    android:id="@+id/iv_anime"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -187,10 +192,30 @@
             app:tabTextAppearance="@style/TabItemCustom"
             app:tabMode="scrollable"/>
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/vp_anime"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/sm_anime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp">
+
+               <include layout="@layout/shimmer_descripcion"/>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp_anime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+
+        </FrameLayout>
+
 
     </LinearLayout>
 

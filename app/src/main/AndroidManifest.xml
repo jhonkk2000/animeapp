@@ -21,6 +21,7 @@
 
         </activity>
         <activity
+            android:windowSoftInputMode="adjustResize"
             android:name=".CenterActivity"
             android:label="@string/title_activity_center"
             android:theme="@style/Theme.Aniappinspiracy.NoActionBar" />

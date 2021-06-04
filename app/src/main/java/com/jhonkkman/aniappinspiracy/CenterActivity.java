@@ -1,9 +1,26 @@
 package com.jhonkkman.aniappinspiracy;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
+import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
+import com.jhonkkman.aniappinspiracy.data.models.User;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -12,9 +29,25 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class CenterActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static List<GeneroItem> generos = new ArrayList<>();
+    private DatabaseReference dbr;
+    private SharedPreferences pref;
+    private User user = new User();
+    private TextView tv_nombreu;
+    private ImageView iv_user;
+    private NavigationView navigationView;
+    public static ArrayList<AnimeItem> animesI = new ArrayList<>();
+    public static ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
+    public static List<GeneroItem> generosG = new ArrayList<>();
+    public static List<AnimeItem> animeItems = new ArrayList<>();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +56,80 @@ public class CenterActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
+        dbr = FirebaseDatabase.getInstance().getReference();
+        pref = getSharedPreferences("user",MODE_PRIVATE);
+        loadUser();
+        updateUserLocal();
+        loadGen();
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_inicio, R.id.nav_explora, R.id.nav_top,R.id.nav_fav,R.id.nav_perfil,R.id.nav_comunidad,R.id.nav_configuracion,R.id.nav_acerca_de)
-                .setDrawerLayout(drawer)
+                .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
+
+    public void loadDataNav(){
+        View view = navigationView.getHeaderView(0);
+        iv_user = view.findViewById(R.id.iv_foto_user);
+        tv_nombreu = view.findViewById(R.id.tv_nombre_usuario_nav);
+        tv_nombreu.setText(user.getNombre_usuario());
+        Glide.with(this).load(user.getUrl_foto()).into(iv_user);
+    }
+
+    public void loadUser(){
+        Gson gson = new Gson();
+        String json = pref.getString("usuario","");
+        user = gson.fromJson(json,User.class);
+        loadDataNav();
+    }
+
+    public void loadGen(){
+        dbr.child("genres").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for (DataSnapshot ds : snapshot.getChildren()){
+                        generos.add(ds.getValue(GeneroItem.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void updateUserLocal(){
+        dbr.child("users").child(pref.getString("id","")).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    User usuario = snapshot.getValue(User.class);
+                    SharedPreferences.Editor editor = pref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(usuario);
+                    editor.putString("usuario",json);
+                    editor.putString("id",snapshot.getKey());
+                    editor.apply();
+                    loadUser();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
 
     @Override
     public boolean onSupportNavigateUp() {

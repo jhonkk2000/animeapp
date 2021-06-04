@@ -16,4 +16,5 @@
     <color name="green_background">#57DC3D</color>
     <color name="green_transparency">#9957DC3D</color>
     <color name="transparency">#00FFFFFF</color>
+    <color name="disable_color">#AD575656</color>
 </resources>

@@ -12,8 +12,8 @@
         android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_width="80dp"
+            android:layout_height="120dp"
             android:focusable="true"
             android:clickable="true"
             app:cardCornerRadius="15dp"
@@ -21,6 +21,7 @@
             app:strokeWidth="2dp">
 
             <ImageView
+                android:id="@+id/iv_anime_personaje"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -29,6 +30,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
+            android:id="@+id/tv_anime_personaje"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nombre_personaje"
@@ -39,6 +41,7 @@
             android:textColor="@color/gray_text"/>
 
         <TextView
+            android:id="@+id/tv_actor_personaje"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nombre_actor"
@@ -48,8 +51,8 @@
             android:textColor="@color/gray_text"/>
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_width="80dp"
+            android:layout_height="120dp"
             android:focusable="true"
             android:clickable="true"
             app:cardCornerRadius="15dp"
@@ -57,6 +60,7 @@
             app:strokeWidth="2dp">
 
             <ImageView
+                android:id="@+id/iv_actor_personaje"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"

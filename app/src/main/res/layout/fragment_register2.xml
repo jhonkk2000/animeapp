@@ -20,6 +20,7 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/et_nombre_usuario_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nombre_de"
@@ -28,16 +29,19 @@
             android:textStyle="bold"
             android:inputType="text"
             android:layout_marginTop="25dp"
-            android:textColor="@color/gray_text_hint"/>
+            android:textColorHint="@color/gray_text_hint"
+            android:textColor="@color/gray_text"/>
 
-        <EditText
+        <CheckBox
+            android:id="@+id/cb_edad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="10"
             android:hint="@string/fecha_nac"
-            android:background="@drawable/background_edittext"
-            android:paddingLeft="25dp"
+            android:paddingLeft="5dp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:inputType="number"
+            android:inputType="date"
             android:layout_marginTop="20dp"
             android:textColor="@color/gray_text_hint"/>
 

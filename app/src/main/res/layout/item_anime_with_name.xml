@@ -12,26 +12,31 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_anime_season"
             android:layout_width="150dp"
             android:layout_height="200dp"
             android:focusable="true"
             android:clickable="true"
+            android:transitionName="anime_image"
             app:cardCornerRadius="15dp">
 
             <ImageView
+                android:id="@+id/iv_anime_season"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ijiranaide_nagatoro_san"/>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_anime_season_name"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/cual_es_tu_anime_fav"
+            android:gravity="center"
             android:textColor="@color/gray_text"
             android:textSize="12sp"
             android:textStyle="bold"/>

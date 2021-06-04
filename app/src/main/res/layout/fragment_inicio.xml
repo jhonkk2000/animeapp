@@ -6,45 +6,98 @@
     android:layout_height="match_parent"
     tools:context=".ui.inicio.InicioFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/season_anime"
-            android:textStyle="bold"
-            android:textSize="25sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:textColor="@color/gray_text"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_season_anime"
-            android:layout_width="match_parent"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/continuar"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:textColor="@color/gray_text"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_continue"
-            android:layout_width="match_parent"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp"
-            android:layout_height="wrap_content" />
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_season_anime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/season_anime"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:textColor="@color/gray_text"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </LinearLayout>
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/sm_season"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="15dp"
+                    android:paddingStart="15dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="150dp"
+                            android:layout_height="200dp"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:layout_marginRight="5dp"
+                            android:backgroundTint="@color/gray_text"
+                            android:background="@color/gray_text"
+                            app:cardCornerRadius="15dp"/>
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="150dp"
+                            android:layout_height="200dp"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:layout_marginRight="5dp"
+                            android:backgroundTint="@color/gray_text"
+                            app:cardCornerRadius="15dp"/>
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="150dp"
+                            android:layout_height="200dp"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:layout_marginRight="5dp"
+                            android:backgroundTint="@color/gray_text"
+                            app:cardCornerRadius="15dp"/>
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_season_anime"
+                    android:layout_width="match_parent"
+                    android:paddingEnd="15dp"
+                    android:paddingStart="15dp"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/sm_anime_item_gen_inicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
+                            <include android:id="@+id/in_1" layout="@layout/shimmer_inicio_genres_anime"/>
+                            <include android:id="@+id/in_2" layout="@layout/shimmer_inicio_genres_anime"/>
+
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_rv_generos_inicio"
+                        android:layout_width="match_parent"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+        </LinearLayout>
 </RelativeLayout>

@@ -1,6 +1,8 @@
 package com.jhonkkman.aniappinspiracy.data.models;
 
-public class AnimeItem {
+import java.io.Serializable;
+
+public class AnimeItem implements Serializable {
 
     private int mal_id;
     private String title;
@@ -11,6 +13,16 @@ public class AnimeItem {
     private int episodes;
     private String source;
     private float score;
+
+    public AnimeItem(){
+
+    }
+
+    public AnimeItem(int mal_id, String title, String image_url) {
+        this.mal_id = mal_id;
+        this.title = title;
+        this.image_url = image_url;
+    }
 
     public int getMal_id() {
         return mal_id;

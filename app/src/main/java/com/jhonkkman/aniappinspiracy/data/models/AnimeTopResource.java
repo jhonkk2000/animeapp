@@ -4,19 +4,9 @@ import java.util.List;
 
 public class AnimeTopResource {
 
-    private String season_name;
-    private int season_year;
-    private List<AnimeItem> anime;
+    private List<AnimeItem> top;
 
-    public String getSeason_name() {
-        return season_name;
-    }
-
-    public int getSeason_year() {
-        return season_year;
-    }
-
-    public List<AnimeItem> getAnime() {
-        return anime;
+    public List<AnimeItem> getTop() {
+        return top;
     }
 }
