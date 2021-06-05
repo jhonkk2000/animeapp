@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
 import com.jhonkkman.aniappinspiracy.data.api.ApiClientData;
@@ -25,14 +26,16 @@ public class GaleriaFragment extends Fragment {
 
     private RecyclerView rv_g;
     private LinearLayoutManager lym;
-    private AdapterResultados adapter;
+    private AdapterGaleria adapter;
     private ApiAnimeData API_SERVICE;
+    private LinearLayout ly_nodata;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_galeria, container, false);
         rv_g = view.findViewById(R.id.rv_galeria);
+        ly_nodata = view.findViewById(R.id.ly_nodata_galeria);
         loadData();
         return view;
     }
@@ -76,8 +79,10 @@ public class GaleriaFragment extends Fragment {
 
     public void loadGaleria(ArrayList<Picture> lista1,ArrayList<Picture> lista2,ArrayList<Picture> lista3){
         lym = new LinearLayoutManager(getContext());
-        adapter = new AdapterResultados(lista1,lista2,lista3,getContext());
+        adapter = new AdapterGaleria(lista1,lista2,lista3,getContext());
         rv_g.setLayoutManager(lym);
         rv_g.setAdapter(adapter);
+        ly_nodata.setVisibility(View.INVISIBLE);
+        rv_g.setVisibility(View.VISIBLE);
     }
 }

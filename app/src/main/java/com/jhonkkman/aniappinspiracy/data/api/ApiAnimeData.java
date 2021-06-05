@@ -31,7 +31,22 @@ public interface ApiAnimeData {
     Call<AnimeTopSeasonResource> getAnimeTopSeason(@Path("year") int year,@Path("season") String season);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeSearch(@Query("q") String name,@Query("page") int page);
+    Call<AnimeSearchRequest> getAnimeSearch(@Query("q") String name);
+
+    @GET("search/anime")
+    Call<AnimeSearchRequest> getAnimeLetter(@Query("letter") String name);
+
+    @GET("search/anime")
+    Call<AnimeSearchRequest> getAnimeType(@Query("type") String name);
+
+    @GET("search/anime")
+    Call<AnimeSearchRequest> getAnimeRated(@Query("rated") String name);
+
+    @GET("search/anime")
+    Call<AnimeSearchRequest> getAnimeScore(@Query("score") float name);
+
+    @GET("search/anime")
+    Call<AnimeSearchRequest> getAnimeGenre(@Query("genre") int name);
 
     @GET("top/anime")
     Call<AnimeTopResource> getAnimeTop();

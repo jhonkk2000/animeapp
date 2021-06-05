@@ -4,9 +4,9 @@ import java.util.List;
 
 public class AnimeSearchRequest {
 
-    private List<AnimeItemSearch> animeItemSearches;
+    private List<AnimeItem> results;
 
-    public List<AnimeItemSearch> getAnimeItemSearches() {
-        return animeItemSearches;
+    public List<AnimeItem> getAnimeItems() {
+        return results;
     }
 }

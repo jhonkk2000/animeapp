@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class PersonajesFragment extends Fragment {
     private LinearLayoutManager lym;
     private AdapterPersonaje adapter;
     private ApiAnimeData API_SERVICE;
+    private LinearLayout ly_nodata;
 
 
     @Override
@@ -38,6 +40,7 @@ public class PersonajesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personajes, container, false);
         rv_p = view.findViewById(R.id.rv_personajes);
+        ly_nodata = view.findViewById(R.id.ly_nodata_personajes);
         loadData();
         return view;
     }
@@ -50,6 +53,10 @@ public class PersonajesFragment extends Fragment {
             public void onResponse(Call<PersonajesResource> call, Response<PersonajesResource> response) {
                 if(response.isSuccessful()){
                     ArrayList<Character> characters = response.body().getCharacters();
+                    if(characters.size()!=0){
+                        ly_nodata.setVisibility(View.INVISIBLE);
+                        rv_p.setVisibility(View.VISIBLE);
+                    }
                     loadPersonajes(characters);
                 }
             }

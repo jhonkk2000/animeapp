@@ -119,143 +119,175 @@
 
         </LinearLayout>
 
-        <ScrollView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/ly_nodata_busqueda"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_nodata_icon"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/mejor_coincidencia"
+                    android:text="@string/nodata"
+                    android:gravity="center"
+                    android:textColor="@color/gray_text"
                     android:textStyle="bold"
-                    android:textSize="22sp"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="@color/gray_text"/>
+                    android:textSize="20sp"/>
 
+            </LinearLayout>
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_busqueda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cv_best_anime"
-                        android:layout_width="130dp"
-                        android:layout_height="180dp"
-                        android:focusable="true"
-                        android:clickable="true"
-                        app:cardCornerRadius="15dp"
-                        app:strokeColor="@color/dark_red"
-                        app:strokeWidth="4dp"
-                        android:transitionName="anime_image">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ijiranaide_nagatoro_san"/>
-
-                    </com.google.android.material.card.MaterialCardView>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mejor_coincidencia"
+                        android:textStyle="bold"
+                        android:textSize="22sp"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/gray_text"/>
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:background="@drawable/background_descripcion"
-                        android:layout_marginLeft="-4dp"
-                        android:paddingTop="5dp"
-                        android:paddingStart="10dp"
-                        android:paddingBottom="5dp"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textColor="@color/gray_text"
-                            android:textStyle="bold"
-                            android:text="@string/nombre_de_anime"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/gray_text"
-                            android:textSize="11sp"
-                            android:text="@string/sypnosis"/>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/en_emision"
-                            android:textSize="11sp"
-                            android:textColor="@color/green_text"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/fecha_estreno"
-                            android:textSize="11sp"
-                            android:textColor="@color/gray_text"
-                            android:textStyle="bold"/>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="20dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.1"
-                                android:layout_gravity="center"
-                                android:text="@string/serie_tv"
-                                android:textStyle="bold"
-                                android:textSize="11sp"/>
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cv_best_anime"
+                            android:layout_width="130dp"
+                            android:layout_height="180dp"
+                            android:focusable="true"
+                            android:clickable="true"
+                            app:cardCornerRadius="15dp"
+                            app:strokeColor="@color/dark_red"
+                            app:strokeWidth="4dp"
+                            android:transitionName="anime_image">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_estrella_icon"/>
+                                android:id="@+id/iv_anime_busqueda"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ijiranaide_nagatoro_san"/>
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:background="@drawable/background_descripcion"
+                            android:layout_marginLeft="-4dp"
+                            android:paddingTop="5dp"
+                            android:paddingStart="10dp"
+                            android:paddingBottom="5dp"
+                            android:orientation="vertical">
+
                             <TextView
+                                android:id="@+id/tv_nombre_buscar"
                                 android:layout_width="wrap_content"
-                                android:layout_gravity="center"
                                 android:layout_height="wrap_content"
-                                android:text="@string/estrellas"
+                                android:layout_gravity="center"
+                                android:textColor="@color/gray_text"
                                 android:textStyle="bold"
-                                android:textColor="@color/gray_text"/>
+                                android:text="@string/nombre_de_anime"/>
+                            <TextView
+                                android:id="@+id/tv_desc_buscar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/gray_text"
+                                android:textSize="11sp"
+                                android:text="@string/sypnosis"/>
+                            <TextView
+                                android:id="@+id/tv_en_emision_buscar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/en_emision"
+                                android:textSize="11sp"
+                                android:textColor="@color/green_text"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:id="@+id/tv_fecha_buscar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/fecha_estreno"
+                                android:textSize="11sp"
+                                android:textColor="@color/gray_text"
+                                android:textStyle="bold"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="20dp"
+                                android:orientation="horizontal">
 
+                                <TextView
+                                    android:id="@+id/tv_tipo_buscar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.1"
+                                    android:layout_gravity="center"
+                                    android:text="@string/serie_tv"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"/>
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/ic_estrella_icon"/>
+                                <TextView
+                                    android:id="@+id/tv_puntaje_buscar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/estrellas"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/gray_text"/>
+
+                            </LinearLayout>
                         </LinearLayout>
-
 
                     </LinearLayout>
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mas_resultados"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/gray_text"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_mas_resultados"
+                        android:layout_width="match_parent"
+                        android:paddingBottom="10dp"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mas_resultados"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/gray_text"/>
+            </androidx.core.widget.NestedScrollView>
+        </FrameLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_mas_resultados"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:paddingBottom="10dp"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    android:layout_height="0dp"/>
-
-            </LinearLayout>
-
-        </ScrollView>
 
 
 

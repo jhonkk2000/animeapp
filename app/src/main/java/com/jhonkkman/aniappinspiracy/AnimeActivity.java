@@ -263,7 +263,6 @@ public class AnimeActivity extends AppCompatActivity {
                             Log.d("TRADUCTOR","fallo");
                         }
                     });
-
                 }
             }
 

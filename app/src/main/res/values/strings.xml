@@ -94,6 +94,10 @@
     <string name="escribe_un">Escribe un comentario…</string>
     <string name="cargando">Registrando nuevo usuario</string>
     <string name="recover_cargando">Procesando solicitud</string>
+    <string name="nodata">Busqueda no encontrada. O inicia una con las opciones de arriba.</string>
+    <string name="nodata_p">No se encontraron datos.</string>
+    <string name="nodata_g">No se encontraron imagenes.</string>
+    <string name="nodata_c">No se encontraron comentarios. Sé el primero en comentar</string>
 
     <string name="comentario">Comentario acerca de la serie que tal te parecio, recomendaciones a otrasseries, y todo lo que te alcance con 150 caracteres, mas nada porque si no me</string>
 

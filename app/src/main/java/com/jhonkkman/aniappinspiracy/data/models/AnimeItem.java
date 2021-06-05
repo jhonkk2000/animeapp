@@ -7,9 +7,10 @@ public class AnimeItem implements Serializable {
     private int mal_id;
     private String title;
     private String image_url;
-    private String sypnosis;
+    private String synopsis;
     private String type;
-    private String airing_start;
+    private String start_date;
+    private boolean airing;
     private int episodes;
     private String source;
     private float score;
@@ -36,16 +37,16 @@ public class AnimeItem implements Serializable {
         return image_url;
     }
 
-    public String getSypnosis() {
-        return sypnosis;
+    public String getSynopsis() {
+        return synopsis;
     }
 
     public String getType() {
         return type;
     }
 
-    public String getAiring_start() {
-        return airing_start;
+    public String getStart_date() {
+        return start_date;
     }
 
     public int getEpisodes() {
@@ -58,5 +59,9 @@ public class AnimeItem implements Serializable {
 
     public float getScore() {
         return score;
+    }
+
+    public boolean isAiring() {
+        return airing;
     }
 }

@@ -20,6 +20,7 @@
                 android:clickable="true"
                 app:strokeColor="@color/dark_red"
                 android:layout_marginRight="5dp"
+                android:transitionName="anime_image"
                 app:strokeWidth="2dp"
                 app:cardCornerRadius="15dp">
 
@@ -43,6 +44,7 @@
                 app:strokeColor="@color/dark_red"
                 android:layout_marginRight="5dp"
                 app:strokeWidth="2dp"
+                android:transitionName="anime_image"
                 app:cardCornerRadius="15dp"
                 android:focusable="true">
 
@@ -65,6 +67,7 @@
                 android:layout_height="170dp"
                 app:strokeColor="@color/dark_red"
                 app:strokeWidth="2dp"
+                android:transitionName="anime_image"
                 app:cardCornerRadius="15dp"
                 android:focusable="true">
 

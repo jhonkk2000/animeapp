@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -55,12 +56,14 @@ public class ComentariosFragment extends Fragment {
     private boolean comment = false;
     private ArrayList<User> users = new ArrayList<>();
     private Spinner sp_filtro;
+    private LinearLayout ly_nodata;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comentarios, container, false);
         rv_c = view.findViewById(R.id.rv_comentarios);
+        ly_nodata = view.findViewById(R.id.ly_nodata_comentarios);
         btn_enviar = view.findViewById(R.id.btn_enviar_comentario);
         btn_enviar.setEnabled(false);
         et_comentario = view.findViewById(R.id.et_comentario);
@@ -172,6 +175,8 @@ public class ComentariosFragment extends Fragment {
                             comment = true;
                         }
                     }
+                    ly_nodata.setVisibility(View.INVISIBLE);
+                    rv_c.setVisibility(View.VISIBLE);
                 }
                 loadSpinner();
                 verifyComment();

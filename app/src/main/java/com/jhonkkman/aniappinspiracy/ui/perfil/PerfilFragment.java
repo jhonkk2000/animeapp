@@ -10,14 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jhonkkman.aniappinspiracy.AdapterResultados;
+import com.jhonkkman.aniappinspiracy.AdapterGaleria;
 import com.jhonkkman.aniappinspiracy.R;
 
 public class PerfilFragment extends Fragment {
 
     private RecyclerView rv_change_img;
     private LinearLayoutManager lym;
-    private AdapterResultados adapter;
+    private AdapterGaleria adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

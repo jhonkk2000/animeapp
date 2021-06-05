@@ -188,6 +188,8 @@ public class InicioFragment extends Fragment {
         adapter.notifyDataSetChanged();
         rv_season.setLayoutManager(lym);
         rv_season.setAdapter(adapter);
+        rv_season.setNestedScrollingEnabled(false);
+        adapter2.notifyDataSetChanged();
     }
 
     public void loadContinue() {
@@ -272,8 +274,8 @@ public class InicioFragment extends Fragment {
                             ArrayList<AnimeItem> animes = response.body().getAnime();
                             CenterActivity.animesG.add(animes);
                             CenterActivity.generosG.add(generos.get(finalI));
-                            adapter2.notifyDataSetChanged();
                         }
+                        adapter2.notifyDataSetChanged();
                         if (finalI < generos.size() - 1) {
                             loadDataGenres();
                         }

@@ -1,32 +1,40 @@
 package com.jhonkkman.aniappinspiracy;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 import com.jhonkkman.aniappinspiracy.data.models.Picture;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class AdapterResultados extends RecyclerView.Adapter<AdapterResultados.ViewHolderResultados> {
-
-    private ArrayList<Picture> lista1 = new ArrayList<>();
-    private ArrayList<Picture> lista2 = new ArrayList<>();
-    private ArrayList<Picture> lista3 = new ArrayList<>();
+    private ArrayList<AnimeItem> lista1 = new ArrayList<>();
+    private ArrayList<AnimeItem> lista2 = new ArrayList<>();
+    private ArrayList<AnimeItem> lista3 = new ArrayList<>();
     private Context context;
+    private Activity activity;
 
-    public AdapterResultados(ArrayList<Picture> lista1, ArrayList<Picture> lista2, ArrayList<Picture> lista3, Context context) {
+    public AdapterResultados(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, Context context,Activity activity) {
         this.lista1 = lista1;
         this.lista2 = lista2;
         this.lista3 = lista3;
         this.context = context;
+        this.activity = activity;
     }
 
     @NonNull
@@ -37,7 +45,7 @@ public class AdapterResultados extends RecyclerView.Adapter<AdapterResultados.Vi
 
     @Override
     public void onBindViewHolder(@NonNull AdapterResultados.ViewHolderResultados holder, int position) {
-        holder.loadData(lista1,lista2,lista3,position,context);
+        holder.loadData(lista1,lista2,lista3,position,context,activity);
     }
 
     @Override
@@ -60,21 +68,54 @@ public class AdapterResultados extends RecyclerView.Adapter<AdapterResultados.Vi
             cv_3 = v.findViewById(R.id.cv_resultado_3);
         }
 
-        public void loadData(ArrayList<Picture> lista1,ArrayList<Picture> lista2,ArrayList<Picture> lista3,int pos,Context context){
+        public void loadData(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, int pos, Context context, Activity activity){
             if(lista1.size()>=pos+1){
-                Glide.with(context).load(lista1.get(pos).getSmall()).into(iv_1);
+                Glide.with(context).load(lista1.get(pos).getImage_url()).into(iv_1);
+                cv_1.setVisibility(View.VISIBLE);
+                cv_1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(context,AnimeActivity.class);
+                        i.putExtra("anime", (Serializable) lista1.get(pos));
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv_1, ViewCompat.getTransitionName(cv_1));
+                        context.startActivity(i,options.toBundle());
+                    }
+                });
             }else{
                 cv_1.setVisibility(View.INVISIBLE);
+
             }
             if(lista2.size()>=pos+1){
-                Glide.with(context).load(lista2.get(pos).getSmall()).into(iv_2);
+                Glide.with(context).load(lista2.get(pos).getImage_url()).into(iv_2);
+                cv_2.setVisibility(View.VISIBLE);
+                cv_2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(context,AnimeActivity.class);
+                        i.putExtra("anime", (Serializable) lista2.get(pos));
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv_2, ViewCompat.getTransitionName(cv_2));
+                        context.startActivity(i,options.toBundle());
+                    }
+                });
             }else{
                 cv_2.setVisibility(View.INVISIBLE);
+                Log.d("Falla2",lista2.size()+"");
             }
             if(lista3.size()>=pos+1){
-                Glide.with(context).load(lista3.get(pos).getSmall()).into(iv_3);
+                Glide.with(context).load(lista3.get(pos).getImage_url()).into(iv_3);
+                cv_3.setVisibility(View.VISIBLE);
+                cv_3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(context,AnimeActivity.class);
+                        i.putExtra("anime", (Serializable) lista3.get(pos));
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv_3, ViewCompat.getTransitionName(cv_3));
+                        context.startActivity(i,options.toBundle());
+                    }
+                });
             }else{
                 cv_3.setVisibility(View.INVISIBLE);
+                Log.d("Falla3",lista3.size()+"");
             }
 
         }
