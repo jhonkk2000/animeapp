@@ -93,6 +93,7 @@
     <string name="numero_likes">12345</string>
     <string name="escribe_un">Escribe un comentario…</string>
     <string name="cargando">Registrando nuevo usuario</string>
+    <string name="cargando_e">Cargando episodios...</string>
     <string name="recover_cargando">Procesando solicitud</string>
     <string name="nodata">Busqueda no encontrada. O inicia una con las opciones de arriba.</string>
     <string name="nodata_p">No se encontraron datos.</string>

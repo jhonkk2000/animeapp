@@ -11,20 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aniappinspiracy">
-        <activity android:name=".PlayersActivity"
-            android:parentActivityName=".AnimeActivity">
-
-        </activity>
+        <activity
+            android:name=".PlayersActivity"
+            android:parentActivityName=".AnimeActivity"></activity>
         <activity
             android:name=".AnimeActivity"
-            android:parentActivityName=".CenterActivity">
-
-        </activity>
+            android:parentActivityName=".CenterActivity"></activity>
         <activity
-            android:windowSoftInputMode="adjustResize"
             android:name=".CenterActivity"
             android:label="@string/title_activity_center"
-            android:theme="@style/Theme.Aniappinspiracy.NoActionBar" />
+            android:theme="@style/Theme.Aniappinspiracy.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".GenFavActivity" />
         <activity android:name=".AnimeFavActivity" />
         <activity android:name=".FormActivity" />

@@ -43,9 +43,11 @@ public class TopFragment extends Fragment {
 
     public void loadFragments(){
         List<Fragment> fragments = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            fragments.add(new TodosFragment());
-        }
+        fragments.add(new TodosFragment("nada"));
+        fragments.add(new TodosFragment("airing"));
+        fragments.add(new TodosFragment("tv"));
+        fragments.add(new TodosFragment("movie"));
+        fragments.add(new TodosFragment("ova"));
         AdapterPager adapterPager = new AdapterPager(getActivity().getSupportFragmentManager(),tabs.getTabCount(),fragments);
         vp_top.setAdapter(adapterPager);
         vp_top.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));

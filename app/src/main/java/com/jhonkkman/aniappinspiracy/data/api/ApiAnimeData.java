@@ -51,4 +51,7 @@ public interface ApiAnimeData {
     @GET("top/anime")
     Call<AnimeTopResource> getAnimeTop();
 
+    @GET("top/anime/1/{subtype}")
+    Call<AnimeTopResource> getAnimeTopSubtype(@Path("subtype") String subtype);
+
 }

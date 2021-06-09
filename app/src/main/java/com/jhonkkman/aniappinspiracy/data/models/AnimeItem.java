@@ -7,6 +7,7 @@ public class AnimeItem implements Serializable {
     private int mal_id;
     private String title;
     private String image_url;
+    private String url;
     private String synopsis;
     private String type;
     private String start_date;
@@ -23,6 +24,10 @@ public class AnimeItem implements Serializable {
         this.mal_id = mal_id;
         this.title = title;
         this.image_url = image_url;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public int getMal_id() {

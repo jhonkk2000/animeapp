@@ -1,12 +1,10 @@
 package com.jhonkkman.aniappinspiracy;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -37,8 +35,10 @@ import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
 import com.jhonkkman.aniappinspiracy.data.api.ApiClientData;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeCompleto;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeResource;
+import com.jhonkkman.aniappinspiracy.data.models.Episodio;
 import com.jhonkkman.aniappinspiracy.data.models.User;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -52,6 +52,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.jhonkkman.aniappinspiracy.CenterActivity.animesGuardados;
 
 public class AnimeActivity extends AppCompatActivity {
 
@@ -67,7 +69,12 @@ public class AnimeActivity extends AppCompatActivity {
     private SharedPreferences pref;
     public static String KEY_COMENTARIO = "";
     public static ShimmerFrameLayout sm_anime;
-
+    public static AlertLoading dialog = new AlertLoading();
+    //public static ArrayList<Episodio> episodios = new ArrayList<>();
+    private AnimeResource anime = new AnimeResource();
+    private ArrayList<Episodio> episodios = new ArrayList<>();
+    private List<Fragment> fragments = new ArrayList<>();
+    private boolean change_data = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,13 +98,51 @@ public class AnimeActivity extends AppCompatActivity {
         pref = getSharedPreferences("user",MODE_PRIVATE);
         dbr = FirebaseDatabase.getInstance().getReference("users");
         anime_previous = (AnimeItem) getIntent().getSerializableExtra("anime");
+        //dialog.showDialog(this,"Cargando episodios");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         loadKeyComentario();
         onSelectFav();
         loadTabs();
-        loadFragments();
+        //loadFragments();
+        savedLoadState();
         loadData();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if(change_data){
+            Toast.makeText(this, "episodios: " + episodios.size(), Toast.LENGTH_SHORT).show();
+            animesGuardados.add(new AnimeCompleto(anime,episodios));
+        }else{
+            for (int i = 0; i < animesGuardados.size(); i++) {
+                if(anime_previous.getMal_id()==animesGuardados.get(i).getAnime().getMal_id()){
+                    if(animesGuardados.get(i).getEpisodios().size()!=episodios.size()){
+                        animesGuardados.get(i).setEpisodios(episodios);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    public void savedLoadState(){
+        boolean state = false;
+        for (int i = 0; i < animesGuardados.size(); i++) {
+            if(anime_previous.getMal_id()==animesGuardados.get(i).getAnime().getMal_id()){
+                state = true;
+                anime = animesGuardados.get(i).getAnime();
+                Toast.makeText(this, "episodios dentro del if: " + animesGuardados.get(i).getEpisodios().size() , Toast.LENGTH_SHORT).show();
+                episodios = animesGuardados.get(i).getEpisodios();
+                loadDataAnime();
+                traducir();
+                break;
+            }
+        }
+        if(!state){
+            loadAnime();
+        }
     }
 
     public void loadKeyComentario(){
@@ -154,9 +199,6 @@ public class AnimeActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    for (int i = 0; i < lista2.size(); i++) {
-
-                    }
                 }
                 if(state){
                     iv_select_fav.setImageDrawable(getDrawable(R.drawable.ic_fav_lleno_icon));
@@ -192,83 +234,91 @@ public class AnimeActivity extends AppCompatActivity {
         tabs.addTab(tabs.newTab().setText(getString(R.string.comentarios)));
     }
 
-    public void loadFragments(){
+    public void loadAnime(){
         API_SERVICE = ApiClientData.getClient().create(ApiAnimeData.class);
         Call<AnimeResource> call = API_SERVICE.getAnime(anime_previous.getMal_id());
         call.enqueue(new Callback<AnimeResource>() {
             @Override
             public void onResponse(Call<AnimeResource> call, Response<AnimeResource> response) {
                 if(response.isSuccessful()){
-                    AnimeResource anime = response.body();
-                    loadAiring(anime.isAiring());
-                    loadStars(anime.getScore());
-                    tv_year.setText(String.valueOf(anime.getAired().getProp().getFrom().getYear()));
-                    String generos = "";
-                    for (int i = 0; i < anime.getGenres().size(); i++) {
-                        for (int j = 0; j < CenterActivity.generos.size(); j++) {
-                            if(CenterActivity.generos.get(j).getMal_id() == anime.getGenres().get(i).getMal_id()){
-                                if(i==anime.getGenres().size()-1){
-                                    generos = generos + CenterActivity.generos.get(j).getName() + ".";
-                                }else{
-                                    generos = generos + CenterActivity.generos.get(j).getName() + ", ";
-                                }
-                            }
-                        }
-                    }
-                    tv_generos.setText(generos);
-                    List<Fragment> fragments = new ArrayList<>();
-                    String url_trailer = "";
-                    if(anime.getTrailer_url()!=null){
-                        url_trailer = anime.getTrailer_url().split("embed/")[1].split("\\?")[0];
-                        getLifecycle().addObserver(yt_trailer);
-                        String finalUrl_trailer = url_trailer;
-                        yt_trailer.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-                            @Override
-                            public void onReady(@NotNull YouTubePlayer youTubePlayer) {
-                                youTubePlayer.cueVideo(finalUrl_trailer,0);
-                            }
-                        });
-                    }
-                    TranslatorOptions options =
-                            new TranslatorOptions.Builder()
-                                    .setSourceLanguage(TranslateLanguage.ENGLISH)
-                                    .setTargetLanguage(TranslateLanguage.SPANISH)
-                                    .build();
-                    final Translator translator =
-                            Translation.getClient(options);
-                    DownloadConditions conditions = new DownloadConditions.Builder()
-                            .requireWifi()
-                            .build();
-                    translator.downloadModelIfNeeded(conditions).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            translator.translate(anime.getSynopsis()).addOnSuccessListener(new OnSuccessListener<String>() {
-                                @Override
-                                public void onSuccess(String s) {
-                                    fragments.add(new DescripcionFragment(s.split("\\[")[0]));
-                                    fragments.add(new EpisodiosFragment());
-                                    fragments.add(new PersonajesFragment());
-                                    fragments.add(new GaleriaFragment());
-                                    fragments.add(new ComentariosFragment());
-                                    AdapterPager adapter = new AdapterPager(getSupportFragmentManager(),tabs.getTabCount(),fragments);
-                                    vp_anime.setAdapter(adapter);
-                                    vp_anime.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
-                                    tabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_anime));
-                                }
-                            });
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull @NotNull Exception e) {
-                            Log.d("TRADUCTOR","fallo");
-                        }
-                    });
+                    anime = response.body();
+                    change_data = true;
+                    loadDataAnime();
+                    traducir();
                 }
             }
 
             @Override
             public void onFailure(Call<AnimeResource> call, Throwable t) {
 
+            }
+        });
+    }
+
+    public void loadDataAnime(){
+        loadAiring(anime.isAiring());
+        loadStars(anime.getScore());
+        tv_year.setText(String.valueOf(anime.getAired().getProp().getFrom().getYear()));
+        String generos = "";
+        for (int i = 0; i < anime.getGenres().size(); i++) {
+            for (int j = 0; j < CenterActivity.generos.size(); j++) {
+                if(CenterActivity.generos.get(j).getMal_id() == anime.getGenres().get(i).getMal_id()){
+                    if(i==anime.getGenres().size()-1){
+                        generos = generos + CenterActivity.generos.get(j).getName() + ".";
+                    }else{
+                        generos = generos + CenterActivity.generos.get(j).getName() + ", ";
+                    }
+                }
+            }
+        }
+        tv_generos.setText(generos);
+        String url_trailer = "";
+        if(anime.getTrailer_url()!=null){
+            url_trailer = anime.getTrailer_url().split("embed/")[1].split("\\?")[0];
+            getLifecycle().addObserver(yt_trailer);
+            String finalUrl_trailer = url_trailer;
+            yt_trailer.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NotNull YouTubePlayer youTubePlayer) {
+                    youTubePlayer.cueVideo(finalUrl_trailer,0);
+                }
+            });
+        }
+    }
+
+    public void traducir(){
+        TranslatorOptions options =
+                new TranslatorOptions.Builder()
+                        .setSourceLanguage(TranslateLanguage.ENGLISH)
+                        .setTargetLanguage(TranslateLanguage.SPANISH)
+                        .build();
+        final Translator translator =
+                Translation.getClient(options);
+        DownloadConditions conditions = new DownloadConditions.Builder()
+                .requireWifi()
+                .build();
+        translator.downloadModelIfNeeded(conditions).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                translator.translate(anime.getSynopsis()).addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        fragments.add(new DescripcionFragment(s.split("\\[")[0]));
+                        fragments.add(new EpisodiosFragment(episodios));
+                        fragments.add(new PersonajesFragment());
+                        fragments.add(new GaleriaFragment());
+                        fragments.add(new ComentariosFragment());
+                        AdapterPager adapter = new AdapterPager(getSupportFragmentManager(),tabs.getTabCount(),fragments);
+                        vp_anime.setAdapter(adapter);
+                        vp_anime.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+                        tabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_anime));
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Log.d("TRADUCTOR","fallo");
             }
         });
     }

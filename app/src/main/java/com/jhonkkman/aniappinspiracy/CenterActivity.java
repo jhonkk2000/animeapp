@@ -16,8 +16,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeCompleto;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
+import com.jhonkkman.aniappinspiracy.data.models.TopMemoria;
 import com.jhonkkman.aniappinspiracy.data.models.User;
 
 import androidx.annotation.NonNull;
@@ -48,6 +50,8 @@ public class CenterActivity extends AppCompatActivity {
     public static ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
     public static List<GeneroItem> generosG = new ArrayList<>();
     public static List<AnimeItem> animeItems = new ArrayList<>();
+    public static ArrayList<AnimeCompleto> animesGuardados = new ArrayList<>();
+    public static ArrayList<TopMemoria> animesTop = new ArrayList<>();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
