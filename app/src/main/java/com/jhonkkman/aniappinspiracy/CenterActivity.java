@@ -18,9 +18,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeCompleto;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeResource;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeSearchRequest;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.data.models.TopMemoria;
 import com.jhonkkman.aniappinspiracy.data.models.User;
+import com.jhonkkman.aniappinspiracy.ui.favorito.FavoritoFragment;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -52,6 +55,9 @@ public class CenterActivity extends AppCompatActivity {
     public static List<AnimeItem> animeItems = new ArrayList<>();
     public static ArrayList<AnimeCompleto> animesGuardados = new ArrayList<>();
     public static ArrayList<TopMemoria> animesTop = new ArrayList<>();
+    public static ArrayList<AnimeResource> animesFav = new ArrayList<>();
+    public static String season ;
+    public static int year;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +71,7 @@ public class CenterActivity extends AppCompatActivity {
         pref = getSharedPreferences("user",MODE_PRIVATE);
         loadUser();
         updateUserLocal();
-        loadGen();
+        updateFav();
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -92,14 +98,12 @@ public class CenterActivity extends AppCompatActivity {
         loadDataNav();
     }
 
-    public void loadGen(){
-        dbr.child("genres").addListenerForSingleValueEvent(new ValueEventListener() {
+    public void updateFav(){
+        dbr.child("users").child(pref.getString("id","")).child("animes_fav").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    for (DataSnapshot ds : snapshot.getChildren()){
-                        generos.add(ds.getValue(GeneroItem.class));
-                    }
+                    FavoritoFragment.animesFav = (List<Long>) snapshot.getValue();
                 }
             }
 

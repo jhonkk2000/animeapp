@@ -105,6 +105,7 @@ public class AdapterInicioRv extends RecyclerView.Adapter<AdapterInicioRv.ViewHo
             adapter = new AdapterAnimeImage(context,animes,activity);
             rv_anime.setLayoutManager(lym);
             rv_anime.setAdapter(adapter);
+            rv_anime.scheduleLayoutAnimation();
             tv_nombre.setText(genero.getName());
         }
 
@@ -113,7 +114,23 @@ public class AdapterInicioRv extends RecyclerView.Adapter<AdapterInicioRv.ViewHo
                 adapter = new AdapterAnimeImage(context,animes,activity);
                 rv_anime.setLayoutManager(lym);
                 rv_anime.setAdapter(adapter);
+                rv_anime.scheduleLayoutAnimation();
                 tv_nombre.setText("Ultimos animes vistos");
+                reload(adapter);
+        }
+
+        public void reload(AdapterAnimeImage adapter){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(InicioFragment.estado_last){
+                        adapter.notifyDataSetChanged();
+                    }else{
+                        adapter.notifyDataSetChanged();
+                        reload(adapter);
+                    }
+                }
+            },1000);
         }
 
     }

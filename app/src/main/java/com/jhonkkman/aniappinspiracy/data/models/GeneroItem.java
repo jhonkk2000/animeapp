@@ -1,6 +1,8 @@
 package com.jhonkkman.aniappinspiracy.data.models;
 
-public class GeneroItem {
+import java.io.Serializable;
+
+public class GeneroItem implements Serializable {
 
     private int mal_id;
     private String name;

@@ -3,16 +3,21 @@ package com.jhonkkman.aniappinspiracy.data.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class AnimeResource {
 
     private int mal_id,episodes;
-    private String image_url,trailer_url,title,type,source,status,rating,synopsis="";
+    private String image_url,trailer_url,title,type,source,status,rating,synopsis="",url;
     private Aired aired;
     private boolean airing;
     private float score;
     private List<GeneroItem> genres;
+
+    public String getUrl() {
+        return url;
+    }
 
     public Aired getAired() {
         return aired;
@@ -55,7 +60,11 @@ public class AnimeResource {
     }
 
     public String getSynopsis() {
-        return synopsis;
+        if(synopsis!= null){
+            return synopsis;
+        }else{
+            return "";
+        }
     }
 
     public boolean isAiring() {

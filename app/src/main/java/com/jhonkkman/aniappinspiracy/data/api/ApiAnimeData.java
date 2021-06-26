@@ -34,19 +34,19 @@ public interface ApiAnimeData {
     Call<AnimeSearchRequest> getAnimeSearch(@Query("q") String name);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeLetter(@Query("letter") String name);
+    Call<AnimeSearchRequest> getAnimeLetter(@Query("letter") String name,@Query("order_by") String order,@Query("sort") String sort);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeType(@Query("type") String name);
+    Call<AnimeSearchRequest> getAnimeType(@Query("type") String name,@Query("order_by") String order,@Query("sort") String sort);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeRated(@Query("rated") String name);
+    Call<AnimeSearchRequest> getAnimeRated(@Query("rated") String name,@Query("order_by") String order,@Query("sort") String sort);
 
     @GET("search/anime")
     Call<AnimeSearchRequest> getAnimeScore(@Query("score") float name);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeGenre(@Query("genre") int name);
+    Call<AnimeSearchRequest> getAnimeGenre(@Query("genre") int name,@Query("order_by") String order,@Query("sort") String sort);
 
     @GET("top/anime")
     Call<AnimeTopResource> getAnimeTop();

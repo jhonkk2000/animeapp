@@ -111,7 +111,7 @@ public class LoginFragment extends Fragment {
                                                     if(usuario.isFirs_time()){
                                                         startActivity(new Intent(getContext(),AnimeFavActivity.class));
                                                     }else{
-                                                        startActivity(new Intent(getContext(),CenterActivity.class));
+                                                        startActivity(new Intent(getContext(),SplashActivity.class));
                                                         //dbr.child(id).child("firs_time").setValue(false);
                                                     }
                                                     getActivity().finish();

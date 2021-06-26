@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -113,7 +114,6 @@ public class AnimeActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         if(change_data){
-            Toast.makeText(this, "episodios: " + episodios.size(), Toast.LENGTH_SHORT).show();
             animesGuardados.add(new AnimeCompleto(anime,episodios));
         }else{
             for (int i = 0; i < animesGuardados.size(); i++) {
@@ -133,7 +133,6 @@ public class AnimeActivity extends AppCompatActivity {
             if(anime_previous.getMal_id()==animesGuardados.get(i).getAnime().getMal_id()){
                 state = true;
                 anime = animesGuardados.get(i).getAnime();
-                Toast.makeText(this, "episodios dentro del if: " + animesGuardados.get(i).getEpisodios().size() , Toast.LENGTH_SHORT).show();
                 episodios = animesGuardados.get(i).getEpisodios();
                 loadDataAnime();
                 traducir();
@@ -177,15 +176,15 @@ public class AnimeActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = pref.getString("usuario","");
         User user = gson.fromJson(json,User.class);
-        animesFav = user.getAnime_fav();
-        for (int i = 0; i < animesFav.size(); i++) {
+        //animesFav = user.getAnime_fav();
+        /*for (int i = 0; i < animesFav.size(); i++) {
             if(anime_previous.getMal_id()==animesFav.get(i)){
                 iv_select_fav.setImageDrawable(getDrawable(R.drawable.ic_fav_lleno_icon));
                 break;
             }
-        }
+        }*/
         final ArrayList[] animesFavUpdate = new ArrayList[1];
-        animesFavUpdate[0] = (ArrayList) animesFav;
+        //animesFavUpdate[0] = (ArrayList) animesFav;
         dbr.child(pref.getString("id","")).child("animes_fav").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -245,6 +244,13 @@ public class AnimeActivity extends AppCompatActivity {
                     change_data = true;
                     loadDataAnime();
                     traducir();
+                }else{
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadAnime();
+                        }
+                    },700);
                 }
             }
 
@@ -304,7 +310,7 @@ public class AnimeActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String s) {
                         fragments.add(new DescripcionFragment(s.split("\\[")[0]));
-                        fragments.add(new EpisodiosFragment(episodios));
+                        fragments.add(new EpisodiosFragment(anime.getEpisodes()));
                         fragments.add(new PersonajesFragment());
                         fragments.add(new GaleriaFragment());
                         fragments.add(new ComentariosFragment());

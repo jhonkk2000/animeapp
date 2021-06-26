@@ -31,11 +31,19 @@ public class EpisodiosFragment extends Fragment {
     private AdapterEpisodio adapter;
     private boolean busqueda = true;
     private TextView tv_load ;
-    private LinearLayout ly_carga;
-    private ArrayList<Episodio> episodios = new ArrayList<>();
+    private LinearLayout ly_carga, ly_nodata;
+    private int episodios;
 
-    public EpisodiosFragment(ArrayList<Episodio> episodios){
-        this.episodios = episodios;
+    public EpisodiosFragment(int episodios){
+        if(episodios!=0){
+            this.episodios = episodios;
+        }else{
+            try {
+                loadCount();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -44,16 +52,24 @@ public class EpisodiosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_episodios, container, false);
         rv_episodios = view.findViewById(R.id.rv_episodios);
         ly_carga = view.findViewById(R.id.ly_carga);
+        ly_nodata = view.findViewById(R.id.ly_nodata_episodios);
         tv_load = view.findViewById(R.id.tv_episodios_cargando);
         ly_carga.setVisibility(View.INVISIBLE);
-        rv_episodios.setVisibility(View.INVISIBLE);
-        testEpisodes();
-        Toast.makeText(getContext(), "episodios: " + episodios.size(), Toast.LENGTH_SHORT).show();
-        verify();
+        ly_nodata.setVisibility(View.INVISIBLE);
+        rv_episodios.setVisibility(View.VISIBLE);
+        //testEpisodes();
+        //verify();
+        loadEpisodes();
         return view;
     }
 
-    public void verify(){
+    public void loadCount() throws IOException {
+        String[] anime_name = anime_previous.getUrl().split("/");
+        ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length-1],0);
+        episodios = apiVideoServer.getCountEpisodes();
+    }
+
+    /*public void verify(){
         if(busqueda){
             ly_carga.setVisibility(View.VISIBLE);
             rv_episodios.setVisibility(View.INVISIBLE);
@@ -66,6 +82,9 @@ public class EpisodiosFragment extends Fragment {
             },1000);
         }else{
             ly_carga.setVisibility(View.INVISIBLE);
+            if(episodios.size()==0){
+                ly_nodata.setVisibility(View.VISIBLE);
+            }
             rv_episodios.setVisibility(View.VISIBLE);
             adapter.notifyDataSetChanged();
         }
@@ -78,6 +97,7 @@ public class EpisodiosFragment extends Fragment {
                 String[] anime_name = anime_previous.getUrl().split("/");
                 int ep = episodios.size()+1;
                 do{
+                    int val = ep%20;
                     ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length-1],ep);
                     ep++;
                     ArrayList<String> videos = new ArrayList<>();
@@ -102,8 +122,7 @@ public class EpisodiosFragment extends Fragment {
                 }while (busqueda);
             }
         }).start();
-        loadEpisodes();
-    }
+    }*/
 
     public void loadEpisodes(){
         rv_episodios.setLayoutManager(new LinearLayoutManager(getContext()));

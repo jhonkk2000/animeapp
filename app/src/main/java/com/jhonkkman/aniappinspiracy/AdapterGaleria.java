@@ -1,12 +1,16 @@
 package com.jhonkkman.aniappinspiracy;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,12 +25,14 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
     private ArrayList<Picture> lista2 = new ArrayList<>();
     private ArrayList<Picture> lista3 = new ArrayList<>();
     private Context context;
+    private Activity activity;
 
-    public AdapterGaleria(ArrayList<Picture> lista1, ArrayList<Picture> lista2, ArrayList<Picture> lista3, Context context) {
+    public AdapterGaleria(ArrayList<Picture> lista1, ArrayList<Picture> lista2, ArrayList<Picture> lista3, Context context,Activity activity) {
         this.lista1 = lista1;
         this.lista2 = lista2;
         this.lista3 = lista3;
         this.context = context;
+        this.activity = activity;
     }
 
     @NonNull
@@ -37,7 +43,7 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderGaleria holder, int position) {
-        holder.loadData(lista1,lista2,lista3,position,context);
+        holder.loadData(lista1,lista2,lista3,position,context,activity);
     }
 
     @Override
@@ -60,23 +66,38 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
             cv_3 = v.findViewById(R.id.cv_resultado_3);
         }
 
-        public void loadData(ArrayList<Picture> lista1,ArrayList<Picture> lista2,ArrayList<Picture> lista3,int pos,Context context){
+        public void loadData(ArrayList<Picture> lista1,ArrayList<Picture> lista2,ArrayList<Picture> lista3,int pos,Context context,Activity activity){
             if(lista1.size()>=pos+1){
                 Glide.with(context).load(lista1.get(pos).getSmall()).into(iv_1);
+                openImage(cv_1,context,lista1.get(pos).getLarge(),activity);
             }else{
                 cv_1.setVisibility(View.INVISIBLE);
             }
             if(lista2.size()>=pos+1){
                 Glide.with(context).load(lista2.get(pos).getSmall()).into(iv_2);
+                openImage(cv_2,context,lista2.get(pos).getLarge(),activity);
             }else{
                 cv_2.setVisibility(View.INVISIBLE);
             }
             if(lista3.size()>=pos+1){
                 Glide.with(context).load(lista3.get(pos).getSmall()).into(iv_3);
+                openImage(cv_3,context,lista3.get(pos).getLarge(),activity);
             }else{
                 cv_3.setVisibility(View.INVISIBLE);
             }
 
+        }
+
+        public void openImage(MaterialCardView cv,Context context,String url,Activity activity){
+            cv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context,ImageActivity.class);
+                    i.putExtra("url",url);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv, ViewCompat.getTransitionName(cv));
+                    context.startActivity(i,options.toBundle());
+                }
+            });
         }
 
     }

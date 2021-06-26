@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -54,6 +55,7 @@ import com.jhonkkman.aniappinspiracy.PersonajesFragment;
 import com.jhonkkman.aniappinspiracy.R;
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
 import com.jhonkkman.aniappinspiracy.data.api.ApiClientData;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeGenResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeSearchRequest;
 
@@ -72,6 +74,8 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.jhonkkman.aniappinspiracy.CenterActivity.generos;
 
 public class ExploraFragment extends Fragment {
 
@@ -114,6 +118,7 @@ public class ExploraFragment extends Fragment {
         //loadAnime();
         eventsFilter();
         onBuscar();
+        scrollRv();
         return root;
     }
 
@@ -363,156 +368,57 @@ public class ExploraFragment extends Fragment {
     public void cargarLlamada(int tipo,String busqueda){
         switch (tipo){
             case 0:
-                Call<AnimeSearchRequest> call = API_SERVICE.getAnimeSearch(busqueda);
-                call.enqueue(new Callback<AnimeSearchRequest>() {
-                    @Override
-                    public void onResponse(Call<AnimeSearchRequest> call, Response<AnimeSearchRequest> response) {
-                        if(response.isSuccessful()){
-                            List<AnimeItem> animeItems = response.body().getAnimeItems();
-                            if(animeItems.size()!=0){
-                                loadResultados(animeItems);
-                            }else{
-                                ly_nodata.setVisibility(View.VISIBLE);
-                                scroll.setVisibility(View.INVISIBLE);
-                            }
-                        }else{
-                            dialog.dismissDialog();
-                            Toast.makeText(getContext(), "Algo fallo. Vuelve a intentar la busqueda", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AnimeSearchRequest> call, Throwable t) {
-                        dialog.dismissDialog();
-                        Toast.makeText(getContext(), "Error al buscar, vuelve a intentarlo", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                loadCall(API_SERVICE.getAnimeSearch(busqueda),0);
                 break;
             case 1:
-                Call<AnimeSearchRequest> call2 = API_SERVICE.getAnimeLetter(busqueda);
-                call2.enqueue(new Callback<AnimeSearchRequest>() {
-                    @Override
-                    public void onResponse(Call<AnimeSearchRequest> call, Response<AnimeSearchRequest> response) {
-                        if(response.isSuccessful()){
-                            List<AnimeItem> animeItems = response.body().getAnimeItems();
-                            if(animeItems.size()!=0){
-                                loadResultados(animeItems);
-                            }else{
-                                ly_nodata.setVisibility(View.VISIBLE);
-                                scroll.setVisibility(View.INVISIBLE);
-                            }
-                        }else{
-                            dialog.dismissDialog();
-                            Toast.makeText(getContext(), "Algo fallo. Vuelve a intentar la busqueda", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AnimeSearchRequest> call, Throwable t) {
-                        dialog.dismissDialog();
-                        Toast.makeText(getContext(), "Error al buscar, vuelve a intentarlo", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                loadCall(API_SERVICE.getAnimeLetter(busqueda,"score","desc"),1);
                 break;
             case 2:
-                Call<AnimeSearchRequest> call6 = API_SERVICE.getAnimeType(busqueda);
-                call6.enqueue(new Callback<AnimeSearchRequest>() {
-                    @Override
-                    public void onResponse(Call<AnimeSearchRequest> call, Response<AnimeSearchRequest> response) {
-                        if(response.isSuccessful()){
-                            List<AnimeItem> animeItems = response.body().getAnimeItems();
-                            if(animeItems.size()!=0){
-                                loadResultados(animeItems);
-                            }else{
-                                ly_nodata.setVisibility(View.VISIBLE);
-                                scroll.setVisibility(View.INVISIBLE);
-                            }
-                        }else{
-                            dialog.dismissDialog();
-                            Toast.makeText(getContext(), "Algo fallo. Vuelve a intentar la busqueda", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AnimeSearchRequest> call, Throwable t) {
-                        dialog.dismissDialog();
-                        Toast.makeText(getContext(), "Error al buscar, vuelve a intentarlo", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                loadCall(API_SERVICE.getAnimeType(busqueda,"score","desc"),2);
                 break;
             case 3:
-                Call<AnimeSearchRequest> call3 = API_SERVICE.getAnimeRated(busqueda);
-                call3.enqueue(new Callback<AnimeSearchRequest>() {
-                    @Override
-                    public void onResponse(Call<AnimeSearchRequest> call, Response<AnimeSearchRequest> response) {
-                        if(response.isSuccessful()){
-                            List<AnimeItem> animeItems = response.body().getAnimeItems();
-                            if(animeItems.size()!=0){
-                                loadResultados(animeItems);
-                            }else{
-                                ly_nodata.setVisibility(View.VISIBLE);
-                                scroll.setVisibility(View.INVISIBLE);
-                            }
-                        }else{
-                            dialog.dismissDialog();
-                            Toast.makeText(getContext(), "Algo fallo. Vuelve a intentar la busqueda", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AnimeSearchRequest> call, Throwable t) {
-                        dialog.dismissDialog();
-                        Toast.makeText(getContext(), "Error al buscar, vuelve a intentarlo", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                loadCall(API_SERVICE.getAnimeRated(busqueda,"score","desc"),3);
                 break;
             case 4:
-                Call<AnimeSearchRequest> call4 = API_SERVICE.getAnimeScore(Float.parseFloat(busqueda));
-                call4.enqueue(new Callback<AnimeSearchRequest>() {
-                    @Override
-                    public void onResponse(Call<AnimeSearchRequest> call, Response<AnimeSearchRequest> response) {
-                        if(response.isSuccessful()){
-                            List<AnimeItem> animeItems = response.body().getAnimeItems();
-                            if(animeItems.size()!=0){
-                                loadResultados(animeItems);
-                            }else{
-                                ly_nodata.setVisibility(View.VISIBLE);
-                                scroll.setVisibility(View.INVISIBLE);
-                            }
-                        }else{
-                            dialog.dismissDialog();
-                            Toast.makeText(getContext(), "Algo fallo. Vuelve a intentar la busqueda", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AnimeSearchRequest> call, Throwable t) {
-                        dialog.dismissDialog();
-                        Toast.makeText(getContext(), "Error al buscar, vuelve a intentarlo", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                loadCall(API_SERVICE.getAnimeScore(Float.parseFloat(busqueda)),4);
                 break;
             case 5:
-                Call<AnimeSearchRequest> call5 = API_SERVICE.getAnimeGenre(Integer.parseInt(busqueda));
-                call5.enqueue(new Callback<AnimeSearchRequest>() {
+                //loadCall(API_SERVICE.getAnimeGenre(Integer.parseInt(busqueda)));
+                Call<AnimeGenResource> callG = API_SERVICE.getGeneroAnime(Integer.parseInt(busqueda));
+                callG.enqueue(new Callback<AnimeGenResource>() {
                     @Override
-                    public void onResponse(Call<AnimeSearchRequest> call, Response<AnimeSearchRequest> response) {
+                    public void onResponse(Call<AnimeGenResource> call, Response<AnimeGenResource> response) {
                         if(response.isSuccessful()){
-                            List<AnimeItem> animeItems = response.body().getAnimeItems();
+                            List<AnimeItem> animeItems = response.body().getAnime();
+                            List<AnimeItem> finalItems = new ArrayList<>();
+                            for (int i = 0; i < animeItems.size(); i++) {
+                                Log.d("CANTIDAD", animeItems.size()+"");
+                                if(!animeItems.get(i).getType().equals("ONA") && !animeItems.get(i).getType().equals("Special")&& !animeItems.get(i).getType().equals("Music")
+                                      && !animeItems.get(i).isKids()){
+                                    finalItems.add(animeItems.get(i));
+                                }
+                                Log.d("CANTIDADF", finalItems.size()+"");
+                            }
                             if(animeItems.size()!=0){
-                                loadResultados(animeItems);
+                                loadResultados(finalItems,5);
                             }else{
                                 ly_nodata.setVisibility(View.VISIBLE);
                                 scroll.setVisibility(View.INVISIBLE);
                             }
                         }else{
-                            dialog.dismissDialog();
-                            Toast.makeText(getContext(), "Algo fallo. Vuelve a intentar la busqueda", Toast.LENGTH_SHORT).show();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    cargarLlamada(tipo,busqueda);
+                                }
+                            },700);
                         }
+
                     }
 
                     @Override
-                    public void onFailure(Call<AnimeSearchRequest> call, Throwable t) {
+                    public void onFailure(Call<AnimeGenResource> call, Throwable t) {
+                        Log.d("NOCARGA", t.getMessage());
                         dialog.dismissDialog();
                         Toast.makeText(getContext(), "Error al buscar, vuelve a intentarlo", Toast.LENGTH_SHORT).show();
                     }
@@ -522,7 +428,54 @@ public class ExploraFragment extends Fragment {
 
     }
 
-    public void loadResultados(List<AnimeItem> animeItems){
+    public void loadCall(Call<AnimeSearchRequest> callA,int pos){
+        Call<AnimeSearchRequest> call = callA;
+        call.enqueue(new Callback<AnimeSearchRequest>() {
+            @Override
+            public void onResponse(Call<AnimeSearchRequest> call, Response<AnimeSearchRequest> response) {
+                if(response.isSuccessful()){
+                    List<AnimeItem> animeItems = response.body().getAnimeItems();
+                    List<AnimeItem> finalItems = new ArrayList<>();
+                    for (int i = 0; i < animeItems.size(); i++) {
+                        boolean gen = false;
+                        for (int j = 0; j < animeItems.get(i).getGenres().size(); j++) {
+                            if(animeItems.get(i).getGenres().get(j).getMal_id()==15){
+                                gen = true;
+                                break;
+                            }
+                        }
+                        if(!animeItems.get(i).getRated().equals("Rx") && !animeItems.get(i).getRated().equals("PG") && !animeItems.get(i).getType().equals("ONA") && !animeItems.get(i).getType().equals("Special")&& !animeItems.get(i).getType().equals("Music")
+                        && !gen && !animeItems.get(i).getRated().equals("G")){
+                            finalItems.add(animeItems.get(i));
+                        }
+                    }
+                    if(finalItems.size()!=0){
+                        loadResultados(finalItems,pos);
+                    }else{
+                        dialog.dismissDialog();
+                        Toast.makeText(getContext(), "No se encontraron animes", Toast.LENGTH_SHORT).show();
+                        ly_nodata.setVisibility(View.VISIBLE);
+                        scroll.setVisibility(View.INVISIBLE);
+                    }
+                }else{
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadCall(callA.clone(),pos);
+                        }
+                    },700);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AnimeSearchRequest> call, Throwable t) {
+                dialog.dismissDialog();
+                Toast.makeText(getContext(), "Error al buscar, vuelve a intentarlo", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void loadResultados(List<AnimeItem> animeItems, int pos){
         AnimeItem anime1 = animeItems.get(0);
         loadAnime(anime1);
         ArrayList<AnimeItem> lista1 = new ArrayList<>();
@@ -554,7 +507,12 @@ public class ExploraFragment extends Fragment {
                             tv_emision.setText("Finalizado");
                         }
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+SS:SS", Locale.ENGLISH);
-                        LocalDate localDate = LocalDate.parse(anime1.getStart_date(), formatter);
+                        LocalDate localDate;
+                        if(pos==5){
+                            localDate = LocalDate.parse(anime1.getAiring_start(), formatter);
+                        }else{
+                            localDate = LocalDate.parse(anime1.getStart_date(), formatter);
+                        }
                         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                         tv_fecha.setText("Fecha de estreno: " + sdf.format(date));
@@ -595,6 +553,20 @@ public class ExploraFragment extends Fragment {
             }
         });
         //rv_resultados.setNestedScrollingEnabled(false);
+    }
+
+    public void scrollRv(){
+        rv_resultados.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    Toast.makeText(getContext(), "Ultimo", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
     }
 
     public void loadGeneros(){

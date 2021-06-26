@@ -27,7 +27,6 @@
 
     </LinearLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:visibility="invisible"
         android:layout_width="match_parent"

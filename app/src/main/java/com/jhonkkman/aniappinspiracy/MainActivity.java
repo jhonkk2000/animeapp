@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         activityMain = this;
         onRegister();
         onLogin();
-        verifySession();
     }
 
     public void onRegister(){
@@ -36,15 +35,6 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
-    }
-
-    public void verifySession(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            startActivity(new Intent(this,CenterActivity.class));
-            //startActivity(new Intent(this,AnimeFavActivity.class));
-            finish();
-        }
     }
 
     public void onLogin(){

@@ -27,12 +27,14 @@ public class GenUserFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gen_user, container, false);
         rv_gen = view.findViewById(R.id.rv_gen_user);
-        loadGen();
-
+        //loadGen();
         return view;
     }
+
+
     public void loadGen(){
         List<GeneroItem> generoItems = new ArrayList<>();
+        generoItems = CenterActivity.generos;
         lym = new LinearLayoutManager(getContext());
         adapter = new AdapterGen(generoItems);
         rv_gen.setLayoutManager(lym);

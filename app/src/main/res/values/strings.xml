@@ -98,7 +98,10 @@
     <string name="nodata">Busqueda no encontrada. O inicia una con las opciones de arriba.</string>
     <string name="nodata_p">No se encontraron datos.</string>
     <string name="nodata_g">No se encontraron imagenes.</string>
+    <string name="nodata_e">No se encontraron episodios.</string>
     <string name="nodata_c">No se encontraron comentarios. Sé el primero en comentar</string>
+    <string name="no_disponible">No disponible</string>
+    <string name="cargar_mas">Cargar mas...</string>
 
     <string name="comentario">Comentario acerca de la serie que tal te parecio, recomendaciones a otrasseries, y todo lo que te alcance con 150 caracteres, mas nada porque si no me</string>
 
@@ -133,8 +136,6 @@
     </string-array>
     <string-array name="categoria">
         <item>Categoria</item>
-        <item>Todas la edades</item>
-        <item>Niños</item>
         <item>Mayores de 13 años</item>
         <item>Mayores de 17 años</item>
     </string-array>
@@ -143,9 +144,6 @@
         <item>TV</item>
         <item>OVA</item>
         <item>Movie</item>
-        <item>Special</item>
-        <item>Ona</item>
-        <item>Music</item>
     </string-array>
     <string-array name="rating">
         <item>Rating</item>
@@ -158,7 +156,6 @@
         <item>7</item>
         <item>8</item>
         <item>9</item>
-        <item>10</item>
     </string-array>
     <string-array name="genero">
         <item>Genero</item>

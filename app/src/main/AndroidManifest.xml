@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jhonkkman.aniappinspiracy">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -11,26 +12,53 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aniappinspiracy">
+        <activity android:name=".ImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+
+        </activity>
         <activity
-            android:name=".PlayersActivity"
-            android:parentActivityName=".AnimeActivity"></activity>
+            android:name=".WebPlayerActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+
+        </activity>
         <activity
-            android:name=".AnimeActivity"
-            android:parentActivityName=".CenterActivity"></activity>
-        <activity
-            android:name=".CenterActivity"
-            android:label="@string/title_activity_center"
-            android:theme="@style/Theme.Aniappinspiracy.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".GenFavActivity" />
-        <activity android:name=".AnimeFavActivity" />
-        <activity android:name=".FormActivity" />
-        <activity android:name=".MainActivity">
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".PlayersActivity"
+            android:parentActivityName=".AnimeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AnimeActivity"
+            android:parentActivityName=".CenterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CenterActivity"
+            android:label="@string/title_activity_center"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Aniappinspiracy.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".GenFavActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AnimeFavActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FormActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

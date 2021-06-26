@@ -26,7 +26,7 @@
                     app:autoPlay="false"
                     app:showYouTubeButton="true"
                     app:showSeekBar="false"
-                    app:showFullScreenButton="false"
+                    app:showFullScreenButton="true"
                     app:showVideoCurrentTime="false"
                     app:showVideoDuration="false">
 
@@ -211,9 +211,6 @@
                 android:id="@+id/vp_anime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-
-
-
         </FrameLayout>
 
 
@@ -233,5 +230,4 @@
             android:background="@color/transparency"
             app:popupTheme="@style/Theme.Aniappinspiracy.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
-
 </RelativeLayout>

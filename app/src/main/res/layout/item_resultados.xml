@@ -14,13 +14,14 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_resultado_1"
-                android:layout_width="120dp"
+                android:layout_width="0dp"
                 android:layout_height="170dp"
                 android:focusable="true"
                 android:clickable="true"
                 app:strokeColor="@color/dark_red"
                 android:layout_marginRight="5dp"
                 android:transitionName="anime_image"
+                android:layout_weight=".30"
                 app:strokeWidth="2dp"
                 app:cardCornerRadius="15dp">
 
@@ -34,15 +35,14 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_resultado_2"
-                android:layout_width="120dp"
+                android:layout_width="0dp"
                 android:layout_height="170dp"
                 android:clickable="true"
                 app:strokeColor="@color/dark_red"
                 android:layout_marginRight="5dp"
+                android:layout_weight=".30"
                 app:strokeWidth="2dp"
                 android:transitionName="anime_image"
                 app:cardCornerRadius="15dp"
@@ -54,15 +54,12 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ijiranaide_nagatoro_san"/>
-
             </com.google.android.material.card.MaterialCardView>
-
-
-
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_resultado_3"
-                android:layout_width="120dp"
+                android:layout_width="0dp"
+                android:layout_weight=".30"
                 android:clickable="true"
                 android:layout_height="170dp"
                 app:strokeColor="@color/dark_red"

@@ -1,6 +1,9 @@
 package com.jhonkkman.aniappinspiracy.data.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class AnimeItem implements Serializable {
 
@@ -11,10 +14,14 @@ public class AnimeItem implements Serializable {
     private String synopsis;
     private String type;
     private String start_date;
+    private String rated;
     private boolean airing;
+    private ArrayList<GeneroItem> genres = new ArrayList<>();
     private int episodes;
     private String source;
     private float score;
+    private boolean kids;
+    private String airing_start;
 
     public AnimeItem(){
 
@@ -24,6 +31,30 @@ public class AnimeItem implements Serializable {
         this.mal_id = mal_id;
         this.title = title;
         this.image_url = image_url;
+    }
+
+    public boolean isKids() {
+        return kids;
+    }
+
+    public String getAiring_start() {
+        return airing_start;
+    }
+
+    public String getRated() {
+        if(rated!=null){
+            return rated;
+        }else{
+            return "Rx";
+        }
+    }
+
+    public ArrayList<GeneroItem> getGenres() {
+        return genres;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getUrl() {

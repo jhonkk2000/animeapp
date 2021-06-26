@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,13 @@ public class GaleriaFragment extends Fragment {
                         }
                     }
                     loadGaleria(lista1,lista2,lista3);
+                }else{
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadData();
+                        }
+                    },700);
                 }
             }
 
@@ -79,7 +87,7 @@ public class GaleriaFragment extends Fragment {
 
     public void loadGaleria(ArrayList<Picture> lista1,ArrayList<Picture> lista2,ArrayList<Picture> lista3){
         lym = new LinearLayoutManager(getContext());
-        adapter = new AdapterGaleria(lista1,lista2,lista3,getContext());
+        adapter = new AdapterGaleria(lista1,lista2,lista3,getContext(),getActivity());
         rv_g.setLayoutManager(lym);
         rv_g.setAdapter(adapter);
         ly_nodata.setVisibility(View.INVISIBLE);

@@ -29,8 +29,10 @@
                 android:textStyle="bold"/>
 
             <Switch
+                android:id="@+id/sw_modo_oscuro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </LinearLayout>
@@ -55,21 +57,26 @@
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_cerrar_sesion"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cerrar_sesion"
-            android:textAllCaps="false"
-            android:layout_gravity="bottom"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:background="@drawable/background_mini_button"/>
+            android:layout_height="match_parent">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_cerrar_sesion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cerrar_sesion"
+                android:textAllCaps="false"
+                android:layout_gravity="bottom"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:background="@drawable/background_mini_button"/>
+        </FrameLayout>
 
     </LinearLayout>
 

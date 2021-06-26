@@ -100,9 +100,17 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_rv_generos_inicio"
                     android:layout_width="match_parent"
+                    android:overScrollMode="never"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     android:layout_height="wrap_content" />
             </FrameLayout>
+            <ProgressBar
+                android:id="@+id/pb_inicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:indeterminateDrawable="@drawable/progress"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

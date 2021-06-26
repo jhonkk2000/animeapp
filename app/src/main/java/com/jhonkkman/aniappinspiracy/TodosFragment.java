@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
 import com.jhonkkman.aniappinspiracy.data.api.ApiClientData;
@@ -31,6 +33,7 @@ public class TodosFragment extends Fragment {
     private AdapterTodos adapter;
     private String subtype;
     private List<AnimeItem> animes = new ArrayList<>();
+    private ProgressBar pb_top;
 
     public TodosFragment(String subtype){
         this.subtype = subtype;
@@ -41,6 +44,7 @@ public class TodosFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_todos, container, false);
         rv_top = view.findViewById(R.id.rv_todos_top);
+        pb_top = view.findViewById(R.id.pb_top);
         verifyDataSaved();
         return view;
     }
@@ -73,7 +77,15 @@ public class TodosFragment extends Fragment {
                 if(response.isSuccessful()){
                     CenterActivity.animesTop.add(new TopMemoria(response.body(),subtype));
                     animes = response.body().getTop();
+
                     loadRv(animes);
+                }else{
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadTops(subtype);
+                        }
+                    },750);
                 }
             }
 
@@ -85,9 +97,11 @@ public class TodosFragment extends Fragment {
     }
 
     public void loadRv(List<AnimeItem> animes){
+        pb_top.setVisibility(View.INVISIBLE);
         lym = new LinearLayoutManager(getContext());
         adapter = new AdapterTodos(getContext(),animes,getActivity());
         rv_top.setLayoutManager(lym);
         rv_top.setAdapter(adapter);
+        rv_top.scheduleLayoutAnimation();
     }
 }

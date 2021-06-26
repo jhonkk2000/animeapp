@@ -5,7 +5,7 @@ import java.util.List;
 
 public class User {
     private String nombre_usuario,descripcion,url_foto,correo;
-    private List<Integer> anime_fav = new ArrayList<>();
+    private List<Integer> animes_fav = new ArrayList<>();
     private List<Integer> genero_fav = new ArrayList<>();
     private List<Integer> last_anime_view = new ArrayList<>();
     private boolean first_time;
@@ -14,19 +14,19 @@ public class User {
 
     }
 
-    public User(String nombre_usuario, String descripcion, String url_foto, String correo, List<Integer> anime_fav, List<Integer> genero_fav, List<Integer> last_anime_view, boolean firs_time) {
+    public User(String nombre_usuario, String descripcion, String url_foto, String correo, List<Integer> animes_fav, List<Integer> genero_fav, List<Integer> last_anime_view, boolean firs_time) {
         this.nombre_usuario = nombre_usuario;
         this.descripcion = descripcion;
         this.url_foto = url_foto;
         this.correo = correo;
-        this.anime_fav = anime_fav;
+        this.animes_fav = animes_fav;
         this.genero_fav = genero_fav;
         this.last_anime_view = last_anime_view;
         this.first_time = firs_time;
     }
 
     public List<Integer> getAnime_fav() {
-        return anime_fav;
+        return animes_fav;
     }
 
     public List<Integer> getGenero_fav() {

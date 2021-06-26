@@ -128,6 +128,7 @@ public class ComentariosFragment extends Fragment {
         if(this.isAdded()){
             if(comment){
                 btn_enviar.setEnabled(false);
+                et_comentario.setEnabled(false);
                 btn_enviar.setBackground(getContext().getDrawable(R.drawable.background_disable_minibutton));
             }else{
                 btn_enviar.setEnabled(true);

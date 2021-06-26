@@ -1,37 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingEnd="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
+        android:background="@drawable/background_edittext"
+        android:orientation="horizontal"
         android:paddingStart="20dp"
-        android:background="@drawable/background_edittext">
+        android:paddingEnd="20dp">
 
         <TextView
             android:id="@+id/tv_episodio"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|start"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:layout_weight="1"
+            android:text="@string/episodios"
             android:textColor="@color/gray_text"
-            android:text="@string/episodios"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/btn_enter_episode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/transparency"
             android:layout_gravity="center"
-            android:src="@drawable/ic_enter_icon"/>
+            android:background="@color/transparency"
+            android:src="@drawable/ic_enter_icon" />
 
     </LinearLayout>
+
 
 </RelativeLayout>
