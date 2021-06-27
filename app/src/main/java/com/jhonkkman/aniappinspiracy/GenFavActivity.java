@@ -52,7 +52,7 @@ public class GenFavActivity extends AppCompatActivity {
         tv_skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(GenFavActivity.this,CenterActivity.class));
+                startActivity(new Intent(GenFavActivity.this,SplashActivity.class));
                 finish();
             }
         });

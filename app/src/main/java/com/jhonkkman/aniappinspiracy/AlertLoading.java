@@ -16,6 +16,7 @@ public class AlertLoading {
 
     public void showDialog(Activity activity,String msj){
         dialog = new Dialog(activity);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.SlidingDialogAnimation;
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.alert_loading);

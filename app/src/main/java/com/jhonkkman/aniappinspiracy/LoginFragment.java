@@ -93,9 +93,11 @@ public class LoginFragment extends Fragment {
                                             if(snapshot.exists()){
                                                 User usuario = null;
                                                 String id = "";
+                                                boolean first = false;
                                                 for (DataSnapshot ds : snapshot.getChildren()){
                                                     if(ds.child("correo").getValue().toString().equals(correo)){
                                                         usuario = ds.getValue(User.class);
+                                                        first =(boolean) ds.child("first_time").getValue();
                                                         id = ds.getKey();
                                                         break;
                                                     }
@@ -107,8 +109,8 @@ public class LoginFragment extends Fragment {
                                                     editor.putString("usuario",json);
                                                     editor.putString("id",id);
                                                     editor.apply();
-                                                    Toast.makeText(getContext(), "Se inicio sesion correctamente", Toast.LENGTH_SHORT).show();
-                                                    if(usuario.isFirs_time()){
+                                                    Toast.makeText(getContext(), "Se inicio sesion correctamente " + usuario.isFirs_time() + first, Toast.LENGTH_SHORT).show();
+                                                    if(first){
                                                         startActivity(new Intent(getContext(),AnimeFavActivity.class));
                                                     }else{
                                                         startActivity(new Intent(getContext(),SplashActivity.class));

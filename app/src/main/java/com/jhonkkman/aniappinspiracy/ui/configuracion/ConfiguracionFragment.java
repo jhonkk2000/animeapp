@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.jhonkkman.aniappinspiracy.AlertLoading;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.MainActivity;
 import com.jhonkkman.aniappinspiracy.R;
@@ -44,10 +46,18 @@ public class ConfiguracionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mauth.signOut();
-                startActivity(new Intent(getContext(), MainActivity.class));
-                getActivity().finish();
-                System.exit(0);
-                cleanData();
+                AlertLoading dialog = new AlertLoading();
+                dialog.showDialog(getActivity(),"Cerrando sesión");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                        dialog.dismissDialog();
+                        getActivity().finish();
+                        System.exit(0);
+                        cleanData();
+                    }
+                },2000);
             }
         });
     }
