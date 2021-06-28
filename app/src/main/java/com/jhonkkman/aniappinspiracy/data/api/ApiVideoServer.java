@@ -104,7 +104,10 @@ public class ApiVideoServer {
                 datos2.add(datos.get(i));
             }
         }
-        int ep = Integer.parseInt(datos2.get(datos2.size()-1).split(" - ")[1].split("</a>")[0]);
+        int ep = 0;
+        if(datos2.size()>0){
+            ep = Integer.parseInt(datos2.get(datos2.size()-1).split(" - ")[1].split("</a>")[0]);
+        }
         return ep;
     }
 

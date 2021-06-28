@@ -61,8 +61,7 @@ dependencies {
 
     //ADblock
     implementation 'org.adblockplus:adblock-android-webview:4.0'
-
-    //ExoPlayer
+    
 
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
