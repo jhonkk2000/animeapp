@@ -53,7 +53,7 @@ public class User {
         return correo;
     }
 
-    public boolean isFirs_time() {
+    public boolean isFirst_time() {
         return first_time;
     }
 

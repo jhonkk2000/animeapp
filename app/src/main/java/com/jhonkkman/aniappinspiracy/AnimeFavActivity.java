@@ -94,7 +94,7 @@ public class AnimeFavActivity extends AppCompatActivity {
                         }
                     }
                 }
-                dbr.child(pref.getString("id","")).child("anime_fav").setValue(animes_fav);
+                dbr.child(pref.getString("id","")).child("animes_fav").setValue(animes_fav);
                 dbr.child(pref.getString("id","")).child("first_time").setValue(false);
                 startActivity(new Intent(AnimeFavActivity.this,GenFavActivity.class));
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

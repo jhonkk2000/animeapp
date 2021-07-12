@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.AdapterAnimeImage;
 import com.jhonkkman.aniappinspiracy.AdapterInicioRv;
 import com.jhonkkman.aniappinspiracy.AdapterSeasonAnime;
+import com.jhonkkman.aniappinspiracy.AlertLoading;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.R;
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
@@ -80,6 +81,7 @@ public class InicioFragment extends Fragment {
     private boolean estado_seasion = false;
     private boolean estado_genres = false;
     public static boolean estado_last=false;
+    private AlertLoading dialog = new AlertLoading();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -112,6 +114,8 @@ public class InicioFragment extends Fragment {
     public void loadSeasonState() {
         if (CenterActivity.animeItems.size() != 0) {
             estado_seasion = true;
+        }else{
+            dialog.showDialog(getActivity(),"Cargando animes!");
         }
     }
 
@@ -204,8 +208,9 @@ public class InicioFragment extends Fragment {
         adapter2 = new AdapterInicioRv(getContext(), CenterActivity.generosG, getActivity(), lastAnimeView, CenterActivity.animesI, CenterActivity.animesG);
         if (lastAnimeView) {
             loadDataContinueLast();
+        }else{
+            loadDataGenres();
         }
-        loadDataGenres();
         rv_continue.setLayoutManager(lym2);
         rv_continue.setAdapter(adapter2);
     }
@@ -228,7 +233,7 @@ public class InicioFragment extends Fragment {
                         AnimeItem a = new AnimeItem(anime.getMal_id(), anime.getTitle(), anime.getImage_url());
                         a.setUrl(anime.getUrl());
                         CenterActivity.animesI.add(a);
-                        if(finalL==1){
+                        if(animes.size()!=0){
                             in_1.setVisibility(View.INVISIBLE);
                             adapter2.notifyDataSetChanged();
                         }
@@ -236,6 +241,7 @@ public class InicioFragment extends Fragment {
                             loadDataContinueLast();
                         }else{
                             estado_last = true;
+                            loadDataGenres();
                         }
                     } else {
                         finalL--;
@@ -253,6 +259,21 @@ public class InicioFragment extends Fragment {
         }, 700);
     }
 
+    public void disablePb(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finalI = CenterActivity.generosG.size()-1;
+                if (finalI < generos.size() - 1) {
+                    disablePb();
+                    //adapter2.notifyDataSetChanged();
+                } else {
+                    pb_inicio.setVisibility(View.INVISIBLE);
+                }
+            }
+        },1500);
+    }
+
     @SuppressLint("NewApi")
     public void loadDataGenres() {
         new Handler().postDelayed(() -> {
@@ -261,11 +282,11 @@ public class InicioFragment extends Fragment {
                 //loadGenresState();
                 finalI = CenterActivity.generosG.size()-1;
                 if (finalI < generos.size() - 1) {
-                    loadDataGenres();
+                    disablePb();
                 } else {
                     pb_inicio.setVisibility(View.INVISIBLE);
                 }
-                //in_1.setVisibility(View.INVISIBLE);
+                in_1.setVisibility(View.INVISIBLE);
                 in_2.setVisibility(View.INVISIBLE);
             } else {
                 finalI++;
@@ -277,6 +298,7 @@ public class InicioFragment extends Fragment {
                             ArrayList<AnimeItem> animes = response.body().getAnime();
                             CenterActivity.animesG.add(animes);
                             CenterActivity.generosG.add(generos.get(finalI));
+                            dialog.dismissDialog();
                             if(finalI%3==0){
                                 adapter2.notifyDataSetChanged();
                             }
@@ -293,6 +315,7 @@ public class InicioFragment extends Fragment {
                                 } else {
                                     if (finalI == 1) {
                                         in_2.setVisibility(View.INVISIBLE);
+                                        adapter2.notifyDataSetChanged();
                                     }
                                 }
                             }

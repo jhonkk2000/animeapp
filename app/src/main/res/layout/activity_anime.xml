@@ -26,7 +26,7 @@
                     app:autoPlay="false"
                     app:showYouTubeButton="true"
                     app:showSeekBar="false"
-                    app:showFullScreenButton="true"
+                    app:showFullScreenButton="false"
                     app:showVideoCurrentTime="false"
                     app:showVideoDuration="false">
 

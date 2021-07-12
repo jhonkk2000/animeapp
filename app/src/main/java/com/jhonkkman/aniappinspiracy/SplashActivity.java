@@ -64,6 +64,7 @@ public class SplashActivity extends AppCompatActivity {
                             generos.add(ds.getValue(GeneroItem.class));
                         }
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
                         if (user != null) {
                             CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
                             CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());

@@ -58,6 +58,7 @@ public class CenterActivity extends AppCompatActivity {
     public static ArrayList<AnimeResource> animesFav = new ArrayList<>();
     public static String season ;
     public static int year;
+    public static String prueba;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

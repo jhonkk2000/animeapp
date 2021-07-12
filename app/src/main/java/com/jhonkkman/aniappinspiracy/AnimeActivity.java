@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
@@ -76,10 +83,13 @@ public class AnimeActivity extends AppCompatActivity {
     private ArrayList<Episodio> episodios = new ArrayList<>();
     private List<Fragment> fragments = new ArrayList<>();
     private boolean change_data = false;
+    private InterstitialAd mInterstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_anime);
         toolbar = findViewById(R.id.toolbar_anime);
         toolbar.setTitle(getString(R.string.nombre_de_anime));
@@ -100,6 +110,7 @@ public class AnimeActivity extends AppCompatActivity {
         dbr = FirebaseDatabase.getInstance().getReference("users");
         anime_previous = (AnimeItem) getIntent().getSerializableExtra("anime");
         //dialog.showDialog(this,"Cargando episodios");
+        loadAd();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         loadKeyComentario();
@@ -108,6 +119,45 @@ public class AnimeActivity extends AppCompatActivity {
         //loadFragments();
         savedLoadState();
         loadData();
+    }
+
+    public void loadAd(){
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(this,getString(R.string.admob_interstitial), adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                mInterstitialAd = interstitialAd;
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(AnimeActivity.this);
+                } else {
+                    Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                }
+                mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        // Called when fullscreen content is dismissed.
+                        Log.d("TAG", "The ad was dismissed.");
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(AdError adError) {
+                        // Called when fullscreen content failed to show.
+                        Log.d("TAG", "The ad failed to show.");
+                    }
+
+                    @Override
+                    public void onAdShowedFullScreenContent() {
+                        mInterstitialAd = null;
+                    }
+                });
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                // Handle the error
+                mInterstitialAd = null;
+            }
+        });
     }
 
     @Override
@@ -227,7 +277,9 @@ public class AnimeActivity extends AppCompatActivity {
 
     public void loadTabs(){
         tabs.addTab(tabs.newTab().setText(getString(R.string.descripcion_tab)));
-        tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
+        if(!CenterActivity.prueba.equals("T1")){
+            tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
+        }
         tabs.addTab(tabs.newTab().setText(getString(R.string.personajes)));
         tabs.addTab(tabs.newTab().setText(getString(R.string.galeria)));
         tabs.addTab(tabs.newTab().setText(getString(R.string.comentarios)));
@@ -310,7 +362,9 @@ public class AnimeActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String s) {
                         fragments.add(new DescripcionFragment(s.split("\\[")[0]));
-                        fragments.add(new EpisodiosFragment(anime.getEpisodes()));
+                        if(!CenterActivity.prueba.equals("T1")){
+                            fragments.add(new EpisodiosFragment(anime.getEpisodes()));
+                        }
                         fragments.add(new PersonajesFragment());
                         fragments.add(new GaleriaFragment());
                         fragments.add(new ComentariosFragment());

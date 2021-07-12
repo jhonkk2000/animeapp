@@ -79,7 +79,6 @@
                 android:background="@drawable/background_edittext"
                 android:textColor="@color/gray_text"
                 android:textSize="14sp"
-                android:inputType="text"
                 android:hint="@string/escribe_un"/>
 
             <ImageButton

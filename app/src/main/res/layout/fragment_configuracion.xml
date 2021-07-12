@@ -62,9 +62,11 @@
 
         </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_cerrar_sesion"
                 android:layout_width="match_parent"
@@ -76,7 +78,19 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:background="@drawable/background_mini_button"/>
-        </FrameLayout>
+
+                <com.google.android.gms.ads.AdView
+                    xmlns:ads="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/adView_configuracion"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|bottom"
+                    ads:adSize="BANNER"
+                    ads:adUnitId="@string/admob_banner">
+                </com.google.android.gms.ads.AdView>
+        </LinearLayout>
+
 
     </LinearLayout>
 

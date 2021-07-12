@@ -17,6 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +49,8 @@ public class PerfilFragment extends Fragment {
     private SharedPreferences pref;
     private User user;
     private DatabaseReference dbr;
+    private AdView mAdView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,12 +64,24 @@ public class PerfilFragment extends Fragment {
         btn_guardar = view.findViewById(R.id.btn_guardar_perfil);
         btn_guardar.setVisibility(View.INVISIBLE);
         pref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        mAdView = view.findViewById(R.id.adView_perfil);
         dbr = FirebaseDatabase.getInstance().getReference("users");
         //loadImg();
+        loadAd();
         loadUserData();
         editData();
         savedData();
         return view;
+    }
+
+    public void loadAd(){
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     public void editData(){

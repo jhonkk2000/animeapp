@@ -127,7 +127,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="match_parent"
@@ -149,8 +150,15 @@
 
         </FrameLayout>
 
-
-
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView_perfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/admob_banner">
+            </com.google.android.gms.ads.AdView>
     </LinearLayout>
 
 </RelativeLayout>

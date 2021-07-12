@@ -14,6 +14,11 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jhonkkman.aniappinspiracy.AlertLoading;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
@@ -25,6 +30,7 @@ public class ConfiguracionFragment extends Fragment {
     private AppCompatButton btn_cerrar_sesion;
     private FirebaseAuth mauth;
     private Switch sw_oscuro;
+    private AdView mAdView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,10 +38,22 @@ public class ConfiguracionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_configuracion, container, false);
         btn_cerrar_sesion = view.findViewById(R.id.btn_cerrar_sesion);
         sw_oscuro = view.findViewById(R.id.sw_modo_oscuro);
+        mAdView = view.findViewById(R.id.adView_configuracion);
         mauth = FirebaseAuth.getInstance();
+        loadAd();
         onCerrarSesion();
         loadOscuro();
         return view;
+    }
+
+    public void loadAd(){
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     public void loadOscuro(){

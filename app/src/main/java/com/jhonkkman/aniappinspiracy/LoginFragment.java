@@ -109,7 +109,7 @@ public class LoginFragment extends Fragment {
                                                     editor.putString("usuario",json);
                                                     editor.putString("id",id);
                                                     editor.apply();
-                                                    Toast.makeText(getContext(), "Se inicio sesion correctamente " + usuario.isFirs_time() + first, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getContext(), "Se inicio sesion correctamente ", Toast.LENGTH_SHORT).show();
                                                     if(first){
                                                         startActivity(new Intent(getContext(),AnimeFavActivity.class));
                                                     }else{

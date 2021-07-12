@@ -90,7 +90,7 @@ public class GenFavActivity extends AppCompatActivity {
                     }
                 }
                 dbr.child("users").child(pref.getString("id","")).child("gen_fav").setValue(gen_fav);
-                startActivity(new Intent(GenFavActivity.this,CenterActivity.class));
+                startActivity(new Intent(GenFavActivity.this,SplashActivity.class));
                 finish();
             }
         });
