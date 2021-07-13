@@ -93,6 +93,7 @@ PROGMASTERPC está altamente comprometido para cumplir con el compromiso de mant
     <string name="reproductor">Reproductores</string>
     <string name="nombre_personaje">Nombre de personaje</string>
     <string name="nombre_actor">Nombre de actor</string>
+    <string name="week_anime">Animes de la semana</string>
 
     <string name="descripcion_tab">Descripcion</string>
     <string name="episodios">Episodios</string>

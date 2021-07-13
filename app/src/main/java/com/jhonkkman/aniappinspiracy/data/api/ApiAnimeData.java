@@ -5,6 +5,7 @@ import com.jhonkkman.aniappinspiracy.data.models.AnimeResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeSearchRequest;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeTopResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeTopSeasonResource;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeWeekRequest;
 import com.jhonkkman.aniappinspiracy.data.models.GaleriaResource;
 import com.jhonkkman.aniappinspiracy.data.models.PersonajesResource;
 
@@ -50,6 +51,9 @@ public interface ApiAnimeData {
 
     @GET("top/anime")
     Call<AnimeTopResource> getAnimeTop();
+
+    @GET("schedule")
+    Call<AnimeWeekRequest> getAnimeWeek();
 
     @GET("top/anime/1/{subtype}")
     Call<AnimeTopResource> getAnimeTopSubtype(@Path("subtype") String subtype);

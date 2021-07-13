@@ -77,27 +77,22 @@
                     android:paddingStart="15dp"
                     android:layout_height="wrap_content" />
             </FrameLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/week_anime"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:textColor="@color/gray_text"/>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/sm_anime_item_gen_inicio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <include android:id="@+id/in_1" layout="@layout/shimmer_inicio_genres_anime"/>
-                        <include android:id="@+id/in_2" layout="@layout/shimmer_inicio_genres_anime"/>
-
-                    </LinearLayout>
-
-                </com.facebook.shimmer.ShimmerFrameLayout>
                 <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:id="@+id/rv_rv_generos_inicio"
                     android:layout_width="match_parent"
                     android:overScrollMode="never"
