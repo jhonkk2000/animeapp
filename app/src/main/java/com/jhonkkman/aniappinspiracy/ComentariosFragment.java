@@ -203,19 +203,23 @@ public class ComentariosFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String comentario = et_comentario.getText().toString();
-                if(!comentario.isEmpty()){
-                    ArrayList<String> likes = new ArrayList<>();
-                    ArrayList<String> dislikes = new ArrayList<>();
-                    comentarios.add(new Comentario(comentario,user.getCorreo(),likes,dislikes));
-                    if(comentarios.size()==0){
-                        dbr.child("anime").push().setValue(new AnimeComentarios(AnimeActivity.anime_previous.getMal_id(),comentarios));
+                if(CenterActivity.login){
+                    if(!comentario.isEmpty()){
+                        ArrayList<String> likes = new ArrayList<>();
+                        ArrayList<String> dislikes = new ArrayList<>();
+                        comentarios.add(new Comentario(comentario,user.getCorreo(),likes,dislikes));
+                        if(comentarios.size()==0){
+                            dbr.child("anime").push().setValue(new AnimeComentarios(AnimeActivity.anime_previous.getMal_id(),comentarios));
+                        }else{
+                            dbr.child("anime").child(KEY_COMENTARIO).child("comentarios").setValue(comentarios);
+                        }
+                        et_comentario.setText("");
+                        loadKey();
                     }else{
-                        dbr.child("anime").child(KEY_COMENTARIO).child("comentarios").setValue(comentarios);
+                        Toast.makeText(getContext(), "Ingresa un comentario", Toast.LENGTH_SHORT).show();
                     }
-                    et_comentario.setText("");
-                    loadKey();
                 }else{
-                    Toast.makeText(getContext(), "Ingresa un comentario", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Necesitas iniciar sesion para comentar", Toast.LENGTH_SHORT).show();
                 }
 
             }

@@ -73,6 +73,10 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
         }
 
         public void loadData(Comentario comentario,ArrayList<User> users,Context context,DatabaseReference dbr,String KEY){
+            if(!CenterActivity.login){
+                btn_like.setEnabled(false);
+                btn_dislike.setEnabled(false);
+            }
             ArrayList<String> likes = comentario.getLikes();
             ArrayList<String> dislikes = comentario.getDislikes();
             User user = new User();

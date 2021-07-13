@@ -1,6 +1,8 @@
 package com.jhonkkman.aniappinspiracy.ui.configuracion;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -20,6 +22,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.AlertLoading;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.MainActivity;
@@ -31,6 +34,7 @@ public class ConfiguracionFragment extends Fragment {
     private FirebaseAuth mauth;
     private Switch sw_oscuro;
     private AdView mAdView;
+    private SharedPreferences pref;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,11 +43,20 @@ public class ConfiguracionFragment extends Fragment {
         btn_cerrar_sesion = view.findViewById(R.id.btn_cerrar_sesion);
         sw_oscuro = view.findViewById(R.id.sw_modo_oscuro);
         mAdView = view.findViewById(R.id.adView_configuracion);
+        pref = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         mauth = FirebaseAuth.getInstance();
+        loadNoLogin();
         loadAd();
         onCerrarSesion();
         loadOscuro();
         return view;
+    }
+
+    public void loadNoLogin(){
+        if(!CenterActivity.login){
+            btn_cerrar_sesion.setEnabled(false);
+            btn_cerrar_sesion.setText("No haz iniciado sesion");
+        }
     }
 
     public void loadAd(){
@@ -66,6 +79,12 @@ public class ConfiguracionFragment extends Fragment {
                 mauth.signOut();
                 AlertLoading dialog = new AlertLoading();
                 dialog.showDialog(getActivity(),"Cerrando sesión");
+                SharedPreferences.Editor editor = pref.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(null);
+                editor.putString("usuario",json);
+                editor.putString("id","");
+                editor.apply();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

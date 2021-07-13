@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,9 @@ public class DescripcionFragment extends Fragment {
 
     private TextView tv_desc;
     private String desc;
+    private ShimmerFrameLayout sm_anime;
 
-    public DescripcionFragment(String desc){
-        this.desc = desc;
+    public DescripcionFragment(){
     }
 
     @Override
@@ -26,13 +27,15 @@ public class DescripcionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_descripcion, container, false);
         tv_desc = view.findViewById(R.id.tv_desc_anime);
-        loadDesc();
+        sm_anime = view.findViewById(R.id.sm_anime_desc);
+        sm_anime.startShimmer();
+        //loadDesc();
         return view;
     }
 
-    public void loadDesc(){
-        AnimeActivity.sm_anime.stopShimmer();
-        AnimeActivity.sm_anime.setVisibility(View.INVISIBLE);
+    public void loadDesc(String desc){
+        sm_anime.stopShimmer();
+        sm_anime.setVisibility(View.INVISIBLE);
         tv_desc.setText("Resumen: " + desc);
     }
 }

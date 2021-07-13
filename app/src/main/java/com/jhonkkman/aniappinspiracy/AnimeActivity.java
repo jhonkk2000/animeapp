@@ -76,7 +76,6 @@ public class AnimeActivity extends AppCompatActivity {
     private DatabaseReference dbr;
     private SharedPreferences pref;
     public static String KEY_COMENTARIO = "";
-    public static ShimmerFrameLayout sm_anime;
     public static AlertLoading dialog = new AlertLoading();
     //public static ArrayList<Episodio> episodios = new ArrayList<>();
     private AnimeResource anime = new AnimeResource();
@@ -84,6 +83,7 @@ public class AnimeActivity extends AppCompatActivity {
     private List<Fragment> fragments = new ArrayList<>();
     private boolean change_data = false;
     private InterstitialAd mInterstitialAd;
+    private DescripcionFragment descF = new DescripcionFragment();
 
 
     @Override
@@ -103,8 +103,6 @@ public class AnimeActivity extends AppCompatActivity {
         yt_trailer = findViewById(R.id.yt_trailer);
         tv_en_emision = findViewById(R.id.tv_en_emision);
         tv_finalizado = findViewById(R.id.tv_finalizado);
-        sm_anime = findViewById(R.id.sm_anime);
-        sm_anime.startShimmer();
         tv_stars = findViewById(R.id.tv_stars_anime);
         pref = getSharedPreferences("user",MODE_PRIVATE);
         dbr = FirebaseDatabase.getInstance().getReference("users");
@@ -113,10 +111,12 @@ public class AnimeActivity extends AppCompatActivity {
         loadAd();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        loadKeyComentario();
-        onSelectFav();
+        if(CenterActivity.login){
+            //loadKeyComentario();
+            onSelectFav();
+        }
         loadTabs();
-        //loadFragments();
+        loadFragments();
         savedLoadState();
         loadData();
     }
@@ -282,7 +282,9 @@ public class AnimeActivity extends AppCompatActivity {
         }
         tabs.addTab(tabs.newTab().setText(getString(R.string.personajes)));
         tabs.addTab(tabs.newTab().setText(getString(R.string.galeria)));
-        tabs.addTab(tabs.newTab().setText(getString(R.string.comentarios)));
+        if(CenterActivity.login){
+            //tabs.addTab(tabs.newTab().setText(getString(R.string.comentarios)));
+        }
     }
 
     public void loadAnime(){
@@ -361,17 +363,8 @@ public class AnimeActivity extends AppCompatActivity {
                 translator.translate(anime.getSynopsis()).addOnSuccessListener(new OnSuccessListener<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        fragments.add(new DescripcionFragment(s.split("\\[")[0]));
-                        if(!CenterActivity.prueba.equals("T1")){
-                            fragments.add(new EpisodiosFragment(anime.getEpisodes()));
-                        }
-                        fragments.add(new PersonajesFragment());
-                        fragments.add(new GaleriaFragment());
-                        fragments.add(new ComentariosFragment());
-                        AdapterPager adapter = new AdapterPager(getSupportFragmentManager(),tabs.getTabCount(),fragments);
-                        vp_anime.setAdapter(adapter);
-                        vp_anime.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
-                        tabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_anime));
+                        String desc = s.split("\\[")[0];
+                        descF.loadDesc(desc);
                     }
                 });
             }
@@ -381,6 +374,22 @@ public class AnimeActivity extends AppCompatActivity {
                 Log.d("TRADUCTOR","fallo");
             }
         });
+    }
+
+    public void loadFragments(){
+        fragments.add(descF);
+        if(!CenterActivity.prueba.equals("T2")){
+            fragments.add(new EpisodiosFragment(anime.getEpisodes()));
+        }
+        fragments.add(new PersonajesFragment());
+        fragments.add(new GaleriaFragment());
+        if(CenterActivity.login){
+            //fragments.add(new ComentariosFragment());
+        }
+        AdapterPager adapter = new AdapterPager(getSupportFragmentManager(),tabs.getTabCount(),fragments);
+        vp_anime.setAdapter(adapter);
+        vp_anime.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+        tabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_anime));
     }
 
     public void loadAiring(boolean airing){

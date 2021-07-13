@@ -65,6 +65,7 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -109,6 +110,7 @@ public class LoginFragment extends Fragment {
                                                     editor.putString("usuario",json);
                                                     editor.putString("id",id);
                                                     editor.apply();
+                                                    CenterActivity.login = true;
                                                     Toast.makeText(getContext(), "Se inicio sesion correctamente ", Toast.LENGTH_SHORT).show();
                                                     if(first){
                                                         startActivity(new Intent(getContext(),AnimeFavActivity.class));

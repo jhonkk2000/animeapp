@@ -76,31 +76,33 @@ public class AdapterPlayers extends RecyclerView.Adapter<AdapterPlayers.ViewHold
             btn_reproducir.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dbr.child(key).child("last_anime_view").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                            ArrayList<Integer> ids = new ArrayList();
-                            for (DataSnapshot ds: snapshot.getChildren()){
-                                ids.add(Integer.parseInt(ds.getValue().toString()));
-                            }
-                            if(ids.size()==4){
-                                ids.remove(0);
-                            }
-                            for (int i = 0; i < ids.size(); i++) {
-                                if(ids.get(i)==AnimeActivity.anime_previous.getMal_id()){
-                                    ids.remove(i);
-                                    break;
+                    if(CenterActivity.login){
+                        dbr.child(key).child("last_anime_view").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                ArrayList<Integer> ids = new ArrayList();
+                                for (DataSnapshot ds: snapshot.getChildren()){
+                                    ids.add(Integer.parseInt(ds.getValue().toString()));
                                 }
+                                if(ids.size()==4){
+                                    ids.remove(0);
+                                }
+                                for (int i = 0; i < ids.size(); i++) {
+                                    if(ids.get(i)==AnimeActivity.anime_previous.getMal_id()){
+                                        ids.remove(i);
+                                        break;
+                                    }
+                                }
+                                ids.add(AnimeActivity.anime_previous.getMal_id());
+                                dbr.child(key).child("last_anime_view").setValue(ids);
                             }
-                            ids.add(AnimeActivity.anime_previous.getMal_id());
-                            dbr.child(key).child("last_anime_view").setValue(ids);
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                     if(type.equals("primary")){
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse(video), "video/*");

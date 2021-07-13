@@ -3,6 +3,8 @@ package com.jhonkkman.aniappinspiracy;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +51,7 @@ public class CenterActivity extends AppCompatActivity {
     private TextView tv_nombreu;
     private ImageView iv_user;
     private NavigationView navigationView;
+    public static boolean login;
     public static ArrayList<AnimeItem> animesI = new ArrayList<>();
     public static ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
     public static List<GeneroItem> generosG = new ArrayList<>();
@@ -70,9 +73,11 @@ public class CenterActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         dbr = FirebaseDatabase.getInstance().getReference();
         pref = getSharedPreferences("user",MODE_PRIVATE);
+        login = getIntent().getBooleanExtra("login",true);
         loadUser();
         updateUserLocal();
         updateFav();
+        loadMenuItems();
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -84,18 +89,32 @@ public class CenterActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
+    public void loadMenuItems(){
+        Menu menu = navigationView.getMenu();
+        MenuItem mi_fav = menu.findItem(R.id.nav_fav);
+        MenuItem mi_perfil = menu.findItem(R.id.nav_perfil);
+        if(!login){
+            mi_fav.setEnabled(false);
+            mi_perfil.setEnabled(false);
+        }
+    }
+
     public void loadDataNav(){
         View view = navigationView.getHeaderView(0);
         iv_user = view.findViewById(R.id.iv_foto_user);
         tv_nombreu = view.findViewById(R.id.tv_nombre_usuario_nav);
-        tv_nombreu.setText(user.getNombre_usuario());
-        Glide.with(this).load(user.getUrl_foto()).into(iv_user);
+        if(!login){
+            tv_nombreu.setText("Anonimo");
+        }else{
+            tv_nombreu.setText(user.getNombre_usuario());
+            Glide.with(this).load(user.getUrl_foto()).into(iv_user);
+        }
     }
 
     public void loadUser(){
-        Gson gson = new Gson();
-        String json = pref.getString("usuario","");
-        user = gson.fromJson(json,User.class);
+            Gson gson = new Gson();
+            String json = pref.getString("usuario","");
+            user = gson.fromJson(json,User.class);
         loadDataNav();
     }
 

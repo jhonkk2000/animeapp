@@ -63,14 +63,18 @@ public class SplashActivity extends AppCompatActivity {
                         for (DataSnapshot ds : snapshot.child("genres").getChildren()) {
                             generos.add(ds.getValue(GeneroItem.class));
                         }
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
-                        if (user != null) {
-                            CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
-                            CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
-                            startActivity(new Intent(SplashActivity.this, CenterActivity.class));
+                        CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
+                        CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
+                        if(!getIntent().getBooleanExtra("register",true)){
+                            startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("login",false));
                         }else{
-                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            if (user != null) {
+                                startActivity(new Intent(SplashActivity.this, CenterActivity.class));
+                            }else{
+                                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                            }
                         }
                         finish();
                     }

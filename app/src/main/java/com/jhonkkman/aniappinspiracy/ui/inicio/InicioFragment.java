@@ -201,15 +201,19 @@ public class InicioFragment extends Fragment {
 
     public void loadContinue() {
         boolean lastAnimeView = false;
-        if (user.getLast_anime_view().size() != 0) {
-            lastAnimeView = true;
-        }
         lym2 = new LinearLayoutManager(getContext());
         adapter2 = new AdapterInicioRv(getContext(), CenterActivity.generosG, getActivity(), lastAnimeView, CenterActivity.animesI, CenterActivity.animesG);
-        if (lastAnimeView) {
-            loadDataContinueLast();
-        }else{
+        if(!CenterActivity.login){
             loadDataGenres();
+        }else{
+            if (user.getLast_anime_view().size() != 0) {
+                lastAnimeView = true;
+            }
+            if (lastAnimeView) {
+                loadDataContinueLast();
+            }else{
+                loadDataGenres();
+            }
         }
         rv_continue.setLayoutManager(lym2);
         rv_continue.setAdapter(adapter2);
@@ -307,9 +311,11 @@ public class InicioFragment extends Fragment {
                             } else {
                                 pb_inicio.setVisibility(View.INVISIBLE);
                             }
-                            if (finalI == 0 && user.getLast_anime_view().size() != 0) {
-                                in_2.setVisibility(View.INVISIBLE);
-                            } else {
+                            if(CenterActivity.login){
+                                if (finalI == 0 && user.getLast_anime_view().size() != 0) {
+                                    in_2.setVisibility(View.INVISIBLE);
+                                }
+                            }
                                 if (finalI == 0) {
                                     in_1.setVisibility(View.INVISIBLE);
                                 } else {
@@ -318,7 +324,7 @@ public class InicioFragment extends Fragment {
                                         adapter2.notifyDataSetChanged();
                                     }
                                 }
-                            }
+
                         }else{
                             finalI--;
                             loadDataGenres();

@@ -196,17 +196,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/sm_anime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp">
-
-               <include layout="@layout/shimmer_descripcion"/>
-            </com.facebook.shimmer.ShimmerFrameLayout>
-
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/vp_anime"
                 android:layout_width="match_parent"
