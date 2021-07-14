@@ -277,7 +277,7 @@ public class AnimeActivity extends AppCompatActivity {
 
     public void loadTabs(){
         tabs.addTab(tabs.newTab().setText(getString(R.string.descripcion_tab)));
-        if(!CenterActivity.prueba.equals("T1")){
+        if(!CenterActivity.prueba.equals("T3")){
             tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
         }
         tabs.addTab(tabs.newTab().setText(getString(R.string.personajes)));
@@ -378,7 +378,7 @@ public class AnimeActivity extends AppCompatActivity {
 
     public void loadFragments(){
         fragments.add(descF);
-        if(!CenterActivity.prueba.equals("T2")){
+        if(!CenterActivity.prueba.equals("T3")){
             fragments.add(new EpisodiosFragment(anime.getEpisodes()));
         }
         fragments.add(new PersonajesFragment());
