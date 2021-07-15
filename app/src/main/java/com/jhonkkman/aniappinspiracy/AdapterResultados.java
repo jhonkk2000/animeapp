@@ -28,13 +28,15 @@ public class AdapterResultados extends RecyclerView.Adapter<AdapterResultados.Vi
     private ArrayList<AnimeItem> lista3 = new ArrayList<>();
     private Context context;
     private Activity activity;
+    private String activityUp;
 
-    public AdapterResultados(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, Context context,Activity activity) {
+    public AdapterResultados(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, Context context,Activity activity,String activityUp) {
         this.lista1 = lista1;
         this.lista2 = lista2;
         this.lista3 = lista3;
         this.context = context;
         this.activity = activity;
+        this.activityUp = activityUp;
     }
 
     @NonNull
@@ -45,7 +47,7 @@ public class AdapterResultados extends RecyclerView.Adapter<AdapterResultados.Vi
 
     @Override
     public void onBindViewHolder(@NonNull AdapterResultados.ViewHolderResultados holder, int position) {
-        holder.loadData(lista1,lista2,lista3,position,context,activity);
+        holder.loadData(lista1,lista2,lista3,position,context,activity,activityUp);
     }
 
     @Override
@@ -66,9 +68,17 @@ public class AdapterResultados extends RecyclerView.Adapter<AdapterResultados.Vi
             cv_1 = v.findViewById(R.id.cv_resultado_1);
             cv_2 = v.findViewById(R.id.cv_resultado_2);
             cv_3 = v.findViewById(R.id.cv_resultado_3);
+            cv_1.setTransitionName("anime_portada");
+            cv_2.setTransitionName("anime_portada");
+            cv_3.setTransitionName("anime_portada");
         }
 
-        public void loadData(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, int pos, Context context, Activity activity){
+        public void loadData(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, int pos, Context context, Activity activity,String activityUp){
+            if(activityUp.equals("inicio")){
+                cv_1.setStrokeWidth(0);
+                cv_2.setStrokeWidth(0);
+                cv_3.setStrokeWidth(0);
+            }
             if(lista1.size()>=pos+1){
                 Glide.with(context).load(lista1.get(pos).getImage_url()).into(iv_1);
                 cv_1.setVisibility(View.VISIBLE);

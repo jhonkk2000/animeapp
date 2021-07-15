@@ -107,6 +107,7 @@ public class AnimeActivity extends AppCompatActivity {
         pref = getSharedPreferences("user",MODE_PRIVATE);
         dbr = FirebaseDatabase.getInstance().getReference("users");
         anime_previous = (AnimeItem) getIntent().getSerializableExtra("anime");
+        vp_anime.setOffscreenPageLimit(5);
         //dialog.showDialog(this,"Cargando episodios");
         loadAd();
         setSupportActionBar(toolbar);
@@ -116,7 +117,12 @@ public class AnimeActivity extends AppCompatActivity {
             onSelectFav();
         }
         loadTabs();
-        loadFragments();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadFragments();
+            }
+        },500);
         savedLoadState();
         loadData();
     }
@@ -277,7 +283,7 @@ public class AnimeActivity extends AppCompatActivity {
 
     public void loadTabs(){
         tabs.addTab(tabs.newTab().setText(getString(R.string.descripcion_tab)));
-        if(!CenterActivity.prueba.equals("T3")){
+        if(!CenterActivity.prueba.equals("T4")){
             tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
         }
         tabs.addTab(tabs.newTab().setText(getString(R.string.personajes)));
@@ -378,7 +384,7 @@ public class AnimeActivity extends AppCompatActivity {
 
     public void loadFragments(){
         fragments.add(descF);
-        if(!CenterActivity.prueba.equals("T3")){
+        if(!CenterActivity.prueba.equals("T4")){
             fragments.add(new EpisodiosFragment(anime.getEpisodes()));
         }
         fragments.add(new PersonajesFragment());

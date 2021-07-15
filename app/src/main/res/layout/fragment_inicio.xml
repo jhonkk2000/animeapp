@@ -93,9 +93,10 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:id="@+id/rv_rv_generos_inicio"
+                    android:id="@+id/rv_generos_inicio"
                     android:layout_width="match_parent"
                     android:overScrollMode="never"
+                    android:layoutAnimation="@anim/layou_animator"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     android:layout_height="wrap_content" />
             </FrameLayout>

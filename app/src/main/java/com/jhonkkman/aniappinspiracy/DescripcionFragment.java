@@ -29,6 +29,7 @@ public class DescripcionFragment extends Fragment {
         tv_desc = view.findViewById(R.id.tv_desc_anime);
         sm_anime = view.findViewById(R.id.sm_anime_desc);
         sm_anime.startShimmer();
+        setRetainInstance(true);
         //loadDesc();
         return view;
     }

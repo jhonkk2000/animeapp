@@ -75,6 +75,7 @@ public class AdapterTodos extends RecyclerView.Adapter<AdapterTodos.ViewHolderTo
                 public void onClick(View view) {
                     Intent i = new Intent(context,AnimeActivity.class);
                     i.putExtra("anime", (Serializable) anime);
+                    cv_anime.setTransitionName("anime_portada");
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv_anime, ViewCompat.getTransitionName(cv_anime));
                     context.startActivity(i,options.toBundle());
                 }

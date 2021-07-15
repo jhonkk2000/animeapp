@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.Resource;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.card.MaterialCardView;
@@ -536,7 +538,7 @@ public class ExploraFragment extends Fragment {
                             }
                         }
                         lym = new LinearLayoutManager(getContext());
-                        adapter = new AdapterResultados(lista1,lista2,lista3,getContext(),getActivity());
+                        adapter = new AdapterResultados(lista1,lista2,lista3,getContext(),getActivity(),"explora");
                         rv_resultados.setLayoutManager(lym);
                         rv_resultados.setAdapter(adapter);
                         rv_resultados.setNestedScrollingEnabled(false);
@@ -570,11 +572,11 @@ public class ExploraFragment extends Fragment {
     }
 
     public void loadGeneros(){
-        String[] genres = new String[CenterActivity.generos.size()+1];
+        String[] genres = new String[generos.size()+1];
         genres[0]= "Generos";
         Log.d("genres",genres.length+"");
-        for (int i = 0; i < CenterActivity.generos.size(); i++) {
-            genres[i+1] = CenterActivity.generos.get(i).getName();
+        for (int i = 0; i < generos.size(); i++) {
+            genres[i+1] = generos.get(i).getName();
         }
         ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,genres);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -1,6 +1,5 @@
 package com.jhonkkman.aniappinspiracy.ui.inicio;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,28 +8,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.jhonkkman.aniappinspiracy.AdapterAnimeImage;
-import com.jhonkkman.aniappinspiracy.AdapterInicioRv;
 import com.jhonkkman.aniappinspiracy.AdapterResultados;
 import com.jhonkkman.aniappinspiracy.AdapterSeasonAnime;
 import com.jhonkkman.aniappinspiracy.AlertLoading;
@@ -38,15 +27,12 @@ import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.R;
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
 import com.jhonkkman.aniappinspiracy.data.api.ApiClientData;
-import com.jhonkkman.aniappinspiracy.data.models.AnimeGenResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeTopSeasonResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeWeekRequest;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.data.models.User;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,7 +76,7 @@ public class InicioFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_inicio, container, false);
         rv_season = root.findViewById(R.id.rv_season_anime);
-        rv_continue = root.findViewById(R.id.rv_rv_generos_inicio);
+        rv_continue = root.findViewById(R.id.rv_generos_inicio);
         pb_inicio = root.findViewById(R.id.pb_inicio);
         tv_season = root.findViewById(R.id.tv_season_anime);
         dbr = FirebaseDatabase.getInstance().getReference();
@@ -228,7 +214,6 @@ public class InicioFragment extends Fragment {
                             loadDataContinueLast();
                         }else{
                             estado_last = true;
-                            loadDataGenres();
                         }
                     } else {
                         finalL--;
@@ -259,72 +244,6 @@ public class InicioFragment extends Fragment {
                 }
             }
         },1500);
-    }
-
-    @SuppressLint("NewApi")
-    public void loadDataGenres() {
-        new Handler().postDelayed(() -> {
-            if (estado_genres) {
-                //adapter2.notifyDataSetChanged();
-                //loadGenresState();
-                finalI = CenterActivity.generosG.size()-1;
-                if (finalI < generos.size() - 1) {
-                    disablePb();
-                } else {
-                    pb_inicio.setVisibility(View.INVISIBLE);
-                }
-                in_1.setVisibility(View.INVISIBLE);
-                in_2.setVisibility(View.INVISIBLE);
-            } else {
-                finalI++;
-                Call<AnimeGenResource> call = API_SERVICE.getGeneroAnime(generos.get(finalI).getMal_id());
-                call.enqueue(new Callback<AnimeGenResource>() {
-                    @Override
-                    public void onResponse(Call<AnimeGenResource> call, Response<AnimeGenResource> response) {
-                        if (response.isSuccessful()) {
-                            ArrayList<AnimeItem> animes = response.body().getAnime();
-                            CenterActivity.animesG.add(animes);
-                            CenterActivity.generosG.add(generos.get(finalI));
-                            dialog.dismissDialog();
-                            if(finalI%3==0){
-                                adapter2.notifyDataSetChanged();
-                            }
-                            if (finalI < generos.size() - 1) {
-                                loadDataGenres();
-                            } else {
-                                pb_inicio.setVisibility(View.INVISIBLE);
-                            }
-                            if(CenterActivity.login){
-                                if (finalI == 0 && user.getLast_anime_view().size() != 0) {
-                                    in_2.setVisibility(View.INVISIBLE);
-                                }
-                            }
-                                if (finalI == 0) {
-                                    in_1.setVisibility(View.INVISIBLE);
-                                } else {
-                                    if (finalI == 1) {
-                                        in_2.setVisibility(View.INVISIBLE);
-                                        adapter2.notifyDataSetChanged();
-                                    }
-                                }
-
-                        }else{
-                            finalI--;
-                            loadDataGenres();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<AnimeGenResource> call, Throwable t) {
-                        Log.d("NOCARGA", t.getMessage());
-                        if (finalI <= generos.size()) {
-                            loadDataGenres();
-                        }
-                    }
-                });
-            }
-        }, 1000);
     }
 
     public void loadAnimeOfTheWeek(){
@@ -437,10 +356,29 @@ public class InicioFragment extends Fragment {
                                     }
                                 }
                             }
+                            Collections.sort(list1, new Comparator<AnimeItem>() {
+                                @Override
+                                public int compare(AnimeItem o1, AnimeItem o2) {
+                                    return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
+                                }
+                            });
+                            Collections.sort(list2, new Comparator<AnimeItem>() {
+                                @Override
+                                public int compare(AnimeItem o1, AnimeItem o2) {
+                                    return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
+                                }
+                            });
+                            Collections.sort(list3, new Comparator<AnimeItem>() {
+                                @Override
+                                public int compare(AnimeItem o1, AnimeItem o2) {
+                                    return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
+                                }
+                            });
                             lym2 = new LinearLayoutManager(getContext());
-                            adapter2 = new AdapterResultados(list1,list2,list3,getContext(),getActivity());
+                            adapter2 = new AdapterResultados(list1,list2,list3,getContext(),getActivity(),"inicio");
                             rv_continue.setLayoutManager(lym2);
                             rv_continue.setAdapter(adapter2);
+                            rv_continue.scheduleLayoutAnimation();
                             adapter2.notifyDataSetChanged();
                             pb_inicio.setVisibility(View.INVISIBLE);
                             if(!estado_seasion){
