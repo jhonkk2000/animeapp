@@ -45,7 +45,6 @@ import retrofit2.Response;
 
 import static com.jhonkkman.aniappinspiracy.CenterActivity.animeItems;
 import static com.jhonkkman.aniappinspiracy.CenterActivity.generos;
-import static com.jhonkkman.aniappinspiracy.CenterActivity.season;
 import static com.jhonkkman.aniappinspiracy.CenterActivity.year;
 
 public class InicioFragment extends Fragment {
@@ -69,6 +68,7 @@ public class InicioFragment extends Fragment {
     private int finalL = -1;
     private boolean estado_seasion = false;
     private boolean estado_genres = false;
+    private String season = CenterActivity.season;
     public static boolean estado_last=false;
     private AlertLoading dialog = new AlertLoading();
 

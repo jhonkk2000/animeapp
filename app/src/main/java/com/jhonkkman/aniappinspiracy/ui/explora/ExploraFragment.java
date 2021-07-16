@@ -571,6 +571,7 @@ public class ExploraFragment extends Fragment {
         });
     }
 
+    @SuppressLint("ResourceType")
     public void loadGeneros(){
         String[] genres = new String[generos.size()+1];
         genres[0]= "Generos";

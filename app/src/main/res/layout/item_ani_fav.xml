@@ -53,7 +53,6 @@
                 android:text="@string/cual_es_tu_anime_fav"
                 android:textSize="12sp"
                 android:gravity="center"
-                android:textColor="@color/gray_text"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -96,7 +95,6 @@
                 android:text="@string/cual_es_tu_anime_fav"
                 android:gravity="center"
                 android:textSize="12sp"
-                android:textColor="@color/gray_text"
                 android:textStyle="bold"/>
 
         </LinearLayout>

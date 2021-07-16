@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -27,6 +28,7 @@ import com.jhonkkman.aniappinspiracy.AlertLoading;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.MainActivity;
 import com.jhonkkman.aniappinspiracy.R;
+import com.jhonkkman.aniappinspiracy.SplashActivity;
 
 public class ConfiguracionFragment extends Fragment {
 
@@ -34,7 +36,7 @@ public class ConfiguracionFragment extends Fragment {
     private FirebaseAuth mauth;
     private Switch sw_oscuro;
     private AdView mAdView;
-    private SharedPreferences pref;
+    private SharedPreferences pref,prefD;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,12 +46,22 @@ public class ConfiguracionFragment extends Fragment {
         sw_oscuro = view.findViewById(R.id.sw_modo_oscuro);
         mAdView = view.findViewById(R.id.adView_configuracion);
         pref = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        prefD = getActivity().getSharedPreferences("darkMode",Context.MODE_PRIVATE);
         mauth = FirebaseAuth.getInstance();
+        loadStateDark();
         loadNoLogin();
         loadAd();
         onCerrarSesion();
         loadOscuro();
         return view;
+    }
+
+    public void loadStateDark(){
+        if(prefD.getBoolean("night",false)){
+            sw_oscuro.setChecked(true);
+        }else{
+            sw_oscuro.setChecked(false);
+        }
     }
 
     public void loadNoLogin(){
@@ -70,6 +82,36 @@ public class ConfiguracionFragment extends Fragment {
     }
 
     public void loadOscuro(){
+        sw_oscuro.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(sw_oscuro.isChecked()){
+                    changeState(true);
+                    Intent i = new Intent(getContext(), SplashActivity.class);
+                    if(!getActivity().getIntent().getBooleanExtra("login",true)){
+                        i.putExtra("register",false);
+                    }
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    startActivity(i);
+                    getActivity().finish();
+                }else{
+                    changeState(false);
+                    Intent i = new Intent(getContext(), SplashActivity.class);
+                    if(!getActivity().getIntent().getBooleanExtra("login",true)){
+                        i.putExtra("register",false);
+                    }
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    startActivity(i);
+                    getActivity().finish();
+                }
+            }
+        });
+    }
+
+    public void changeState(boolean val){
+        SharedPreferences.Editor editor = prefD.edit();
+        editor.putBoolean("night",val);
+        editor.apply();
     }
 
     public void onCerrarSesion(){

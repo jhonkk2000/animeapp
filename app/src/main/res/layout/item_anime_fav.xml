@@ -17,9 +17,9 @@
             android:layout_height="180dp"
             android:focusable="true"
             android:clickable="true"
-            app:cardCornerRadius="15dp"
+            app:cardCornerRadius="10dp"
             app:strokeColor="@color/dark_red"
-            android:transitionName="anime_image"
+            android:transitionName="anime_portada"
             app:strokeWidth="4dp">
 
             <ImageView

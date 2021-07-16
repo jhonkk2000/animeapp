@@ -17,7 +17,6 @@
             android:id="@+id/tv_position_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray_text"
             android:textSize="50sp"
             android:textStyle="bold"
             android:text="@string/diez"/>
@@ -45,7 +44,6 @@
             android:id="@+id/tv_anime_top"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray_text"
             android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:text="@string/nombre_de_anime"/>
@@ -60,8 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/estrellas"
-            android:textStyle="bold"
-            android:textColor="@color/gray_text"/>
+            android:textStyle="bold"/>
 
     </LinearLayout>
 

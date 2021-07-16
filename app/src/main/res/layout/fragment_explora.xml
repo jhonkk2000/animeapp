@@ -35,6 +35,8 @@
                     android:layout_weight="1"
                     android:paddingStart="20dp"
                     android:layout_marginEnd="10dp"
+                    android:textColorHint="@color/gray_text_hint"
+                    android:textColor="@color/gray_text"
                     android:textStyle="bold"
                     android:hint="@string/nombre_de_anime" />
 
@@ -139,7 +141,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/nodata"
                     android:gravity="center"
-                    android:textColor="@color/gray_text"
                     android:textStyle="bold"
                     android:textSize="20sp"/>
 
@@ -176,7 +177,7 @@
                             app:cardCornerRadius="15dp"
                             app:strokeColor="@color/dark_red"
                             app:strokeWidth="4dp"
-                            android:transitionName="anime_image">
+                            android:transitionName="anime_portada">
 
                             <ImageView
                                 android:id="@+id/iv_anime_busqueda"
@@ -273,8 +274,7 @@
                         android:textStyle="bold"
                         android:textSize="20sp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:textColor="@color/gray_text"/>
+                        android:layout_marginBottom="5dp"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_mas_resultados"

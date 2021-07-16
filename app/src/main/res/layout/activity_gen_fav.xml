@@ -22,8 +22,7 @@
             android:text="@string/cual_es_tu_gen_fav"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="@color/gray_text"/>
+            android:gravity="center"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_gen_fav"
@@ -58,8 +57,7 @@
             android:text="@string/omitir"
             android:textStyle="bold"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:textColor="@color/gray_text"/>
+            android:layout_marginBottom="10dp"/>
 
     </LinearLayout>
 

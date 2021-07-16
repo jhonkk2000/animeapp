@@ -21,7 +21,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/nodata_p"
                 android:gravity="center"
-                android:textColor="@color/gray_text"
                 android:textStyle="bold"
                 android:textSize="20sp"/>
 

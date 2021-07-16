@@ -54,7 +54,12 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -283,7 +288,7 @@ public class AnimeActivity extends AppCompatActivity {
 
     public void loadTabs(){
         tabs.addTab(tabs.newTab().setText(getString(R.string.descripcion_tab)));
-        if(!CenterActivity.prueba.equals("T4")){
+        if(!CenterActivity.prueba.equals("T3")){
             tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
         }
         tabs.addTab(tabs.newTab().setText(getString(R.string.personajes)));
@@ -370,7 +375,12 @@ public class AnimeActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String s) {
                         String desc = s.split("\\[")[0];
-                        descF.loadDesc(desc);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                descF.loadDesc(desc);
+                            }
+                        },500);
                     }
                 });
             }
@@ -384,7 +394,7 @@ public class AnimeActivity extends AppCompatActivity {
 
     public void loadFragments(){
         fragments.add(descF);
-        if(!CenterActivity.prueba.equals("T4")){
+        if(!CenterActivity.prueba.equals("T3")){
             fragments.add(new EpisodiosFragment(anime.getEpisodes()));
         }
         fragments.add(new PersonajesFragment());
@@ -398,13 +408,31 @@ public class AnimeActivity extends AppCompatActivity {
         tabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_anime));
     }
 
-    public void loadAiring(boolean airing){
+    public void loadAiring(boolean airing) {
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date myDate = null;
+        Date today = new Date();
+        try {
+            myDate = formatter.parse(anime.getAired().getProp().getFrom().getDay()+"-"+anime.getAired().getProp().getFrom().getMonth()+"-"+anime.getAired().getProp().getFrom().getYear());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if(airing){
             tv_en_emision.setVisibility(View.VISIBLE);
             tv_finalizado.setVisibility(View.INVISIBLE);
         }else{
             tv_en_emision.setVisibility(View.INVISIBLE);
             tv_finalizado.setVisibility(View.VISIBLE);
+            if(today.before(myDate)){
+                long dif = myDate.getTime() - today.getTime();
+                long difference_In_Days
+                        = (dif
+                        / (1000 * 60 * 60 * 24))
+                        % 365;
+                tv_en_emision.setText("Se estrena en " + difference_In_Days + " días");
+                tv_en_emision.setVisibility(View.VISIBLE);
+                tv_finalizado.setVisibility(View.INVISIBLE);
+            }
         }
     }
 

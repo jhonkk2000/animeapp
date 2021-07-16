@@ -21,7 +21,6 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:text="@string/cargando_e"
-            android:textColor="@color/gray_text"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -59,7 +58,6 @@
             android:layout_height="wrap_content"
             android:text="@string/nodata_e"
             android:gravity="center"
-            android:textColor="@color/gray_text"
             android:textStyle="bold"
             android:textSize="20sp"/>
 

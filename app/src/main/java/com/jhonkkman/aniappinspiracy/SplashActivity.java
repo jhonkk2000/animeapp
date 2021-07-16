@@ -2,8 +2,10 @@ package com.jhonkkman.aniappinspiracy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
@@ -29,6 +31,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private DatabaseReference dbr;
     private ImageView iv_splah;
+    private SharedPreferences prefD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +39,20 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         dbr = FirebaseDatabase.getInstance().getReference();
         iv_splah = findViewById(R.id.iv_splash);
+        prefD = getSharedPreferences("darkMode",MODE_PRIVATE);
+        loadDark();
         loadAnimationImage();
         if (NetworkUtils.isNetworkConnected(this)) {
             finishSplash();
         } else {
             Toast.makeText(this, "Verifica tu conexion a internet!", Toast.LENGTH_SHORT).show();
             finish();
+        }
+    }
+
+    public void loadDark(){
+        if(prefD.getBoolean("night",false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
     }
 
@@ -60,6 +71,7 @@ public class SplashActivity extends AppCompatActivity {
                 dbr.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        generos.clear();
                         for (DataSnapshot ds : snapshot.child("genres").getChildren()) {
                             generos.add(ds.getValue(GeneroItem.class));
                         }
