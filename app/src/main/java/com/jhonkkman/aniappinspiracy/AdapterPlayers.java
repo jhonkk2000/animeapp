@@ -76,7 +76,7 @@ public class AdapterPlayers extends RecyclerView.Adapter<AdapterPlayers.ViewHold
             btn_reproducir.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(CenterActivity.login){
+                    /*if(CenterActivity.login){
                         dbr.child(key).child("last_anime_view").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -102,7 +102,7 @@ public class AdapterPlayers extends RecyclerView.Adapter<AdapterPlayers.ViewHold
 
                             }
                         });
-                    }
+                    }*/
                     if(type.equals("primary")){
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse(video), "video/*");

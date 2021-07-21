@@ -2,12 +2,17 @@ package com.jhonkkman.aniappinspiracy.ui.inicio;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -16,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,9 +40,11 @@ import com.jhonkkman.aniappinspiracy.data.models.AnimeWeekRequest;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.data.models.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -53,14 +61,16 @@ public class InicioFragment extends Fragment {
     private AdapterSeasonAnime adapter;
     private AdapterResultados adapter2;
     private LinearLayoutManager lym, lym2;
+    private ImageView iv_carousel;
     private ApiAnimeData API_SERVICE;
     private DatabaseReference dbr;
-    private TextView tv_season;
+    private TextView tv_season,tv_titulo, tv_desc;
     private ProgressBar pb_inicio;
     private ShimmerFrameLayout sm_season;
     private SharedPreferences pref;
     private ArrayList<AnimeItem> animesI = new ArrayList<>();
     private ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
+    private ArrayList<AnimeItem> animeOfDay = new ArrayList<>();
     private User user;
     private List<GeneroItem> generosG = new ArrayList<>();
     private View in_1, in_2, in_3, in_4;
@@ -71,14 +81,18 @@ public class InicioFragment extends Fragment {
     private String season = CenterActivity.season;
     public static boolean estado_last=false;
     private AlertLoading dialog = new AlertLoading();
+    private int carouselCount = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_inicio, container, false);
         rv_season = root.findViewById(R.id.rv_season_anime);
         rv_continue = root.findViewById(R.id.rv_generos_inicio);
+        iv_carousel = root.findViewById(R.id.iv_carousel);
         pb_inicio = root.findViewById(R.id.pb_inicio);
         tv_season = root.findViewById(R.id.tv_season_anime);
+        tv_titulo = root.findViewById(R.id.tv_titulo_carousel);
+        tv_desc = root.findViewById(R.id.tv_desc_carousel);
         dbr = FirebaseDatabase.getInstance().getReference();
         API_SERVICE = ApiClientData.getClient().create(ApiAnimeData.class);
         pref = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -95,6 +109,70 @@ public class InicioFragment extends Fragment {
         loadDataSeason();
         setRetainInstance(true);
         return root;
+    }
+
+    public void loadCarousel(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switch (carouselCount){
+                    case 0:
+                        loadAnimationCarousel(0);
+                        carouselCount++;
+                        break;
+                    case 1:
+                        loadAnimationCarousel(1);
+                        carouselCount++;
+                        break;
+                    case 2:
+                        loadAnimationCarousel(2);
+                        carouselCount++;
+                        break;
+                    case 3:
+                        loadAnimationCarousel(3);
+                        carouselCount++;
+                        break;
+                    case 4:
+                        loadAnimationCarousel(4);
+                        carouselCount = 0;
+                        break;
+                }
+
+            }
+        },5000);
+    }
+
+    public void loadAnimationCarousel(int carouselCount){
+        Bitmap b = BitmapFactory.decodeResource(getResources(),R.drawable.ijiranaide_nagatoro_san);
+        ImageViewAnimatedChange(getContext(),iv_carousel,animeOfDay.get(carouselCount).getImage_url(),animeOfDay.get(carouselCount).getTitle(),animeOfDay.get(carouselCount).getSynopsis());
+        loadCarousel();
+    }
+
+    public void ImageViewAnimatedChange(Context c, final ImageView v,String url,String title,String desc) {
+        final Animation anim_out = AnimationUtils.loadAnimation(c, android.R.anim.fade_out);
+        final Animation anim_in  = AnimationUtils.loadAnimation(c, android.R.anim.fade_in);
+        anim_out.setAnimationListener(new Animation.AnimationListener()
+        {
+            @Override public void onAnimationStart(Animation animation) {}
+            @Override public void onAnimationRepeat(Animation animation) {}
+            @Override public void onAnimationEnd(Animation animation)
+            {
+                Glide.with(getContext()).load(url).into(v);
+                tv_titulo.setText(title);
+                tv_desc.setText(desc);
+                anim_in.setAnimationListener(new Animation.AnimationListener() {
+                    @Override public void onAnimationStart(Animation animation) {}
+                    @Override public void onAnimationRepeat(Animation animation) {}
+                    @Override public void onAnimationEnd(Animation animation) {}
+                });
+                v.startAnimation(anim_in);
+                tv_titulo.setAnimation(anim_in);
+                tv_desc.setAnimation(anim_in);
+            }
+        });
+        v.startAnimation(anim_out);
+        tv_titulo.startAnimation(anim_out);
+        tv_desc.setAnimation(anim_out);
     }
 
     public void loadSeasonState() {
@@ -257,8 +335,14 @@ public class InicioFragment extends Fragment {
                             ArrayList<AnimeItem> list1 = new ArrayList<>();
                             ArrayList<AnimeItem> list2 = new ArrayList<>();
                             ArrayList<AnimeItem> list3 = new ArrayList<>();
+                            Date d = new Date();
+                            String day = new SimpleDateFormat("EEEE").format(d);
+                            Log.d("DIAAAAAAAA", day);
                             int val = 0;
                             for (int i = 0; i < animes.getMonday().size(); i++) {
+                                if(day.equalsIgnoreCase("monday")){
+                                    animeOfDay.add(animes.getMonday().get(i));
+                                }
                                 if(val == 0){
                                     list1.add(animes.getMonday().get(i));
                                     val++;
@@ -273,6 +357,9 @@ public class InicioFragment extends Fragment {
                                 }
                             }
                             for (int i = 0; i < animes.getTuesday().size(); i++) {
+                                if(day.equalsIgnoreCase("tuesday")){
+                                    animeOfDay.add(animes.getTuesday().get(i));
+                                }
                                 if(val == 0){
                                     list1.add(animes.getTuesday().get(i));
                                     val++;
@@ -287,6 +374,9 @@ public class InicioFragment extends Fragment {
                                 }
                             }
                             for (int i = 0; i < animes.getWednesday().size(); i++) {
+                                if(day.equalsIgnoreCase("wednesday")){
+                                    animeOfDay.add(animes.getWednesday().get(i));
+                                }
                                 if(val == 0){
                                     list1.add(animes.getWednesday().get(i));
                                     val++;
@@ -301,6 +391,9 @@ public class InicioFragment extends Fragment {
                                 }
                             }
                             for (int i = 0; i < animes.getThursday().size(); i++) {
+                                if(day.equalsIgnoreCase("thursday")){
+                                    animeOfDay.add(animes.getThursday().get(i));
+                                }
                                 if(val == 0){
                                     list1.add(animes.getThursday().get(i));
                                     val++;
@@ -315,6 +408,9 @@ public class InicioFragment extends Fragment {
                                 }
                             }
                             for (int i = 0; i < animes.getFriday().size(); i++) {
+                                if(day.equalsIgnoreCase("Friday")){
+                                    animeOfDay.add(animes.getFriday().get(i));
+                                }
                                 if(val == 0){
                                     list1.add(animes.getFriday().get(i));
                                     val++;
@@ -329,6 +425,9 @@ public class InicioFragment extends Fragment {
                                 }
                             }
                             for (int i = 0; i < animes.getSaturday().size(); i++) {
+                                if(day.equalsIgnoreCase("saturday")){
+                                    animeOfDay.add(animes.getSaturday().get(i));
+                                }
                                 if(val == 0){
                                     list1.add(animes.getSaturday().get(i));
                                     val++;
@@ -343,6 +442,9 @@ public class InicioFragment extends Fragment {
                                 }
                             }
                             for (int i = 0; i < animes.getSunday().size(); i++) {
+                                if(day.equalsIgnoreCase("sunday")){
+                                    animeOfDay.add(animes.getSunday().get(i));
+                                }
                                 if(val == 0){
                                     list1.add(animes.getSunday().get(i));
                                     val++;
@@ -356,6 +458,12 @@ public class InicioFragment extends Fragment {
                                     }
                                 }
                             }
+                            Collections.sort(animeOfDay, new Comparator<AnimeItem>() {
+                                @Override
+                                public int compare(AnimeItem o1, AnimeItem o2) {
+                                    return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
+                                }
+                            });
                             Collections.sort(list1, new Comparator<AnimeItem>() {
                                 @Override
                                 public int compare(AnimeItem o1, AnimeItem o2) {
@@ -384,6 +492,12 @@ public class InicioFragment extends Fragment {
                             if(!estado_seasion){
                                 dialog.dismissDialog();
                             }
+                            iv_carousel.setVisibility(View.VISIBLE);
+                            tv_desc.setVisibility(View.VISIBLE);
+                            tv_titulo.setVisibility(View.VISIBLE);
+                            ImageViewAnimatedChange(getContext(),iv_carousel,animeOfDay.get(0).getImage_url(),animeOfDay.get(0).getTitle(),animeOfDay.get(0).getSynopsis());
+                            carouselCount = 1;
+                            loadCarousel();
                         }else{
                             loadAnimeOfTheWeek();
                         }

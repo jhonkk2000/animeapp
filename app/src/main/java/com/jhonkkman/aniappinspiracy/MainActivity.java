@@ -2,6 +2,7 @@ package com.jhonkkman.aniappinspiracy;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.dark_red));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.light_red));
         btn_register = findViewById(R.id.btn_register_main);
         btn_login = findViewById(R.id.btn_login_main);
         activityMain = this;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this,SplashActivity.class).putExtra("register",false));
                 finish();
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
     }

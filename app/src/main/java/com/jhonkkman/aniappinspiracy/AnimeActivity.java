@@ -114,7 +114,7 @@ public class AnimeActivity extends AppCompatActivity {
         anime_previous = (AnimeItem) getIntent().getSerializableExtra("anime");
         vp_anime.setOffscreenPageLimit(5);
         //dialog.showDialog(this,"Cargando episodios");
-        loadAd();
+        //loadAd();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(CenterActivity.login){
@@ -127,7 +127,7 @@ public class AnimeActivity extends AppCompatActivity {
             public void run() {
                 loadFragments();
             }
-        },500);
+        },800);
         savedLoadState();
         loadData();
     }
@@ -288,7 +288,7 @@ public class AnimeActivity extends AppCompatActivity {
 
     public void loadTabs(){
         tabs.addTab(tabs.newTab().setText(getString(R.string.descripcion_tab)));
-        if(!CenterActivity.prueba.equals("T3")){
+        if(!CenterActivity.prueba.equals("T1")){
             tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
         }
         tabs.addTab(tabs.newTab().setText(getString(R.string.personajes)));
@@ -315,7 +315,7 @@ public class AnimeActivity extends AppCompatActivity {
                         public void run() {
                             loadAnime();
                         }
-                    },700);
+                    },1000);
                 }
             }
 
@@ -380,7 +380,7 @@ public class AnimeActivity extends AppCompatActivity {
                             public void run() {
                                 descF.loadDesc(desc);
                             }
-                        },500);
+                        },800);
                     }
                 });
             }
@@ -394,7 +394,7 @@ public class AnimeActivity extends AppCompatActivity {
 
     public void loadFragments(){
         fragments.add(descF);
-        if(!CenterActivity.prueba.equals("T3")){
+        if(!CenterActivity.prueba.equals("T1")){
             fragments.add(new EpisodiosFragment(anime.getEpisodes()));
         }
         fragments.add(new PersonajesFragment());

@@ -37,6 +37,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.dark_red));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.light_red));
         dbr = FirebaseDatabase.getInstance().getReference();
         iv_splah = findViewById(R.id.iv_splash);
         prefD = getSharedPreferences("darkMode",MODE_PRIVATE);

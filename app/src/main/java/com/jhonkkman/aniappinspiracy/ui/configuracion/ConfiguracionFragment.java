@@ -3,6 +3,7 @@ package com.jhonkkman.aniappinspiracy.ui.configuracion;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -50,14 +51,15 @@ public class ConfiguracionFragment extends Fragment {
         mauth = FirebaseAuth.getInstance();
         loadStateDark();
         loadNoLogin();
-        loadAd();
+        //loadAd();
         onCerrarSesion();
         loadOscuro();
         return view;
     }
 
     public void loadStateDark(){
-        if(prefD.getBoolean("night",false)){
+        int val = getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        if(val==32){
             sw_oscuro.setChecked(true);
         }else{
             sw_oscuro.setChecked(false);

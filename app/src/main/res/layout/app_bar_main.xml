@@ -12,12 +12,17 @@
         app:elevation="0dp"
         android:theme="@style/Theme.Aniappinspiracy.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.Aniappinspiracy.PopupOverlay" />
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                app:layout_scrollFlags="scroll|enterAlways"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@null"
+                app:popupTheme="@style/Theme.Aniappinspiracy.PopupOverlay" />
+
+
 
     </com.google.android.material.appbar.AppBarLayout>
 

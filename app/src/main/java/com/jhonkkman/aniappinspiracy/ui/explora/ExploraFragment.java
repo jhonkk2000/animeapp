@@ -395,7 +395,7 @@ public class ExploraFragment extends Fragment {
                             List<AnimeItem> finalItems = new ArrayList<>();
                             for (int i = 0; i < animeItems.size(); i++) {
                                 Log.d("CANTIDAD", animeItems.size()+"");
-                                if(!animeItems.get(i).getType().equals("ONA") && !animeItems.get(i).getType().equals("Special")&& !animeItems.get(i).getType().equals("Music")
+                                if(!animeItems.get(i).getType().equals("ONA") && !animeItems.get(i).getType().equals("Music")
                                       && !animeItems.get(i).isKids()){
                                     finalItems.add(animeItems.get(i));
                                 }
@@ -446,7 +446,7 @@ public class ExploraFragment extends Fragment {
                                 break;
                             }
                         }
-                        if(!animeItems.get(i).getRated().equals("Rx") && !animeItems.get(i).getRated().equals("PG") && !animeItems.get(i).getType().equals("ONA") && !animeItems.get(i).getType().equals("Special")&& !animeItems.get(i).getType().equals("Music")
+                        if(!animeItems.get(i).getRated().equals("Rx") && !animeItems.get(i).getRated().equals("PG") && !animeItems.get(i).getType().equals("ONA") && !animeItems.get(i).getType().equals("Music")
                         && !gen && !animeItems.get(i).getRated().equals("G")){
                             finalItems.add(animeItems.get(i));
                         }

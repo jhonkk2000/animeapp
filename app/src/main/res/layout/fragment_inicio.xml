@@ -14,6 +14,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:src="@drawable/ijiranaide_nagatoro_san"/>
+
+                <ImageView
+                    android:id="@+id/iv_carousel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:src="@drawable/ijiranaide_nagatoro_san"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left|bottom"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:background="@drawable/background_carousel_text"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_titulo_carousel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:visibility="invisible"
+                        android:textSize="25sp"
+                        android:text="@string/registrarte"/>
+
+                    <TextView
+                        android:id="@+id/tv_desc_carousel"
+                        android:layout_width="wrap_content"
+                        android:visibility="invisible"
+                        android:layout_height="wrap_content"
+                        android:maxLength="100"
+                        android:text="@string/registrarte"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
             <TextView
                 android:id="@+id/tv_season_anime"
                 android:layout_width="match_parent"

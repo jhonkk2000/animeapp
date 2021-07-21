@@ -24,7 +24,7 @@ public class AcercaFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_acerca, container, false);
         mAdView = view.findViewById(R.id.adView_acerca);
-        loadAd();
+        //loadAd();
         return view;
     }
 
