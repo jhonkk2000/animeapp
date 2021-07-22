@@ -71,7 +71,7 @@
     <string name="generouno_gen">Genero 1, Genero 2, Genero 3, Genero 4</string>
 
     <string name="politica_de_p">Politica de privacidad</string>
-    <string name="desc_politica" ><b><i>Información que es recogida </i></b><br> Nuestra app podrá recoger información personal por ejemplo: Nombre de usuario e  información de contacto como  su dirección de correo electrónica.</br>
+    <string name="desc_politica"><b><i>Información que es recogida </i></b><br> Nuestra app podrá recoger información personal por ejemplo: Nombre de usuario e  información de contacto como  su dirección de correo electrónica.</br>
 
        <br><b><i> Uso de la información recogida</i></b> </br><br> Nuestra app emplea la información con el fin de proporcionar una mejora en la experiencia.
 PROGMASTERPC está altamente comprometido para cumplir con el compromiso de mantener su información segura.
@@ -94,6 +94,7 @@ PROGMASTERPC está altamente comprometido para cumplir con el compromiso de mant
     <string name="nombre_personaje">Nombre de personaje</string>
     <string name="nombre_actor">Nombre de actor</string>
     <string name="week_anime">Animes de la semana</string>
+    <string name="carousel_button">Acceder</string>
 
     <string name="descripcion_tab">Descripcion</string>
     <string name="episodios">Episodios</string>

@@ -205,14 +205,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:textColor="@color/gray_text"
                                 android:textStyle="bold"
                                 android:text="@string/nombre_de_anime"/>
                             <TextView
                                 android:id="@+id/tv_desc_buscar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/gray_text"
                                 android:textSize="11sp"
                                 android:maxLength="250"
                                 android:text="@string/sypnosis"/>
@@ -222,7 +220,6 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/en_emision"
                                 android:textSize="11sp"
-                                android:textColor="@color/green_text"
                                 android:textStyle="bold"/>
                             <TextView
                                 android:id="@+id/tv_fecha_buscar"
@@ -230,7 +227,6 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/fecha_estreno"
                                 android:textSize="11sp"
-                                android:textColor="@color/gray_text"
                                 android:textStyle="bold"/>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -259,8 +255,7 @@
                                     android:layout_gravity="center"
                                     android:layout_height="wrap_content"
                                     android:text="@string/estrellas"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/gray_text"/>
+                                    android:textStyle="bold"/>
 
                             </LinearLayout>
                         </LinearLayout>

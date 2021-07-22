@@ -20,23 +20,25 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="500dp"
                     android:visibility="invisible"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/ijiranaide_nagatoro_san"/>
 
                 <ImageView
                     android:id="@+id/iv_carousel"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="500dp"
                     android:visibility="invisible"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/ijiranaide_nagatoro_san"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="left|bottom"
-                    android:paddingLeft="40dp"
-                    android:paddingRight="40dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:background="@drawable/background_carousel_text"
                     android:orientation="vertical">
 
@@ -56,6 +58,20 @@
                         android:layout_height="wrap_content"
                         android:maxLength="100"
                         android:text="@string/registrarte"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_acceder_carousel"
+                        android:visibility="invisible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/carousel_button"
+                        android:drawableLeft="@drawable/ic_play_icon"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:background="@drawable/background_button_carousel"/>
 
                 </LinearLayout>
 

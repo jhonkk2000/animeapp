@@ -1,6 +1,7 @@
 package com.jhonkkman.aniappinspiracy.ui.inicio;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,8 +16,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +34,7 @@ import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.AdapterResultados;
 import com.jhonkkman.aniappinspiracy.AdapterSeasonAnime;
 import com.jhonkkman.aniappinspiracy.AlertLoading;
+import com.jhonkkman.aniappinspiracy.AnimeActivity;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.R;
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
@@ -40,6 +46,7 @@ import com.jhonkkman.aniappinspiracy.data.models.AnimeWeekRequest;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.data.models.User;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,6 +74,7 @@ public class InicioFragment extends Fragment {
     private TextView tv_season,tv_titulo, tv_desc;
     private ProgressBar pb_inicio;
     private ShimmerFrameLayout sm_season;
+    private AppCompatButton btn_acceder;
     private SharedPreferences pref;
     private ArrayList<AnimeItem> animesI = new ArrayList<>();
     private ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
@@ -87,6 +95,7 @@ public class InicioFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_inicio, container, false);
         rv_season = root.findViewById(R.id.rv_season_anime);
+        btn_acceder = root.findViewById(R.id.btn_acceder_carousel);
         rv_continue = root.findViewById(R.id.rv_generos_inicio);
         iv_carousel = root.findViewById(R.id.iv_carousel);
         pb_inicio = root.findViewById(R.id.pb_inicio);
@@ -100,6 +109,7 @@ public class InicioFragment extends Fragment {
         //sm_item.startShimmer();
         sm_season.startShimmer();
         CenterActivity.animesI.clear();
+        openAnimeCarousel();
         //Toast.makeText(getContext(), "a"+ finalI, Toast.LENGTH_SHORT).show();
         loadSeasonState();
         loadGenresState();
@@ -143,7 +153,6 @@ public class InicioFragment extends Fragment {
     }
 
     public void loadAnimationCarousel(int carouselCount){
-        Bitmap b = BitmapFactory.decodeResource(getResources(),R.drawable.ijiranaide_nagatoro_san);
         ImageViewAnimatedChange(getContext(),iv_carousel,animeOfDay.get(carouselCount).getImage_url(),animeOfDay.get(carouselCount).getTitle(),animeOfDay.get(carouselCount).getSynopsis());
         loadCarousel();
     }
@@ -166,13 +175,32 @@ public class InicioFragment extends Fragment {
                     @Override public void onAnimationEnd(Animation animation) {}
                 });
                 v.startAnimation(anim_in);
+                btn_acceder.setAnimation(anim_in);
                 tv_titulo.setAnimation(anim_in);
                 tv_desc.setAnimation(anim_in);
             }
         });
         v.startAnimation(anim_out);
+        btn_acceder.setAnimation(anim_out);
         tv_titulo.startAnimation(anim_out);
         tv_desc.setAnimation(anim_out);
+    }
+
+    public void openAnimeCarousel(){
+        btn_acceder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), AnimeActivity.class);
+                if(carouselCount!=0){
+                    i.putExtra("anime", (Serializable) animeOfDay.get(carouselCount-1));
+                }else{
+                    i.putExtra("anime", (Serializable) animeOfDay.get(4));
+                }
+                Toast.makeText(getContext(), "" + carouselCount, Toast.LENGTH_SHORT).show();
+                //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), cv_2, ViewCompat.getTransitionName(cv_2));
+                getContext().startActivity(i);
+            }
+        });
     }
 
     public void loadSeasonState() {
@@ -495,6 +523,7 @@ public class InicioFragment extends Fragment {
                             iv_carousel.setVisibility(View.VISIBLE);
                             tv_desc.setVisibility(View.VISIBLE);
                             tv_titulo.setVisibility(View.VISIBLE);
+                            btn_acceder.setVisibility(View.VISIBLE);
                             ImageViewAnimatedChange(getContext(),iv_carousel,animeOfDay.get(0).getImage_url(),animeOfDay.get(0).getTitle(),animeOfDay.get(0).getSynopsis());
                             carouselCount = 1;
                             loadCarousel();
