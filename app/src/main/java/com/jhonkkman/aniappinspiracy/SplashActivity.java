@@ -45,7 +45,11 @@ public class SplashActivity extends AppCompatActivity {
         loadDark();
         loadAnimationImage();
         if (NetworkUtils.isNetworkConnected(this)) {
-            finishSplash();
+            if(CenterActivity.estado_inicio == 0){
+                CenterActivity.estado_inicio =1;
+            }else{
+                finishSplash();
+            }
         } else {
             Toast.makeText(this, "Verifica tu conexion a internet!", Toast.LENGTH_SHORT).show();
             finish();
@@ -77,19 +81,19 @@ public class SplashActivity extends AppCompatActivity {
                         for (DataSnapshot ds : snapshot.child("genres").getChildren()) {
                             generos.add(ds.getValue(GeneroItem.class));
                         }
+                            if(!getIntent().getBooleanExtra("register",true)){
+                                startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("login",false));
+                            }else{
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                if (user != null) {
+                                    startActivity(new Intent(SplashActivity.this, CenterActivity.class));
+                                }else{
+                                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                                }
+                            }
                         CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
                         CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
                         CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
-                        if(!getIntent().getBooleanExtra("register",true)){
-                            startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("login",false));
-                        }else{
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            if (user != null) {
-                                startActivity(new Intent(SplashActivity.this, CenterActivity.class));
-                            }else{
-                                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                            }
-                        }
                         finish();
                     }
 

@@ -2,14 +2,11 @@ package com.jhonkkman.aniappinspiracy;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
@@ -22,7 +19,6 @@ import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeCompleto;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeResource;
-import com.jhonkkman.aniappinspiracy.data.models.AnimeSearchRequest;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.data.models.TopMemoria;
 import com.jhonkkman.aniappinspiracy.data.models.User;
@@ -63,6 +59,7 @@ public class CenterActivity extends AppCompatActivity {
     public static String season ;
     public static int year;
     public static String prueba;
+    public static int estado_inicio =0;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,16 +75,22 @@ public class CenterActivity extends AppCompatActivity {
         loadUser();
         updateUserLocal();
         updateFav();
-        loadMenuItems();
+        //loadMenuItems();
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_inicio, R.id.nav_explora, R.id.nav_top,R.id.nav_fav,R.id.nav_perfil,R.id.nav_comunidad,R.id.nav_configuracion,R.id.nav_acerca_de)
+                R.id.nav_animes,R.id.nav_comunidad,R.id.nav_configuracion,R.id.nav_acerca_de)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        System.exit(0);
     }
 
     public void loadMenuItems(){

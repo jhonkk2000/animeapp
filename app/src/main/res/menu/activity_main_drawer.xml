@@ -6,25 +6,10 @@
 
     <group android:checkableBehavior="single" >
         <item
-            android:id="@+id/nav_inicio"
+            android:id="@+id/nav_animes"
             android:icon="@drawable/ic_inicio_icon"
             android:title="@string/menu_inicio" />
-        <item
-            android:id="@+id/nav_explora"
-            android:icon="@drawable/ic_explorar_icon"
-            android:title="@string/menu_explora" />
-        <item
-            android:id="@+id/nav_top"
-            android:icon="@drawable/ic_top_icon"
-            android:title="@string/menu_top" />
-        <item
-            android:id="@+id/nav_fav"
-            android:icon="@drawable/ic_favorito_icon"
-            android:title="@string/menu_fav" />
-        <item
-            android:id="@+id/nav_perfil"
-            android:icon="@drawable/ic_perfil_icon"
-            android:title="@string/menu_perfil" />
+
         <item
             android:id="@+id/nav_comunidad"
             android:icon="@drawable/ic_comunidad_icon"
