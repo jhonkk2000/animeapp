@@ -508,7 +508,7 @@ public class ExploraFragment extends Fragment {
                         }else{
                             tv_emision.setText("Finalizado");
                         }
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+SS:SS", Locale.ENGLISH);
+                        /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss+SS:SS", Locale.ENGLISH);
                         LocalDate localDate;
                         if(pos==5){
                             localDate = LocalDate.parse(anime1.getAiring_start(), formatter);
@@ -517,7 +517,7 @@ public class ExploraFragment extends Fragment {
                         }
                         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                        tv_fecha.setText("Fecha de estreno: " + sdf.format(date));
+                        tv_fecha.setText("Fecha de estreno: " + sdf.format(date));*/
                         tv_tipo.setText(anime1.getType());
                         tv_puntaje.setText(String.valueOf(anime1.getScore()));
                         int pos = 0;

@@ -29,18 +29,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.jhonkkman.aniappinspiracy.CenterActivity.user;
+
 public class FavUserFragment extends Fragment {
 
     private RecyclerView rv_fav;
     private LinearLayoutManager lym;
     private AdapterAnimeFav adapter;
-    private List<Long> animesFav;
+    private List<Integer> animesFav;
     private SharedPreferences pref;
     private ArrayList<AnimeResource> animes = new ArrayList<>();
     private ProgressBar pb_load;
     private int cont = 0;
 
-    public FavUserFragment(List<Long> animesFav){
+    public FavUserFragment(List<Integer> animesFav){
         this.animesFav = animesFav;
     }
 
@@ -57,14 +59,14 @@ public class FavUserFragment extends Fragment {
 
     @SuppressLint("NewApi")
     public void loadIdsFavs(){
-        Gson gson = new Gson();
+        /*Gson gson = new Gson();
         String json = pref.getString("usuario","");
-        User user = gson.fromJson(json,User.class);
-        //animesFav = user.getAnime_fav();
+        User user = gson.fromJson(json,User.class);*/
+        animesFav =  user.getAnimes_fav();
         for (int i = 0; i < animesFav.size(); i++) {
             loadAnime(Math.toIntExact((animesFav.get(i))));
         }
-        //loadFavs();
+        loadFavs();
     }
 
     public void loadAnime(int id){

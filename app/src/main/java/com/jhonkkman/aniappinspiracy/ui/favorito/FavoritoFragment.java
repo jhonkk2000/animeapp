@@ -22,7 +22,7 @@ public class FavoritoFragment extends Fragment {
 
     private TabLayout tabs;
     private ViewPager vp_fav;
-    public static List<Long> animesFav = new ArrayList<>();
+    public static List<Integer> animesFav = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

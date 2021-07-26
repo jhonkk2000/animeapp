@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jhonkkman.aniappinspiracy">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aniappinspiracy">
-        <activity android:name=".ImageActivity"
+        <activity android:name=".ContainerNavActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".CenterActivity">
+
+        </activity>
+        <activity
+            android:name=".ImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 
@@ -25,7 +31,7 @@
         </activity>
         <activity
             android:name=".SplashActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,12 +45,12 @@
         <activity
             android:name=".AnimeActivity"
             android:parentActivityName=".CenterActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CenterActivity"
-            android:label="@string/title_activity_center"
             android:excludeFromRecents="true"
+            android:label="@string/title_activity_center"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Aniappinspiracy.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
@@ -59,12 +65,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"></activity>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/admob_id"/>
+            android:value="@string/admob_id" />
     </application>
 
 </manifest>

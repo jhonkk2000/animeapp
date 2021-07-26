@@ -114,7 +114,7 @@ public class AnimeActivity extends AppCompatActivity {
         anime_previous = (AnimeItem) getIntent().getSerializableExtra("anime");
         vp_anime.setOffscreenPageLimit(5);
         //dialog.showDialog(this,"Cargando episodios");
-        //loadAd();
+        loadAd();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(CenterActivity.login){

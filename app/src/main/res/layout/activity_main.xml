@@ -23,7 +23,7 @@
                 android:layout_marginTop="-15dp">
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="250dp"
                     android:layout_gravity="top"
                     android:src="@drawable/ic_shape_top"/>
 
@@ -41,7 +41,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
                 android:layout_gravity="end"
                 android:layout_marginTop="55dp"
                 android:layout_marginEnd="-170dp"
@@ -49,10 +49,11 @@
 
             <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginLeft="-85dp"
+                android:layout_gravity="bottom"
                 android:background="@drawable/ic_shape_bot"
-                android:layout_marginTop="280dp">
+                android:layout_marginTop="230dp">
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -25,7 +25,7 @@ public class User {
         this.first_time = first_time;
     }
 
-    public List<Integer> getAnime_fav() {
+    public List<Integer> getAnimes_fav() {
         return animes_fav;
     }
 

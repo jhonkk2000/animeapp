@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.jhonkkman.aniappinspiracy.ui.explora.ExploraFragment;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class AnimesFragment extends Fragment {
 
-    private BottomNavigationView bnv;
+    public static BottomNavigationView bnv;
     private InicioFragment inicioFragment = new InicioFragment();
     private ExploraFragment exploraFragment = new ExploraFragment();
     private TopFragment topFragment = new TopFragment();
@@ -32,6 +33,9 @@ public class AnimesFragment extends Fragment {
     private PerfilFragment perfilFragment = new PerfilFragment();
     private NonSwipeableViewPager vp_animes;
     private List<Fragment> fragments = new ArrayList<>();
+    public static int pos_bototm_nav = 0;
+    public int last_item = 0;
+    private boolean state_no_session = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,30 +45,46 @@ public class AnimesFragment extends Fragment {
         vp_animes = view.findViewById(R.id.container_animes);
         vp_animes.setOffscreenPageLimit(5);
         loadViewPager();
-        openFragments(0);
+        openFragments(0, R.id.nav_inicio);
         bottomNavigationOnClick();
         return view;
     }
 
-    public void bottomNavigationOnClick(){
+    public void bottomNavigationOnClick() {
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_inicio:
-                        openFragments(0);
+                        openFragments(0, R.id.nav_inicio);
                         break;
                     case R.id.nav_explora:
-                        openFragments(1);
+                        openFragments(1, R.id.nav_explora);
                         break;
                     case R.id.nav_top:
-                        openFragments(2);
+                        openFragments(2, R.id.nav_top);
                         break;
                     case R.id.nav_fav:
-                        openFragments(3);
+                        if (CenterActivity.login) {
+                            openFragments(3, R.id.nav_fav);
+                        } else {
+                            bnv.setSelectedItemId(last_item);
+                            if (!state_no_session) {
+                                Toast.makeText(getContext(), "No haz iniciado sesión", Toast.LENGTH_SHORT).show();
+                                state_no_session = true;
+                            }
+                        }
                         break;
                     case R.id.nav_perfil:
-                        openFragments(4);
+                        if (CenterActivity.login) {
+                            openFragments(4, R.id.nav_perfil);
+                        } else {
+                            bnv.setSelectedItemId(last_item);
+                            if (!state_no_session) {
+                                Toast.makeText(getContext(), "No haz iniciado sesión", Toast.LENGTH_SHORT).show();
+                                state_no_session = true;
+                            }
+                        }
                         break;
                 }
                 return true;
@@ -73,7 +93,7 @@ public class AnimesFragment extends Fragment {
     }
 
 
-    public void openFragments(int pos){
+    public void openFragments(int pos, int last) {
         /*Fragment fragment2 = getActivity().getSupportFragmentManager().findFragmentByTag("inicio");
         if (fragment2 != null && fragment2.isVisible()) {
             Toast.makeText(getContext(), "caca", Toast.LENGTH_SHORT).show();
@@ -82,28 +102,20 @@ public class AnimesFragment extends Fragment {
         transaction.replace(R.id.container_animes, fragment);
         transaction.addToBackStack(null);
         transaction.commit();*/
-        float scale = getResources().getDisplayMetrics().density;
-        int veinteDP = (int) (20*scale + 0.5f);
-        int seDP = (int) (60*scale + 0.5f);
-        if(pos!=0){
-            if(pos==1){
-                vp_animes.setPadding(veinteDP,seDP,veinteDP,0);
-            }else{
-                vp_animes.setPadding(0,seDP,0,0);
-            }
-        }else{
-            vp_animes.setPadding(0,0,0,0);
-        }
+        pos_bototm_nav = pos;
+        last_item = last;
         vp_animes.setCurrentItem(pos);
     }
 
-    public void loadViewPager(){
+    public void loadViewPager() {
         fragments.add(inicioFragment);
         fragments.add(exploraFragment);
         fragments.add(topFragment);
-        fragments.add(favoritoFragment);
-        fragments.add(perfilFragment);
-        AdapterPager adapter = new AdapterPager(getActivity().getSupportFragmentManager(),fragments.size(),fragments);
+        if (CenterActivity.login) {
+            fragments.add(favoritoFragment);
+            fragments.add(perfilFragment);
+        }
+        AdapterPager adapter = new AdapterPager(getActivity().getSupportFragmentManager(), fragments.size(), fragments);
         vp_animes.setAdapter(adapter);
     }
 }

@@ -49,6 +49,7 @@ import com.jhonkkman.aniappinspiracy.data.models.User;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -71,7 +72,7 @@ public class InicioFragment extends Fragment {
     private ImageView iv_carousel;
     private ApiAnimeData API_SERVICE;
     private DatabaseReference dbr;
-    private TextView tv_season,tv_titulo, tv_desc;
+    private TextView tv_season, tv_titulo, tv_desc;
     private ProgressBar pb_inicio;
     private ShimmerFrameLayout sm_season;
     private AppCompatButton btn_acceder;
@@ -87,7 +88,7 @@ public class InicioFragment extends Fragment {
     private boolean estado_seasion = false;
     private boolean estado_genres = false;
     private String season = CenterActivity.season;
-    public static boolean estado_last=false;
+    public static boolean estado_last = false;
     private AlertLoading dialog = new AlertLoading();
     private int carouselCount = 0;
 
@@ -121,11 +122,11 @@ public class InicioFragment extends Fragment {
         return root;
     }
 
-    public void loadCarousel(){
+    public void loadCarousel() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                switch (carouselCount){
+                switch (carouselCount) {
                     case 0:
                         loadAnimationCarousel(0);
                         carouselCount++;
@@ -149,30 +150,43 @@ public class InicioFragment extends Fragment {
                 }
 
             }
-        },5000);
+        }, 5000);
     }
 
-    public void loadAnimationCarousel(int carouselCount){
+    public void loadAnimationCarousel(int carouselCount) {
         ImageViewAnimatedChange(getContext(),iv_carousel,animeOfDay.get(carouselCount).getImage_url(),animeOfDay.get(carouselCount).getTitle(),animeOfDay.get(carouselCount).getSynopsis());
         loadCarousel();
     }
 
-    public void ImageViewAnimatedChange(Context c, final ImageView v,String url,String title,String desc) {
+    public void ImageViewAnimatedChange(Context c, final ImageView v, String url, String title, String desc) {
         final Animation anim_out = AnimationUtils.loadAnimation(c, android.R.anim.fade_out);
-        final Animation anim_in  = AnimationUtils.loadAnimation(c, android.R.anim.fade_in);
-        anim_out.setAnimationListener(new Animation.AnimationListener()
-        {
-            @Override public void onAnimationStart(Animation animation) {}
-            @Override public void onAnimationRepeat(Animation animation) {}
-            @Override public void onAnimationEnd(Animation animation)
-            {
+        final Animation anim_in = AnimationUtils.loadAnimation(c, android.R.anim.fade_in);
+        anim_out.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
                 Glide.with(getContext()).load(url).into(v);
                 tv_titulo.setText(title);
                 tv_desc.setText(desc);
                 anim_in.setAnimationListener(new Animation.AnimationListener() {
-                    @Override public void onAnimationStart(Animation animation) {}
-                    @Override public void onAnimationRepeat(Animation animation) {}
-                    @Override public void onAnimationEnd(Animation animation) {}
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                    }
                 });
                 v.startAnimation(anim_in);
                 btn_acceder.setAnimation(anim_in);
@@ -186,17 +200,16 @@ public class InicioFragment extends Fragment {
         tv_desc.setAnimation(anim_out);
     }
 
-    public void openAnimeCarousel(){
+    public void openAnimeCarousel() {
         btn_acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), AnimeActivity.class);
-                if(carouselCount!=0){
-                    i.putExtra("anime", (Serializable) animeOfDay.get(carouselCount-1));
-                }else{
+                if (carouselCount != 0) {
+                    i.putExtra("anime", (Serializable) animeOfDay.get(carouselCount - 1));
+                } else {
                     i.putExtra("anime", (Serializable) animeOfDay.get(4));
                 }
-                Toast.makeText(getContext(), "" + carouselCount, Toast.LENGTH_SHORT).show();
                 //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), cv_2, ViewCompat.getTransitionName(cv_2));
                 getContext().startActivity(i);
             }
@@ -206,8 +219,8 @@ public class InicioFragment extends Fragment {
     public void loadSeasonState() {
         if (CenterActivity.animeItems.size() != 0) {
             estado_seasion = true;
-        }else{
-            dialog.showDialog(getActivity(),"Cargando animes!");
+        } else {
+            dialog.showDialog(getActivity(), "Cargando animes!");
         }
     }
 
@@ -239,13 +252,13 @@ public class InicioFragment extends Fragment {
                         for (int i = 0; i < atsr.getAnime().size(); i++) {
                             boolean gen = false;
                             for (int j = 0; j < atsr.getAnime().get(i).getGenres().size(); j++) {
-                                if(atsr.getAnime().get(i).getGenres().get(j).getMal_id()==15){
+                                if (atsr.getAnime().get(i).getGenres().get(j).getMal_id() == 15) {
                                     gen = true;
                                     break;
                                 }
                             }
                             if (!atsr.getAnime().get(i).getType().equals("Special") && !atsr.getAnime().get(i).getType().equals("Ona") && !atsr.getAnime().get(i).getType().equals("Music")
-                            && !gen) {
+                                    && !gen) {
                                 CenterActivity.animeItems.add(atsr.getAnime().get(i));
                             }
                         }
@@ -312,13 +325,13 @@ public class InicioFragment extends Fragment {
                         AnimeItem a = new AnimeItem(anime.getMal_id(), anime.getTitle(), anime.getImage_url());
                         a.setUrl(anime.getUrl());
                         CenterActivity.animesI.add(a);
-                        if(animes.size()!=0){
+                        if (animes.size() != 0) {
                             in_1.setVisibility(View.INVISIBLE);
                             adapter2.notifyDataSetChanged();
                         }
                         if (finalL < animes.size() - 1) {
                             loadDataContinueLast();
-                        }else{
+                        } else {
                             estado_last = true;
                         }
                     } else {
@@ -337,11 +350,11 @@ public class InicioFragment extends Fragment {
         }, 700);
     }
 
-    public void disablePb(){
+    public void disablePb() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                finalI = CenterActivity.generosG.size()-1;
+                finalI = CenterActivity.generosG.size() - 1;
                 if (finalI < generos.size() - 1) {
                     disablePb();
                     //adapter2.notifyDataSetChanged();
@@ -349,195 +362,224 @@ public class InicioFragment extends Fragment {
                     pb_inicio.setVisibility(View.INVISIBLE);
                 }
             }
-        },1500);
+        }, 1500);
     }
 
-    public void loadAnimeOfTheWeek(){
+    public String getDayEnglish(int d) {
+        String day = "";
+        switch (d) {
+            case 1:
+                day = "sunday";
+                break;
+            case 2:
+                day = "monday";
+                break;
+            case 3:
+                day = "tuesday";
+                break;
+            case 4:
+                day = "wednesday";
+                break;
+            case 5:
+                day = "thursday";
+                break;
+            case 6:
+                day = "friday";
+                break;
+            case 7:
+                day = "saturday";
+                break;
+        }
+        return day;
+    }
+
+    public void loadAnimeOfTheWeek() {
         new Handler().postDelayed(() -> {
-                Call<AnimeWeekRequest> call = API_SERVICE.getAnimeWeek();
-                call.enqueue(new Callback<AnimeWeekRequest>() {
-                    @Override
-                    public void onResponse(Call<AnimeWeekRequest> call, Response<AnimeWeekRequest> response) {
-                        if (response.isSuccessful()) {
-                            AnimeWeekRequest animes = response.body();
-                            ArrayList<AnimeItem> list1 = new ArrayList<>();
-                            ArrayList<AnimeItem> list2 = new ArrayList<>();
-                            ArrayList<AnimeItem> list3 = new ArrayList<>();
-                            Date d = new Date();
-                            String day = new SimpleDateFormat("EEEE").format(d);
-                            Log.d("DIAAAAAAAA", day);
-                            int val = 0;
-                            for (int i = 0; i < animes.getMonday().size(); i++) {
-                                if(day.equalsIgnoreCase("monday")){
-                                    animeOfDay.add(animes.getMonday().get(i));
-                                }
-                                if(val == 0){
-                                    list1.add(animes.getMonday().get(i));
+            Call<AnimeWeekRequest> call = API_SERVICE.getAnimeWeek();
+            call.enqueue(new Callback<AnimeWeekRequest>() {
+                @Override
+                public void onResponse(Call<AnimeWeekRequest> call, Response<AnimeWeekRequest> response) {
+                    if (response.isSuccessful()) {
+                        AnimeWeekRequest animes = response.body();
+                        ArrayList<AnimeItem> list1 = new ArrayList<>();
+                        ArrayList<AnimeItem> list2 = new ArrayList<>();
+                        ArrayList<AnimeItem> list3 = new ArrayList<>();
+                        Calendar c = Calendar.getInstance();
+                        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+                        String day = getDayEnglish(dayOfWeek);
+                        int val = 0;
+                        for (int i = 0; i < animes.getMonday().size(); i++) {
+                            if (day.equalsIgnoreCase("monday")) {
+                                animeOfDay.add(animes.getMonday().get(i));
+                            }
+                            if (val == 0) {
+                                list1.add(animes.getMonday().get(i));
+                                val++;
+                            } else {
+                                if (val == 1) {
+                                    list2.add(animes.getMonday().get(i));
                                     val++;
-                                }else{
-                                    if(val == 1){
-                                        list2.add(animes.getMonday().get(i));
-                                        val++;
-                                    }else{
-                                        list3.add(animes.getMonday().get(i));
-                                        val = 0;
-                                    }
+                                } else {
+                                    list3.add(animes.getMonday().get(i));
+                                    val = 0;
                                 }
                             }
-                            for (int i = 0; i < animes.getTuesday().size(); i++) {
-                                if(day.equalsIgnoreCase("tuesday")){
-                                    animeOfDay.add(animes.getTuesday().get(i));
-                                }
-                                if(val == 0){
-                                    list1.add(animes.getTuesday().get(i));
-                                    val++;
-                                }else{
-                                    if(val == 1){
-                                        list2.add(animes.getTuesday().get(i));
-                                        val++;
-                                    }else{
-                                        list3.add(animes.getTuesday().get(i));
-                                        val = 0;
-                                    }
-                                }
-                            }
-                            for (int i = 0; i < animes.getWednesday().size(); i++) {
-                                if(day.equalsIgnoreCase("wednesday")){
-                                    animeOfDay.add(animes.getWednesday().get(i));
-                                }
-                                if(val == 0){
-                                    list1.add(animes.getWednesday().get(i));
-                                    val++;
-                                }else{
-                                    if(val == 1){
-                                        list2.add(animes.getWednesday().get(i));
-                                        val++;
-                                    }else{
-                                        list3.add(animes.getWednesday().get(i));
-                                        val = 0;
-                                    }
-                                }
-                            }
-                            for (int i = 0; i < animes.getThursday().size(); i++) {
-                                if(day.equalsIgnoreCase("thursday")){
-                                    animeOfDay.add(animes.getThursday().get(i));
-                                }
-                                if(val == 0){
-                                    list1.add(animes.getThursday().get(i));
-                                    val++;
-                                }else{
-                                    if(val == 1){
-                                        list2.add(animes.getThursday().get(i));
-                                        val++;
-                                    }else{
-                                        list3.add(animes.getThursday().get(i));
-                                        val = 0;
-                                    }
-                                }
-                            }
-                            for (int i = 0; i < animes.getFriday().size(); i++) {
-                                if(day.equalsIgnoreCase("Friday")){
-                                    animeOfDay.add(animes.getFriday().get(i));
-                                }
-                                if(val == 0){
-                                    list1.add(animes.getFriday().get(i));
-                                    val++;
-                                }else{
-                                    if(val == 1){
-                                        list2.add(animes.getFriday().get(i));
-                                        val++;
-                                    }else{
-                                        list3.add(animes.getFriday().get(i));
-                                        val = 0;
-                                    }
-                                }
-                            }
-                            for (int i = 0; i < animes.getSaturday().size(); i++) {
-                                if(day.equalsIgnoreCase("saturday")){
-                                    animeOfDay.add(animes.getSaturday().get(i));
-                                }
-                                if(val == 0){
-                                    list1.add(animes.getSaturday().get(i));
-                                    val++;
-                                }else{
-                                    if(val == 1){
-                                        list2.add(animes.getSaturday().get(i));
-                                        val++;
-                                    }else{
-                                        list3.add(animes.getSaturday().get(i));
-                                        val = 0;
-                                    }
-                                }
-                            }
-                            for (int i = 0; i < animes.getSunday().size(); i++) {
-                                if(day.equalsIgnoreCase("sunday")){
-                                    animeOfDay.add(animes.getSunday().get(i));
-                                }
-                                if(val == 0){
-                                    list1.add(animes.getSunday().get(i));
-                                    val++;
-                                }else{
-                                    if(val == 1){
-                                        list2.add(animes.getSunday().get(i));
-                                        val++;
-                                    }else{
-                                        list3.add(animes.getSunday().get(i));
-                                        val = 0;
-                                    }
-                                }
-                            }
-                            Collections.sort(animeOfDay, new Comparator<AnimeItem>() {
-                                @Override
-                                public int compare(AnimeItem o1, AnimeItem o2) {
-                                    return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
-                                }
-                            });
-                            Collections.sort(list1, new Comparator<AnimeItem>() {
-                                @Override
-                                public int compare(AnimeItem o1, AnimeItem o2) {
-                                    return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
-                                }
-                            });
-                            Collections.sort(list2, new Comparator<AnimeItem>() {
-                                @Override
-                                public int compare(AnimeItem o1, AnimeItem o2) {
-                                    return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
-                                }
-                            });
-                            Collections.sort(list3, new Comparator<AnimeItem>() {
-                                @Override
-                                public int compare(AnimeItem o1, AnimeItem o2) {
-                                    return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
-                                }
-                            });
-                            lym2 = new LinearLayoutManager(getContext());
-                            adapter2 = new AdapterResultados(list1,list2,list3,getContext(),getActivity(),"inicio");
-                            rv_continue.setLayoutManager(lym2);
-                            rv_continue.setAdapter(adapter2);
-                            rv_continue.scheduleLayoutAnimation();
-                            adapter2.notifyDataSetChanged();
-                            pb_inicio.setVisibility(View.INVISIBLE);
-                            if(!estado_seasion){
-                                dialog.dismissDialog();
-                            }
-                            iv_carousel.setVisibility(View.VISIBLE);
-                            tv_desc.setVisibility(View.VISIBLE);
-                            tv_titulo.setVisibility(View.VISIBLE);
-                            btn_acceder.setVisibility(View.VISIBLE);
-                            ImageViewAnimatedChange(getContext(),iv_carousel,animeOfDay.get(0).getImage_url(),animeOfDay.get(0).getTitle(),animeOfDay.get(0).getSynopsis());
-                            carouselCount = 1;
-                            loadCarousel();
-                        }else{
-                            loadAnimeOfTheWeek();
                         }
-
+                        for (int i = 0; i < animes.getTuesday().size(); i++) {
+                            if (day.equalsIgnoreCase("tuesday")) {
+                                animeOfDay.add(animes.getTuesday().get(i));
+                            }
+                            if (val == 0) {
+                                list1.add(animes.getTuesday().get(i));
+                                val++;
+                            } else {
+                                if (val == 1) {
+                                    list2.add(animes.getTuesday().get(i));
+                                    val++;
+                                } else {
+                                    list3.add(animes.getTuesday().get(i));
+                                    val = 0;
+                                }
+                            }
+                        }
+                        for (int i = 0; i < animes.getWednesday().size(); i++) {
+                            if (day.equalsIgnoreCase("wednesday")) {
+                                animeOfDay.add(animes.getWednesday().get(i));
+                            }
+                            if (val == 0) {
+                                list1.add(animes.getWednesday().get(i));
+                                val++;
+                            } else {
+                                if (val == 1) {
+                                    list2.add(animes.getWednesday().get(i));
+                                    val++;
+                                } else {
+                                    list3.add(animes.getWednesday().get(i));
+                                    val = 0;
+                                }
+                            }
+                        }
+                        for (int i = 0; i < animes.getThursday().size(); i++) {
+                            if (day.equalsIgnoreCase("thursday")) {
+                                animeOfDay.add(animes.getThursday().get(i));
+                            }
+                            if (val == 0) {
+                                list1.add(animes.getThursday().get(i));
+                                val++;
+                            } else {
+                                if (val == 1) {
+                                    list2.add(animes.getThursday().get(i));
+                                    val++;
+                                } else {
+                                    list3.add(animes.getThursday().get(i));
+                                    val = 0;
+                                }
+                            }
+                        }
+                        for (int i = 0; i < animes.getFriday().size(); i++) {
+                            if (day.equalsIgnoreCase("Friday")) {
+                                animeOfDay.add(animes.getFriday().get(i));
+                            }
+                            if (val == 0) {
+                                list1.add(animes.getFriday().get(i));
+                                val++;
+                            } else {
+                                if (val == 1) {
+                                    list2.add(animes.getFriday().get(i));
+                                    val++;
+                                } else {
+                                    list3.add(animes.getFriday().get(i));
+                                    val = 0;
+                                }
+                            }
+                        }
+                        for (int i = 0; i < animes.getSaturday().size(); i++) {
+                            if (day.equalsIgnoreCase("saturday")) {
+                                animeOfDay.add(animes.getSaturday().get(i));
+                            }
+                            if (val == 0) {
+                                list1.add(animes.getSaturday().get(i));
+                                val++;
+                            } else {
+                                if (val == 1) {
+                                    list2.add(animes.getSaturday().get(i));
+                                    val++;
+                                } else {
+                                    list3.add(animes.getSaturday().get(i));
+                                    val = 0;
+                                }
+                            }
+                        }
+                        for (int i = 0; i < animes.getSunday().size(); i++) {
+                            if (day.equalsIgnoreCase("sunday")) {
+                                animeOfDay.add(animes.getSunday().get(i));
+                            }
+                            if (val == 0) {
+                                list1.add(animes.getSunday().get(i));
+                                val++;
+                            } else {
+                                if (val == 1) {
+                                    list2.add(animes.getSunday().get(i));
+                                    val++;
+                                } else {
+                                    list3.add(animes.getSunday().get(i));
+                                    val = 0;
+                                }
+                            }
+                        }
+                        Collections.sort(animeOfDay, new Comparator<AnimeItem>() {
+                            @Override
+                            public int compare(AnimeItem o1, AnimeItem o2) {
+                                return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
+                            }
+                        });
+                        Collections.sort(list1, new Comparator<AnimeItem>() {
+                            @Override
+                            public int compare(AnimeItem o1, AnimeItem o2) {
+                                return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
+                            }
+                        });
+                        Collections.sort(list2, new Comparator<AnimeItem>() {
+                            @Override
+                            public int compare(AnimeItem o1, AnimeItem o2) {
+                                return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
+                            }
+                        });
+                        Collections.sort(list3, new Comparator<AnimeItem>() {
+                            @Override
+                            public int compare(AnimeItem o1, AnimeItem o2) {
+                                return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
+                            }
+                        });
+                        lym2 = new LinearLayoutManager(getContext());
+                        adapter2 = new AdapterResultados(list1, list2, list3, getContext(), getActivity(), "inicio");
+                        rv_continue.setLayoutManager(lym2);
+                        rv_continue.setAdapter(adapter2);
+                        rv_continue.scheduleLayoutAnimation();
+                        adapter2.notifyDataSetChanged();
+                        pb_inicio.setVisibility(View.INVISIBLE);
+                        if (!estado_seasion) {
+                            dialog.dismissDialog();
+                        }
+                        iv_carousel.setVisibility(View.VISIBLE);
+                        tv_desc.setVisibility(View.VISIBLE);
+                        tv_titulo.setVisibility(View.VISIBLE);
+                        btn_acceder.setVisibility(View.VISIBLE);
+                        Log.d("PESODEANIMEOFDAY", "" + dayOfWeek);
+                        ImageViewAnimatedChange(getContext(), iv_carousel, animeOfDay.get(0).getImage_url(), animeOfDay.get(0).getTitle(), animeOfDay.get(0).getSynopsis());
+                        carouselCount = 1;
+                        loadCarousel();
+                    } else {
+                        loadAnimeOfTheWeek();
                     }
 
-                    @Override
-                    public void onFailure(Call<AnimeWeekRequest> call, Throwable t) {
-                        Log.d("NOCARGA", t.getMessage());
-                    }
-                });
+                }
+
+                @Override
+                public void onFailure(Call<AnimeWeekRequest> call, Throwable t) {
+                    Log.d("NOCARGA", t.getMessage());
+                }
+            });
         }, 1000);
     }
 }

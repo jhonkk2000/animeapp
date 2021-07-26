@@ -58,6 +58,7 @@ public class ConfiguracionFragment extends Fragment {
     }
 
     public void loadStateDark(){
+        sw_oscuro.setEnabled(false);
         int val = getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if(val==32){
             sw_oscuro.setChecked(true);

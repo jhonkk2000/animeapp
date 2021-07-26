@@ -32,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
     private DatabaseReference dbr;
     private ImageView iv_splah;
     private SharedPreferences prefD;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,25 +42,20 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().setNavigationBarColor(getResources().getColor(R.color.light_red));
         dbr = FirebaseDatabase.getInstance().getReference();
         iv_splah = findViewById(R.id.iv_splash);
-        prefD = getSharedPreferences("darkMode",MODE_PRIVATE);
+        prefD = getSharedPreferences("darkMode", MODE_PRIVATE);
         loadDark();
         loadAnimationImage();
+         user = FirebaseAuth.getInstance().getCurrentUser();
         if (NetworkUtils.isNetworkConnected(this)) {
-            if(CenterActivity.estado_inicio == 0){
-                CenterActivity.estado_inicio =1;
-            }else{
-                finishSplash();
-            }
+            finishSplash();
         } else {
             Toast.makeText(this, "Verifica tu conexion a internet!", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
-    public void loadDark(){
-        if(prefD.getBoolean("night",false)){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
+    public void loadDark() {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }
 
     public void loadAnimationImage() {
@@ -71,9 +67,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void finishSplash() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+
                 dbr.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -81,16 +75,17 @@ public class SplashActivity extends AppCompatActivity {
                         for (DataSnapshot ds : snapshot.child("genres").getChildren()) {
                             generos.add(ds.getValue(GeneroItem.class));
                         }
-                            if(!getIntent().getBooleanExtra("register",true)){
-                                startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("login",false));
-                            }else{
-                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                if (user != null) {
-                                    startActivity(new Intent(SplashActivity.this, CenterActivity.class));
-                                }else{
-                                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                                }
+                        if (!getIntent().getBooleanExtra("register", true)) {
+                            startActivity(new Intent(SplashActivity.this, CenterActivity.class));
+                            CenterActivity.login = false;
+                        } else {
+                            if (user != null) {
+                                startActivity(new Intent(SplashActivity.this, CenterActivity.class));
+                                CenterActivity.login = true;
+                            } else {
+                                startActivity(new Intent(SplashActivity.this, MainActivity.class));
                             }
+                        }
                         CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
                         CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
                         CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
@@ -102,7 +97,6 @@ public class SplashActivity extends AppCompatActivity {
 
                     }
                 });
-            }
-        }, 1000);
+
     }
 }

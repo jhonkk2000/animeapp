@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
             android:layout_height="?attr/actionBarSize"
+            android:minHeight="@dimen/abc_action_bar_default_height_material"
             android:background="@drawable/background_carousel_toolbar"
             app:popupTheme="@style/Theme.Aniappinspiracy.PopupOverlay" />
 
