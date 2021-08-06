@@ -3,6 +3,8 @@ package com.jhonkkman.aniappinspiracy;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,7 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderEpisodio holder, int position) {
-        holder.loadPlayers(context,position+1);
+        holder.loadPlayers(context, position + 1);
         holder.loadText(position + 1);
     }
 
@@ -53,6 +55,8 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
 
         ImageButton btn_enter;
         TextView tv_episodio;
+        int state = 0;
+        ArrayList<String> videosLinks;
 
         public ViewHolderEpisodio(@NonNull View v) {
             super(v);
@@ -64,22 +68,45 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
             tv_episodio.setText("Episodio " + position);
         }
 
-        public void loadPlayers(Context context,int position) {
+        public void loadPlayers(Context context, int position) {
             btn_enter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     AnimeActivity.dialog.showDialog((Activity) context, "Cargando reproductores");
-                    ArrayList<String> videos = loadEpisode(position);
-                    if(videos.size()!=0){
-                        Intent i = new Intent(context, PlayersActivity.class);
-                        i.putExtra("videos", videos);
-                        context.startActivity(i);
-                    }else{
-                        AnimeActivity.dialog.dismissDialog();
-                        Toast.makeText(context, "Episodio no disponible.", Toast.LENGTH_SHORT).show();
-                    }
+                    final ArrayList<String>[] videos = new ArrayList[1];
+                    videos[0] = new ArrayList<>();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            videos[0] = loadEpisode(position);
+                            videosLinks = videos[0];
+                        }
+                    }).start();
+                    loadActivity(context);
                 }
             });
+        }
+
+        public void loadActivity( Context context) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (state == 1) {
+                        if (videosLinks.size() != 0) {
+                            Intent i = new Intent(context, PlayersActivity.class);
+                            i.putExtra("videos", videosLinks);
+                            context.startActivity(i);
+                        } else {
+                            if(AnimeActivity.dialog.state){
+                                AnimeActivity.dialog.dismissDialog();
+                            }
+                            Toast.makeText(context, "Episodio no disponible.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        loadActivity(context);
+                    }
+                }
+            }, 1000);
         }
 
         public ArrayList<String> loadEpisode(int episode) {
@@ -88,6 +115,7 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
             ArrayList<String> videos = new ArrayList<>();
             try {
                 videos = apiVideoServer.getVideoServers();
+                state = 1;
             } catch (IOException e) {
                 e.printStackTrace();
             }

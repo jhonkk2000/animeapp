@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
+import com.jhonkkman.aniappinspiracy.ui.inicio.InicioFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +46,7 @@ public class SplashActivity extends AppCompatActivity {
         prefD = getSharedPreferences("darkMode", MODE_PRIVATE);
         loadDark();
         loadAnimationImage();
-         user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         if (NetworkUtils.isNetworkConnected(this)) {
             finishSplash();
         } else {
@@ -67,36 +68,35 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void finishSplash() {
-
-                dbr.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        generos.clear();
-                        for (DataSnapshot ds : snapshot.child("genres").getChildren()) {
-                            generos.add(ds.getValue(GeneroItem.class));
-                        }
-                        if (!getIntent().getBooleanExtra("register", true)) {
-                            startActivity(new Intent(SplashActivity.this, CenterActivity.class));
-                            CenterActivity.login = false;
-                        } else {
-                            if (user != null) {
-                                startActivity(new Intent(SplashActivity.this, CenterActivity.class));
-                                CenterActivity.login = true;
-                            } else {
-                                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                            }
-                        }
-                        CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
-                        CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
-                        CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
-                        finish();
+        dbr.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                generos.clear();
+                for (DataSnapshot ds : snapshot.child("genres").getChildren()) {
+                    generos.add(ds.getValue(GeneroItem.class));
+                }
+                if (!getIntent().getBooleanExtra("register", true)) {
+                    startActivity(new Intent(SplashActivity.this, CenterActivity.class));
+                    CenterActivity.login = false;
+                } else {
+                    if (user != null) {
+                        startActivity(new Intent(SplashActivity.this, CenterActivity.class));
+                        CenterActivity.login = true;
+                    } else {
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     }
+                }
+                CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
+                CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
+                CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
+                finish();
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                    }
-                });
+            }
+        });
 
     }
 }

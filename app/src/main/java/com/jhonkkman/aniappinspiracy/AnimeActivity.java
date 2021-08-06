@@ -61,6 +61,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,7 +117,7 @@ public class AnimeActivity extends AppCompatActivity {
         //dialog.showDialog(this,"Cargando episodios");
         loadAd();
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         if(CenterActivity.login){
             //loadKeyComentario();
             onSelectFav();

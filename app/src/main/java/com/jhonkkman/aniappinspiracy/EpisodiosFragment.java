@@ -34,6 +34,10 @@ public class EpisodiosFragment extends Fragment {
     private LinearLayout ly_carga, ly_nodata;
     private int episodios;
 
+    public EpisodiosFragment(){
+
+    }
+
     public EpisodiosFragment(int episodios){
         if(episodios!=0){
             this.episodios = episodios;
@@ -69,65 +73,9 @@ public class EpisodiosFragment extends Fragment {
         episodios = apiVideoServer.getCountEpisodes();
     }
 
-    /*public void verify(){
-        if(busqueda){
-            ly_carga.setVisibility(View.VISIBLE);
-            rv_episodios.setVisibility(View.INVISIBLE);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tv_load.setText("Se cargaron " + episodios.size() + " de 20 maximos por carga");
-                    verify();
-                }
-            },1000);
-        }else{
-            ly_carga.setVisibility(View.INVISIBLE);
-            if(episodios.size()==0){
-                ly_nodata.setVisibility(View.VISIBLE);
-            }
-            rv_episodios.setVisibility(View.VISIBLE);
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    public void testEpisodes(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String[] anime_name = anime_previous.getUrl().split("/");
-                int ep = episodios.size()+1;
-                do{
-                    int val = ep%20;
-                    ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length-1],ep);
-                    ep++;
-                    ArrayList<String> videos = new ArrayList<>();
-                    try {
-                        videos = apiVideoServer.getVideoServers();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if(videos.size()==0){
-                        busqueda = false;
-                    }else{
-                        episodios.add(new Episodio(videos));
-                        for (int i = 0; i < animesGuardados.size(); i++) {
-                            if(anime_previous.getMal_id()==animesGuardados.get(i).getAnime().getMal_id()){
-                                if(animesGuardados.get(i).getEpisodios().size()!=episodios.size()){
-                                    animesGuardados.get(i).setEpisodios(episodios);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }while (busqueda);
-            }
-        }).start();
-    }*/
-
     public void loadEpisodes(){
         rv_episodios.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new AdapterEpisodio(getContext(),episodios);
         rv_episodios.setAdapter(adapter);
-        //AnimeActivity.dialog.dismissDialog();
     }
 }

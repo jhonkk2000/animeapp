@@ -41,6 +41,10 @@ public class GaleriaFragment extends Fragment {
         return view;
     }
 
+    public GaleriaFragment(){
+
+    }
+
     public void loadData(){
         API_SERVICE = ApiClientData.getClient().create(ApiAnimeData.class);
         Call<GaleriaResource> call = API_SERVICE.getGaleria(AnimeActivity.anime_previous.getMal_id());

@@ -64,11 +64,6 @@ public class ApiVideoServer {
                 v++;
             }
         }
-        /*ArrayList<String> finalVideos = new ArrayList<>();
-        for (int i = 0; i < url_videos.size(); i++) {
-            Log.d("URLS", url_videos.get(i));
-            finalVideos.add(getDirectLink(url_videos.get(i)));
-        }*/
         return url_videos;
     }
 
@@ -93,7 +88,6 @@ public class ApiVideoServer {
         String inputLine;
         ArrayList<String> datos = new ArrayList<>();
         while ((inputLine = in.readLine()) != null) {
-            //System.out.println(inputLine);
             datos.add(inputLine);
         }
         in.close();
@@ -120,7 +114,6 @@ public class ApiVideoServer {
         String inputLine;
         ArrayList<String> datos = new ArrayList<>();
         while ((inputLine = in.readLine()) != null) {
-            //System.out.println(inputLine);
             datos.add(inputLine);
         }
         in.close();

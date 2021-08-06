@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.AdapterResultados;
 import com.jhonkkman.aniappinspiracy.AdapterSeasonAnime;
 import com.jhonkkman.aniappinspiracy.AlertLoading;
+import com.jhonkkman.aniappinspiracy.AlertRecommendation;
 import com.jhonkkman.aniappinspiracy.AnimeActivity;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.R;
@@ -76,7 +77,7 @@ public class InicioFragment extends Fragment {
     private ProgressBar pb_inicio;
     private ShimmerFrameLayout sm_season;
     private AppCompatButton btn_acceder;
-    private SharedPreferences pref;
+    private SharedPreferences pref,prefR;
     private ArrayList<AnimeItem> animesI = new ArrayList<>();
     private ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
     private ArrayList<AnimeItem> animeOfDay = new ArrayList<>();
@@ -104,14 +105,13 @@ public class InicioFragment extends Fragment {
         tv_titulo = root.findViewById(R.id.tv_titulo_carousel);
         tv_desc = root.findViewById(R.id.tv_desc_carousel);
         dbr = FirebaseDatabase.getInstance().getReference();
+        prefR = getActivity().getSharedPreferences("recommendation",Context.MODE_PRIVATE);
         API_SERVICE = ApiClientData.getClient().create(ApiAnimeData.class);
         pref = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         sm_season = root.findViewById(R.id.sm_season);
-        //sm_item.startShimmer();
         sm_season.startShimmer();
         CenterActivity.animesI.clear();
         openAnimeCarousel();
-        //Toast.makeText(getContext(), "a"+ finalI, Toast.LENGTH_SHORT).show();
         loadSeasonState();
         loadGenresState();
         loadUser();
@@ -560,6 +560,10 @@ public class InicioFragment extends Fragment {
                         pb_inicio.setVisibility(View.INVISIBLE);
                         if (!estado_seasion) {
                             dialog.dismissDialog();
+                        }
+                        if(!prefR.getBoolean("no_mostrar",false)){
+                            AlertRecommendation dialogR = new AlertRecommendation();
+                            dialogR.showDialog(getActivity());
                         }
                         iv_carousel.setVisibility(View.VISIBLE);
                         tv_desc.setVisibility(View.VISIBLE);

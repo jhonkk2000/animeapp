@@ -59,9 +59,6 @@ public class FavUserFragment extends Fragment {
 
     @SuppressLint("NewApi")
     public void loadIdsFavs(){
-        /*Gson gson = new Gson();
-        String json = pref.getString("usuario","");
-        User user = gson.fromJson(json,User.class);*/
         animesFav =  user.getAnimes_fav();
         for (int i = 0; i < animesFav.size(); i++) {
             loadAnime(Math.toIntExact((animesFav.get(i))));

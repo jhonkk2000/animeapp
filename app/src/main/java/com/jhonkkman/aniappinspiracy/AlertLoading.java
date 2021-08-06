@@ -13,6 +13,7 @@ public class AlertLoading {
 
     Dialog dialog;
     TextView tv_mensaje;
+    public boolean state = false;
 
     public void showDialog(Activity activity,String msj){
         dialog = new Dialog(activity);
@@ -23,10 +24,12 @@ public class AlertLoading {
         tv_mensaje = dialog.findViewById(R.id.tv_mensaje);
         tv_mensaje.setText(msj);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        state = true;
         dialog.show();
     }
 
     public void dismissDialog(){
+        state = false;
         dialog.dismiss();
     }
 

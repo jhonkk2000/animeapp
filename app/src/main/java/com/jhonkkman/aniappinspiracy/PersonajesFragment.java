@@ -34,6 +34,10 @@ public class PersonajesFragment extends Fragment {
     private ApiAnimeData API_SERVICE;
     private LinearLayout ly_nodata;
 
+    public PersonajesFragment(){
+
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

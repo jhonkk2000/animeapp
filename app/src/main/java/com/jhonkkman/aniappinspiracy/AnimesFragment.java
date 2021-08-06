@@ -94,14 +94,6 @@ public class AnimesFragment extends Fragment {
 
 
     public void openFragments(int pos, int last) {
-        /*Fragment fragment2 = getActivity().getSupportFragmentManager().findFragmentByTag("inicio");
-        if (fragment2 != null && fragment2.isVisible()) {
-            Toast.makeText(getContext(), "caca", Toast.LENGTH_SHORT).show();
-        }
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container_animes, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();*/
         pos_bototm_nav = pos;
         last_item = last;
         vp_animes.setCurrentItem(pos);

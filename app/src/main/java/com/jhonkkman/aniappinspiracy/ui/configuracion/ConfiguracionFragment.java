@@ -1,6 +1,8 @@
 package com.jhonkkman.aniappinspiracy.ui.configuracion;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -26,6 +28,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.AlertLoading;
+import com.jhonkkman.aniappinspiracy.AlertRecommendation;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.MainActivity;
 import com.jhonkkman.aniappinspiracy.R;
@@ -33,11 +36,11 @@ import com.jhonkkman.aniappinspiracy.SplashActivity;
 
 public class ConfiguracionFragment extends Fragment {
 
-    private AppCompatButton btn_cerrar_sesion;
+    private AppCompatButton btn_cerrar_sesion,btn_send_r;
     private FirebaseAuth mauth;
     private Switch sw_oscuro;
     private AdView mAdView;
-    private SharedPreferences pref,prefD;
+    private SharedPreferences pref,prefD,prefR;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,15 +49,45 @@ public class ConfiguracionFragment extends Fragment {
         btn_cerrar_sesion = view.findViewById(R.id.btn_cerrar_sesion);
         sw_oscuro = view.findViewById(R.id.sw_modo_oscuro);
         mAdView = view.findViewById(R.id.adView_configuracion);
+        btn_send_r = view.findViewById(R.id.btn_send_recomm_config);
         pref = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         prefD = getActivity().getSharedPreferences("darkMode",Context.MODE_PRIVATE);
+        prefR = getActivity().getSharedPreferences("recommendation",Context.MODE_PRIVATE);
         mauth = FirebaseAuth.getInstance();
+        loadAlertR();
         loadStateDark();
         loadNoLogin();
         //loadAd();
         onCerrarSesion();
         loadOscuro();
         return view;
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void loadAlertR(){
+        AlertRecommendation dialogR = new AlertRecommendation();
+        if(prefR.getBoolean("send",false)){
+            btn_send_r.setEnabled(false);
+            btn_send_r.setText("Gracias :D");
+            btn_send_r.setBackground(getResources().getDrawable(R.drawable.background_disable_minibutton));
+        }
+        btn_send_r.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogR.showDialog(getActivity());
+                dialogR.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if(dialogR.send){
+                            btn_send_r.setEnabled(false);
+                            btn_send_r.setText("Gracias :D");
+                            btn_send_r.setBackground(getResources().getDrawable(R.drawable.background_disable_minibutton));
+                        }
+                    }
+                });
+            }
+        });
+
     }
 
     public void loadStateDark(){

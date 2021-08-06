@@ -120,7 +120,7 @@ public class ExploraFragment extends Fragment {
         //loadAnime();
         eventsFilter();
         onBuscar();
-        scrollRv();
+        //scrollRv();
         return root;
     }
 
@@ -522,20 +522,23 @@ public class ExploraFragment extends Fragment {
                         tv_puntaje.setText(String.valueOf(anime1.getScore()));
                         int pos = 0;
                         for (int i = 0; i < animeItems.size(); i++) {
-                            if(i!=0){
-                                if(pos==0){
-                                    lista1.add(animeItems.get(i));
-                                    pos=1;
-                                }else{
-                                    if(pos==1){
-                                        lista2.add(animeItems.get(i));
-                                        pos=2;
+                            if(lista3.size()<15){
+                                if(i!=0){
+                                    if(pos==0){
+                                        lista1.add(animeItems.get(i));
+                                        pos=1;
                                     }else{
-                                        lista3.add(animeItems.get(i));
-                                        pos=0;
+                                        if(pos==1){
+                                            lista2.add(animeItems.get(i));
+                                            pos=2;
+                                        }else{
+                                            lista3.add(animeItems.get(i));
+                                            pos=0;
+                                        }
                                     }
                                 }
                             }
+
                         }
                         lym = new LinearLayoutManager(getContext());
                         adapter = new AdapterResultados(lista1,lista2,lista3,getContext(),getActivity(),"explora");

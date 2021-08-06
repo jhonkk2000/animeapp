@@ -74,7 +74,6 @@ public class CenterActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         dbr = FirebaseDatabase.getInstance().getReference();
         pref = getSharedPreferences("user", MODE_PRIVATE);
-        //login = getIntent().getBooleanExtra("login",true);
         loadUser();
         updateUserLocal();
         updateFav();
