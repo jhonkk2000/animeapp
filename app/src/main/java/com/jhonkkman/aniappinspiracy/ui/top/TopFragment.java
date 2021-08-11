@@ -44,11 +44,14 @@ public class TopFragment extends Fragment {
 
     public void loadFragments(){
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new TodosFragment("nada"));
-        fragments.add(new TodosFragment("airing"));
-        fragments.add(new TodosFragment("tv"));
-        fragments.add(new TodosFragment("movie"));
-        fragments.add(new TodosFragment("ova"));
+        String[] subtypes = {"nada","airing","tv","movie","ova"};
+        for (int i = 0; i < subtypes.length; i++) {
+            TodosFragment todosFragment = new TodosFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("subtype",subtypes[i]);
+            todosFragment.setArguments(bundle);
+            fragments.add(todosFragment);
+        }
         AdapterPager adapterPager = new AdapterPager(getActivity().getSupportFragmentManager(),tabs.getTabCount(),fragments);
         vp_top.setAdapter(adapterPager);
         vp_top.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));

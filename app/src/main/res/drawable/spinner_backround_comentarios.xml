@@ -4,8 +4,6 @@
         <layer-list>
             <item>
                 <shape>
-                    <solid
-                        android:color="@color/white"/>
                     <corners
                         android:radius="15dp"/>
                     <padding android:left="10dp" android:right="5dp"/>
@@ -19,7 +17,6 @@
                 android:gravity="center|end"
                 android:top="2dp"
                 android:drawable="@drawable/ic_filter_icon"/>
-
         </layer-list>
     </item>
 </selector>

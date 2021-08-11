@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ public class DescripcionFragment extends Fragment {
     private String desc;
     private ShimmerFrameLayout sm_anime;
 
-    public DescripcionFragment(){
+    public DescripcionFragment() {
     }
 
     @Override
@@ -30,13 +31,25 @@ public class DescripcionFragment extends Fragment {
         sm_anime = view.findViewById(R.id.sm_anime_desc);
         sm_anime.startShimmer();
         setRetainInstance(true);
-        //loadDesc();
+        loadDesc();
         return view;
     }
 
-    public void loadDesc(String desc){
-        sm_anime.stopShimmer();
-        sm_anime.setVisibility(View.INVISIBLE);
-        tv_desc.setText("Resumen: " + desc);
+    public void loadDesc() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(AnimeActivity.load_desc){
+                    desc = getArguments().getString("desc");
+                    sm_anime.stopShimmer();
+                    sm_anime.setVisibility(View.INVISIBLE);
+                    tv_desc.setText("Resumen: " + desc);
+                    AnimeActivity.load_desc = false;
+                }else{
+                    loadDesc();
+                }
+            }
+        }, 1000);
+
     }
 }

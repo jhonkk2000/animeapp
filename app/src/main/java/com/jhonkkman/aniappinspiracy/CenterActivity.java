@@ -28,6 +28,7 @@ import com.jhonkkman.aniappinspiracy.data.models.User;
 import com.jhonkkman.aniappinspiracy.ui.favorito.FavoritoFragment;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -62,6 +63,7 @@ public class CenterActivity extends AppCompatActivity {
     public static String season;
     public static int year;
     public static String prueba;
+    public static boolean carousel_state = false;
     private int finish_state = 0;
 
     @Override
@@ -74,6 +76,7 @@ public class CenterActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         dbr = FirebaseDatabase.getInstance().getReference();
         pref = getSharedPreferences("user", MODE_PRIVATE);
+        prueba = getIntent().getStringExtra("prueba");
         loadUser();
         updateUserLocal();
         updateFav();
@@ -144,7 +147,7 @@ public class CenterActivity extends AppCompatActivity {
             tv_nombreu.setText("Anonimo");
         } else {
             tv_nombreu.setText(user.getNombre_usuario());
-            Glide.with(this).load(user.getUrl_foto()).into(iv_user);
+            Glide.with(getApplicationContext()).load(user.getUrl_foto()).into(iv_user);
         }
     }
 
@@ -160,7 +163,7 @@ public class CenterActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    FavoritoFragment.animesFav = (List<Integer>) snapshot.getValue();
+                    FavoritoFragment.animesFav = (ArrayList<Integer>) snapshot.getValue();
                 }
             }
 

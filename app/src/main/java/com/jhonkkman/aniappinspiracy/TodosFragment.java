@@ -35,8 +35,8 @@ public class TodosFragment extends Fragment {
     private List<AnimeItem> animes = new ArrayList<>();
     private ProgressBar pb_top;
 
-    public TodosFragment(String subtype){
-        this.subtype = subtype;
+    public TodosFragment(){
+
     }
 
     @Override
@@ -45,6 +45,7 @@ public class TodosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_todos, container, false);
         rv_top = view.findViewById(R.id.rv_todos_top);
         pb_top = view.findViewById(R.id.pb_top);
+        subtype = getArguments().getString("subtype");
         verifyDataSaved();
         return view;
     }
@@ -77,7 +78,6 @@ public class TodosFragment extends Fragment {
                 if(response.isSuccessful()){
                     CenterActivity.animesTop.add(new TopMemoria(response.body(),subtype));
                     animes = response.body().getTop();
-
                     loadRv(animes);
                 }else{
                     new Handler().postDelayed(new Runnable() {

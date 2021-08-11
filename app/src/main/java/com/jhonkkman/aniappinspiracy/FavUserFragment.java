@@ -42,8 +42,8 @@ public class FavUserFragment extends Fragment {
     private ProgressBar pb_load;
     private int cont = 0;
 
-    public FavUserFragment(List<Integer> animesFav){
-        this.animesFav = animesFav;
+    public FavUserFragment(){
+
     }
 
     @Override

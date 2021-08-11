@@ -6,7 +6,10 @@
 
     <string name="iniciar_sesion">Iniciar Sesión</string>
     <string name="registrarte">Registrarse</string>
+    <string name="error_anime_short">Error al cargar anime</string>
+    <string name="error_anime_long">Error al cargar anime, reinicia ANIME SHOW</string>
     <string name="no_login">Entrar sin registrarte</string>
+
 
     <string name="volviste">Volviste!</string>
     <string name="correo_electronico">Correo electronico</string>
@@ -97,9 +100,14 @@ PROGMASTERPC está altamente comprometido para cumplir con el compromiso de mant
     <string name="week_anime">Animes de la semana</string>
     <string name="carousel_button">Acceder</string>
     <string name="ingresa_tu_recomendacion">Ingresa tus recomendaciones :)</string>
+    <string name="repregunta">¿Estas seguro que deseas establecer esta imagen como fondo de pantalla?</string>
     <string name="recomendacion_details">Escribe recomendaciones para mejorar tu experiencia usando nuestra app, como que podriamos agregar, errores por corregir, se agradece bastante tu apoyo :D! </string>
     <string name="send">Enviar</string>
+    <string name="set_wallpaper">Establecer como fondo de pantalla</string>
     <string name="cancel">Mas tarde</string>
+    <string name="ok">Aceptar</string>
+    <string name="cancel_options">Cancelar</string>
+    <string name="establecer">Si</string>
     <string name="no_mostrar">No volver a mostrar, puedes volver encontrar esta ventana en el apartado de configuracion.</string>
 
     <string name="descripcion_tab">Descripcion</string>
@@ -121,6 +129,12 @@ PROGMASTERPC está altamente comprometido para cumplir con el compromiso de mant
     <string name="cargar_mas">Cargar mas...</string>
 
     <string name="comentario">Comentario acerca de la serie que tal te parecio, recomendaciones a otrasseries, y todo lo que te alcance con 150 caracteres, mas nada porque si no me</string>
+
+    <!--    Notas de actualizacion-->
+    <string name="notes_update">Notas de actualizacion</string>
+    <string name="notas">-Ahora puedes seleccionar las imagenes de galeria como fondo de pantalla para tu telefono \n
+    -Se añadio un apartado de comentarios en cada anime, solo los usuarios registrados podran comentar.\n
+    -Se corrigieron errores y bugs.\n</string>
 
     <string-array name="letra">
         <item>Letra</item>

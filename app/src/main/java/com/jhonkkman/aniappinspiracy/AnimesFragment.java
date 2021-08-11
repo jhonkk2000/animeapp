@@ -1,5 +1,6 @@
 package com.jhonkkman.aniappinspiracy;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.ui.explora.ExploraFragment;
 import com.jhonkkman.aniappinspiracy.ui.favorito.FavoritoFragment;
 import com.jhonkkman.aniappinspiracy.ui.inicio.InicioFragment;
@@ -22,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jhonkkman.aniappinspiracy.CenterActivity.generos;
 
 public class AnimesFragment extends Fragment {
 
@@ -36,6 +45,7 @@ public class AnimesFragment extends Fragment {
     public static int pos_bototm_nav = 0;
     public int last_item = 0;
     private boolean state_no_session = false;
+    private DatabaseReference dbr;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +54,7 @@ public class AnimesFragment extends Fragment {
         bnv = view.findViewById(R.id.bnv_animes);
         vp_animes = view.findViewById(R.id.container_animes);
         vp_animes.setOffscreenPageLimit(5);
+        dbr = FirebaseDatabase.getInstance().getReference("season");
         loadViewPager();
         openFragments(0, R.id.nav_inicio);
         bottomNavigationOnClick();
@@ -100,14 +111,29 @@ public class AnimesFragment extends Fragment {
     }
 
     public void loadViewPager() {
-        fragments.add(inicioFragment);
-        fragments.add(exploraFragment);
-        fragments.add(topFragment);
-        if (CenterActivity.login) {
-            fragments.add(favoritoFragment);
-            fragments.add(perfilFragment);
-        }
-        AdapterPager adapter = new AdapterPager(getActivity().getSupportFragmentManager(), fragments.size(), fragments);
-        vp_animes.setAdapter(adapter);
+        dbr.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                Bundle bundle = new Bundle();
+                bundle.putString("season",snapshot.child("nombre").getValue().toString());
+                bundle.putInt("year",Integer.parseInt(snapshot.child("year").getValue().toString()));
+                inicioFragment.setArguments(bundle);
+                fragments.add(inicioFragment);
+                fragments.add(exploraFragment);
+                fragments.add(topFragment);
+                if (CenterActivity.login) {
+                    fragments.add(favoritoFragment);
+                    fragments.add(perfilFragment);
+                }
+                AdapterPager adapter = new AdapterPager(getActivity().getSupportFragmentManager(), fragments.size(), fragments);
+                vp_animes.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
     }
 }

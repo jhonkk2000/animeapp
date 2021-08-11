@@ -49,7 +49,7 @@
                         android:textStyle="bold"
                         android:visibility="invisible"
                         android:textSize="25sp"
-                        android:text="@string/registrarte"/>
+                        android:text="@string/error_anime_short"/>
 
                     <TextView
                         android:id="@+id/tv_desc_carousel"
@@ -57,7 +57,7 @@
                         android:visibility="invisible"
                         android:layout_height="wrap_content"
                         android:maxLength="100"
-                        android:text="@string/registrarte"/>
+                        android:text="@string/error_anime_long"/>
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_acceder_carousel"

@@ -22,7 +22,7 @@ public class FavoritoFragment extends Fragment {
 
     private TabLayout tabs;
     private ViewPager vp_fav;
-    public static List<Integer> animesFav = new ArrayList<>();
+    public static ArrayList<Integer> animesFav = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +43,11 @@ public class FavoritoFragment extends Fragment {
 
     public void loadFragments(){
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new FavUserFragment(animesFav));
+        Bundle bundle = new Bundle();
+        bundle.putIntegerArrayList("list",animesFav);
+        FavUserFragment favUserFragment = new FavUserFragment();
+        favUserFragment.setArguments(bundle);
+        fragments.add(favUserFragment);
         fragments.add(new GenUserFragment());
         AdapterPager adapterPager = new AdapterPager(getActivity().getSupportFragmentManager(),tabs.getTabCount(),fragments);
         vp_fav.setAdapter(adapterPager);

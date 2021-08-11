@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,14 +113,15 @@ public class LoginFragment extends Fragment {
                                                     editor.apply();
                                                     CenterActivity.login = true;
                                                     Toast.makeText(getContext(), "Se inicio sesion correctamente ", Toast.LENGTH_SHORT).show();
+                                                    Log.d("LOGIN","inicio");
                                                     if(first){
-                                                        startActivity(new Intent(getContext(),AnimeFavActivity.class));
+                                                        startActivity(new Intent(getContext(),AnimeFavActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                                     }else{
-                                                        startActivity(new Intent(getContext(),SplashActivity.class));
+                                                        startActivity(new Intent(getContext(),SplashActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                                         //dbr.child(id).child("firs_time").setValue(false);
                                                     }
                                                     getActivity().finish();
-                                                    MainActivity.activityMain.finish();
+                                                    //MainActivity.activityMain.finish();
                                                 }
                                             }
                                         }

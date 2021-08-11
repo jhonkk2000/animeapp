@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.ViewCompat;
@@ -35,6 +36,7 @@ import com.jhonkkman.aniappinspiracy.AdapterResultados;
 import com.jhonkkman.aniappinspiracy.AdapterSeasonAnime;
 import com.jhonkkman.aniappinspiracy.AlertLoading;
 import com.jhonkkman.aniappinspiracy.AlertRecommendation;
+import com.jhonkkman.aniappinspiracy.AlertUpdate;
 import com.jhonkkman.aniappinspiracy.AnimeActivity;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.R;
@@ -62,7 +64,6 @@ import retrofit2.Response;
 
 import static com.jhonkkman.aniappinspiracy.CenterActivity.animeItems;
 import static com.jhonkkman.aniappinspiracy.CenterActivity.generos;
-import static com.jhonkkman.aniappinspiracy.CenterActivity.year;
 
 public class InicioFragment extends Fragment {
 
@@ -77,7 +78,7 @@ public class InicioFragment extends Fragment {
     private ProgressBar pb_inicio;
     private ShimmerFrameLayout sm_season;
     private AppCompatButton btn_acceder;
-    private SharedPreferences pref,prefR;
+    private SharedPreferences pref, prefR,prefU;
     private ArrayList<AnimeItem> animesI = new ArrayList<>();
     private ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
     private ArrayList<AnimeItem> animeOfDay = new ArrayList<>();
@@ -88,10 +89,10 @@ public class InicioFragment extends Fragment {
     private int finalL = -1;
     private boolean estado_seasion = false;
     private boolean estado_genres = false;
-    private String season = CenterActivity.season;
+    private String season;
     public static boolean estado_last = false;
     private AlertLoading dialog = new AlertLoading();
-    private int carouselCount = 0;
+    private int carouselCount = 0, year;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -104,8 +105,11 @@ public class InicioFragment extends Fragment {
         tv_season = root.findViewById(R.id.tv_season_anime);
         tv_titulo = root.findViewById(R.id.tv_titulo_carousel);
         tv_desc = root.findViewById(R.id.tv_desc_carousel);
+        season = getArguments().getString("season");
+        year = getArguments().getInt("year");
         dbr = FirebaseDatabase.getInstance().getReference();
-        prefR = getActivity().getSharedPreferences("recommendation",Context.MODE_PRIVATE);
+        prefR = getActivity().getSharedPreferences("recommendation", Context.MODE_PRIVATE);
+        prefU = getActivity().getSharedPreferences("update",Context.MODE_PRIVATE);
         API_SERVICE = ApiClientData.getClient().create(ApiAnimeData.class);
         pref = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         sm_season = root.findViewById(R.id.sm_season);
@@ -118,7 +122,7 @@ public class InicioFragment extends Fragment {
         loadContinue();
         finalL = -1;
         loadDataSeason();
-        setRetainInstance(true);
+        //setRetainInstance(true);
         return root;
     }
 
@@ -154,50 +158,55 @@ public class InicioFragment extends Fragment {
     }
 
     public void loadAnimationCarousel(int carouselCount) {
-        ImageViewAnimatedChange(getContext(),iv_carousel,animeOfDay.get(carouselCount).getImage_url(),animeOfDay.get(carouselCount).getTitle(),animeOfDay.get(carouselCount).getSynopsis());
+        ImageViewAnimatedChange(iv_carousel, animeOfDay.get(carouselCount).getImage_url(), animeOfDay.get(carouselCount).getTitle(), animeOfDay.get(carouselCount).getSynopsis());
         loadCarousel();
     }
 
-    public void ImageViewAnimatedChange(Context c, final ImageView v, String url, String title, String desc) {
-        final Animation anim_out = AnimationUtils.loadAnimation(c, android.R.anim.fade_out);
-        final Animation anim_in = AnimationUtils.loadAnimation(c, android.R.anim.fade_in);
-        anim_out.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+    public void ImageViewAnimatedChange(final ImageView v, String url, String title, String desc) {
+        try {
+            Log.d("VISIBILIDAD", "visible" + " " + title);
+            final Animation anim_out = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), android.R.anim.fade_out);
+            final Animation anim_in = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), android.R.anim.fade_in);
+            anim_out.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Glide.with(getContext()).load(url).into(v);
-                tv_titulo.setText(title);
-                tv_desc.setText(desc);
-                anim_in.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    Glide.with(getActivity().getApplicationContext()).load(url).into(v);
+                    tv_titulo.setText(title);
+                    tv_desc.setText(desc);
+                    anim_in.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                    }
-                });
-                v.startAnimation(anim_in);
-                btn_acceder.setAnimation(anim_in);
-                tv_titulo.setAnimation(anim_in);
-                tv_desc.setAnimation(anim_in);
-            }
-        });
-        v.startAnimation(anim_out);
-        btn_acceder.setAnimation(anim_out);
-        tv_titulo.startAnimation(anim_out);
-        tv_desc.setAnimation(anim_out);
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                        }
+                    });
+                    v.startAnimation(anim_in);
+                    btn_acceder.setAnimation(anim_in);
+                    tv_titulo.setAnimation(anim_in);
+                    tv_desc.setAnimation(anim_in);
+                }
+            });
+            v.startAnimation(anim_out);
+            btn_acceder.setAnimation(anim_out);
+            tv_titulo.startAnimation(anim_out);
+            tv_desc.setAnimation(anim_out);
+        } catch (Exception e) {
+        }
+
     }
 
     public void openAnimeCarousel() {
@@ -278,6 +287,7 @@ public class InicioFragment extends Fragment {
     }
 
     public void loadTitleSeason(String season, int year) {
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         switch (season) {
             case "summer":
                 tv_season.setText("Verano " + year);
@@ -560,8 +570,12 @@ public class InicioFragment extends Fragment {
                         pb_inicio.setVisibility(View.INVISIBLE);
                         if (!estado_seasion) {
                             dialog.dismissDialog();
+                            //if(!prefU.getBoolean("state",false)){
+                                AlertUpdate alertUpdate = new AlertUpdate();
+                                alertUpdate.showDialog(getActivity());
+                            //}
                         }
-                        if(!prefR.getBoolean("no_mostrar",false)){
+                        if (!prefR.getBoolean("no_mostrar", false)) {
                             AlertRecommendation dialogR = new AlertRecommendation();
                             dialogR.showDialog(getActivity());
                         }
@@ -570,9 +584,12 @@ public class InicioFragment extends Fragment {
                         tv_titulo.setVisibility(View.VISIBLE);
                         btn_acceder.setVisibility(View.VISIBLE);
                         Log.d("PESODEANIMEOFDAY", "" + dayOfWeek);
-                        ImageViewAnimatedChange(getContext(), iv_carousel, animeOfDay.get(0).getImage_url(), animeOfDay.get(0).getTitle(), animeOfDay.get(0).getSynopsis());
-                        carouselCount = 1;
-                        loadCarousel();
+                        if (!CenterActivity.carousel_state) {
+                            CenterActivity.carousel_state = true;
+                            ImageViewAnimatedChange(iv_carousel, animeOfDay.get(0).getImage_url(), animeOfDay.get(0).getTitle(), animeOfDay.get(0).getSynopsis());
+                            carouselCount = 1;
+                            loadCarousel();
+                        }
                     } else {
                         loadAnimeOfTheWeek();
                     }

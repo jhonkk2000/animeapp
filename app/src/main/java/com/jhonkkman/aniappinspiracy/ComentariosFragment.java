@@ -28,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeComentarios;
@@ -57,6 +58,8 @@ public class ComentariosFragment extends Fragment {
     private ArrayList<User> users = new ArrayList<>();
     private Spinner sp_filtro;
     private LinearLayout ly_nodata;
+    private ArrayList<Comentario> comentarios_filter = new ArrayList<>();
+    private boolean first_time = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,22 +83,12 @@ public class ComentariosFragment extends Fragment {
         return view;
     }
 
-    public void loadSpinner(){
+    public void loadSpinner() {
         sp_filtro.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ArrayList<Comentario> comentarios_filter = comentarios;
-                if(i==1){
-                    Collections.sort(comentarios_filter, new Comparator<Comentario>() {
-                        @Override
-                        public int compare(Comentario comentario, Comentario t1) {
-                            return new Integer(t1.getLikes().size()).compareTo(new Integer(comentario.getLikes().size()));
-                        }
-                    });
-                }else{
-                    Collections.reverse(comentarios_filter);
-                }
-                loadComentarios(comentarios_filter);
+                orderList(i);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -105,12 +98,31 @@ public class ComentariosFragment extends Fragment {
         });
     }
 
-    public void loadUsers(){
+    public void orderList(int i) {
+        comentarios_filter = comentarios;
+        if (i == 1) {
+            Collections.sort(comentarios_filter, new Comparator<Comentario>() {
+                @Override
+                public int compare(Comentario comentario, Comentario t1) {
+                    return new Integer(t1.getLikes().size()).compareTo(new Integer(comentario.getLikes().size()));
+                }
+            });
+        } else {
+            Collections.sort(comentarios_filter, new Comparator<Comentario>() {
+                @Override
+                public int compare(Comentario comentario, Comentario t1) {
+                    return new Integer(t1.getNum()).compareTo(new Integer(comentario.getNum()));
+                }
+            });
+        }
+    }
+
+    public void loadUsers() {
         dbr.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    for (DataSnapshot ds : snapshot.getChildren()){
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
                         users.add(ds.getValue(User.class));
                     }
                 }
@@ -124,31 +136,31 @@ public class ComentariosFragment extends Fragment {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public void verifyComment(){
-        if(this.isAdded()){
-            if(comment){
+    public void verifyComment() {
+        if (this.isAdded()) {
+            if (comment) {
                 btn_enviar.setEnabled(false);
                 et_comentario.setEnabled(false);
                 btn_enviar.setBackground(getContext().getDrawable(R.drawable.background_disable_minibutton));
-            }else{
+            } else {
                 btn_enviar.setEnabled(true);
                 btn_enviar.setBackground(getContext().getDrawable(R.drawable.background_mini_button));
             }
         }
     }
 
-    public void loadKey(){
+    public void loadKey() {
         dbr.child("anime").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    for (DataSnapshot ds: snapshot.getChildren()){
-                        if(Integer.parseInt(ds.child("mall_id").getValue().toString())==AnimeActivity.anime_previous.getMal_id()){
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        if (Integer.parseInt(ds.child("mall_id").getValue().toString()) == AnimeActivity.anime_previous.getMal_id()) {
                             KEY_COMENTARIO = ds.getKey();
                         }
                     }
                 }
-                loadComentarios(comentarios);
+                loadComentarios();
                 loadListComments();
             }
 
@@ -159,20 +171,20 @@ public class ComentariosFragment extends Fragment {
         });
     }
 
-    public void loadListComments(){
+    public void loadListComments() {
         dbr.child("anime").child(KEY_COMENTARIO).child("comentarios").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 comentarios.clear();
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     ArrayList<String> nums = new ArrayList<>();
-                    for (DataSnapshot ds : snapshot.getChildren()){
+                    for (DataSnapshot ds : snapshot.getChildren()) {
                         comentarios.add(ds.getValue(Comentario.class));
                         nums.add(ds.getKey());
                     }
                     for (int i = 0; i < comentarios.size(); i++) {
                         comentarios.get(i).setNum(nums.get(i));
-                        if(comentarios.get(i).getUser().equals(user.getCorreo())){
+                        if (comentarios.get(i).getUser().equals(user.getCorreo())) {
                             comment = true;
                         }
                     }
@@ -182,6 +194,11 @@ public class ComentariosFragment extends Fragment {
                 loadSpinner();
                 verifyComment();
                 sendComment();
+                orderList(sp_filtro.getSelectedItemPosition());
+                if (!first_time) {
+                    loadComentarios();
+                    first_time = true;
+                }
                 adapter.notifyDataSetChanged();
             }
 
@@ -192,43 +209,46 @@ public class ComentariosFragment extends Fragment {
         });
     }
 
-    public void loadUser(){
+    public void loadUser() {
         Gson gson = new Gson();
-        String json = pref.getString("usuario","");
-        user = gson.fromJson(json,User.class);
+        String json = pref.getString("usuario", "");
+        user = gson.fromJson(json, User.class);
+        if (!CenterActivity.login) {
+            btn_enviar.getLayoutParams().height = 0;
+            et_comentario.getLayoutParams().height = 0;
+            btn_enviar.requestLayout();
+            et_comentario.requestLayout();
+        }
     }
 
-    public void sendComment(){
+    public void sendComment() {
         btn_enviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String comentario = et_comentario.getText().toString();
-                if(CenterActivity.login){
-                    if(!comentario.isEmpty()){
-                        ArrayList<String> likes = new ArrayList<>();
-                        ArrayList<String> dislikes = new ArrayList<>();
-                        comentarios.add(new Comentario(comentario,user.getCorreo(),likes,dislikes));
-                        if(comentarios.size()==0){
-                            dbr.child("anime").push().setValue(new AnimeComentarios(AnimeActivity.anime_previous.getMal_id(),comentarios));
-                        }else{
-                            dbr.child("anime").child(KEY_COMENTARIO).child("comentarios").setValue(comentarios);
-                        }
-                        et_comentario.setText("");
-                        loadKey();
-                    }else{
-                        Toast.makeText(getContext(), "Ingresa un comentario", Toast.LENGTH_SHORT).show();
+                if (!comentario.isEmpty()) {
+                    ArrayList<String> likes = new ArrayList<>();
+                    ArrayList<String> dislikes = new ArrayList<>();
+                    comentarios.add(new Comentario(comentario, user.getCorreo(), likes, dislikes));
+                    if (KEY_COMENTARIO.isEmpty()) {
+                        dbr.child("anime").push().setValue(new AnimeComentarios(AnimeActivity.anime_previous.getMal_id(), comentarios));
+                    } else {
+                        dbr.child("anime").child(KEY_COMENTARIO).child("comentarios").setValue(comentarios);
                     }
-                }else{
-                    Toast.makeText(getContext(), "Necesitas iniciar sesion para comentar", Toast.LENGTH_SHORT).show();
+                    et_comentario.setText("");
+                    loadKey();
+                } else {
+                    Toast.makeText(getContext(), "Ingresa un comentario", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         });
     }
 
-    public void loadComentarios(ArrayList<Comentario> comentarios){
+    public void loadComentarios() {
         lym = new LinearLayoutManager(getContext());
-        adapter = new AdapterComentario(getContext(),comentarios,users,dbr,KEY_COMENTARIO);
+        adapter = new AdapterComentario(getContext(), comentarios_filter, users, dbr, KEY_COMENTARIO);
         rv_c.setLayoutManager(lym);
         rv_c.setAdapter(adapter);
     }

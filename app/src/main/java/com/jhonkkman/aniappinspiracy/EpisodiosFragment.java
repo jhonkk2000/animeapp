@@ -30,24 +30,12 @@ public class EpisodiosFragment extends Fragment {
     private RecyclerView rv_episodios;
     private AdapterEpisodio adapter;
     private boolean busqueda = true;
-    private TextView tv_load ;
+    private TextView tv_load;
     private LinearLayout ly_carga, ly_nodata;
     private int episodios;
 
-    public EpisodiosFragment(){
+    public EpisodiosFragment() {
 
-    }
-
-    public EpisodiosFragment(int episodios){
-        if(episodios!=0){
-            this.episodios = episodios;
-        }else{
-            try {
-                loadCount();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
@@ -61,21 +49,33 @@ public class EpisodiosFragment extends Fragment {
         ly_carga.setVisibility(View.INVISIBLE);
         ly_nodata.setVisibility(View.INVISIBLE);
         rv_episodios.setVisibility(View.VISIBLE);
+        episodios = getArguments().getInt("ep");
         //testEpisodes();
         //verify();
         loadEpisodes();
+        Log.d("ARGUMENTO EP","" + getArguments().getInt("ep"));
         return view;
     }
 
     public void loadCount() throws IOException {
         String[] anime_name = anime_previous.getUrl().split("/");
-        ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length-1],0);
+        ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length - 1], 0);
         episodios = apiVideoServer.getCountEpisodes();
+        Bundle bundle = new Bundle();
+        bundle.putInt("ep",episodios);
+        this.setArguments(bundle);
     }
 
-    public void loadEpisodes(){
+    public void loadEpisodes() {
+        if (episodios == 0) {
+            try {
+                loadCount();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         rv_episodios.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new AdapterEpisodio(getContext(),episodios);
+        adapter = new AdapterEpisodio(getContext(), episodios);
         rv_episodios.setAdapter(adapter);
     }
 }

@@ -83,13 +83,14 @@ public class AnimeActivity extends AppCompatActivity {
     private SharedPreferences pref;
     public static String KEY_COMENTARIO = "";
     public static AlertLoading dialog = new AlertLoading();
+    public static boolean load_desc = false;
     //public static ArrayList<Episodio> episodios = new ArrayList<>();
     private AnimeResource anime = new AnimeResource();
     private ArrayList<Episodio> episodios = new ArrayList<>();
     private List<Fragment> fragments = new ArrayList<>();
     private boolean change_data = false;
     private InterstitialAd mInterstitialAd;
-    private DescripcionFragment descF = new DescripcionFragment();
+    private DescripcionFragment descF;
 
 
     @Override
@@ -288,15 +289,20 @@ public class AnimeActivity extends AppCompatActivity {
     }
 
     public void loadTabs(){
-        tabs.addTab(tabs.newTab().setText(getString(R.string.descripcion_tab)));
-        if(!CenterActivity.prueba.equals("T1")){
-            tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
-        }
-        tabs.addTab(tabs.newTab().setText(getString(R.string.personajes)));
-        tabs.addTab(tabs.newTab().setText(getString(R.string.galeria)));
-        if(CenterActivity.login){
-            //tabs.addTab(tabs.newTab().setText(getString(R.string.comentarios)));
-        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tabs.addTab(tabs.newTab().setText(getString(R.string.descripcion_tab)));
+                if(!CenterActivity.prueba.equals("T1")){
+                    tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
+                }
+                tabs.addTab(tabs.newTab().setText(getString(R.string.personajes)));
+                tabs.addTab(tabs.newTab().setText(getString(R.string.galeria)));
+                //if(CenterActivity.login){
+                tabs.addTab(tabs.newTab().setText(getString(R.string.comentarios)));
+                //}
+            }
+        },200);
     }
 
     public void loadAnime(){
@@ -379,7 +385,12 @@ public class AnimeActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                descF.loadDesc(desc);
+                                //descF.loadDesc(desc);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("desc",desc);
+                                bundle.putBoolean("state",true);
+                                descF.setArguments(bundle);
+                                load_desc = true;
                             }
                         },800);
                     }
@@ -394,15 +405,20 @@ public class AnimeActivity extends AppCompatActivity {
     }
 
     public void loadFragments(){
+        descF = new DescripcionFragment();
         fragments.add(descF);
         if(!CenterActivity.prueba.equals("T1")){
-            fragments.add(new EpisodiosFragment(anime.getEpisodes()));
+            Bundle bundle = new Bundle();
+            bundle.putInt("ep",anime.getEpisodes());
+            EpisodiosFragment episodiosFragment = new EpisodiosFragment();
+            episodiosFragment.setArguments(bundle);
+            fragments.add(episodiosFragment);
         }
         fragments.add(new PersonajesFragment());
         fragments.add(new GaleriaFragment());
-        if(CenterActivity.login){
-            //fragments.add(new ComentariosFragment());
-        }
+        //if(CenterActivity.login){
+            fragments.add(new ComentariosFragment());
+        //}
         AdapterPager adapter = new AdapterPager(getSupportFragmentManager(),tabs.getTabCount(),fragments);
         vp_anime.setAdapter(adapter);
         vp_anime.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));

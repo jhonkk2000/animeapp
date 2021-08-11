@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity {
     private ImageView iv_splah;
     private SharedPreferences prefD;
     private FirebaseUser user;
-
+    private int im = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,19 +76,19 @@ public class SplashActivity extends AppCompatActivity {
                     generos.add(ds.getValue(GeneroItem.class));
                 }
                 if (!getIntent().getBooleanExtra("register", true)) {
-                    startActivity(new Intent(SplashActivity.this, CenterActivity.class));
+                    startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("prueba",snapshot.child("prueba").child("nombre").getValue().toString()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     CenterActivity.login = false;
                 } else {
                     if (user != null) {
-                        startActivity(new Intent(SplashActivity.this, CenterActivity.class));
+                        startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("prueba",snapshot.child("prueba").child("nombre").getValue().toString()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         CenterActivity.login = true;
                     } else {
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     }
                 }
-                CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
-                CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
-                CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
+                //CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
+                //CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
+                //CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
                 finish();
             }
 
