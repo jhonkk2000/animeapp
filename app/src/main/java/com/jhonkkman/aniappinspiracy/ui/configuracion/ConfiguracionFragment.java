@@ -185,6 +185,7 @@ public class ConfiguracionFragment extends Fragment {
         CenterActivity.animesGuardados.clear();
         CenterActivity.animesTop.clear();
         CenterActivity.season="";
+        CenterActivity.avisos.clear();
         CenterActivity.animeItems.clear();
     }
 }

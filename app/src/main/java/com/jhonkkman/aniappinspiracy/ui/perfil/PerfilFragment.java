@@ -67,7 +67,7 @@ public class PerfilFragment extends Fragment {
         mAdView = view.findViewById(R.id.adView_perfil);
         dbr = FirebaseDatabase.getInstance().getReference("users");
         //loadImg();
-        loadAd();
+        //loadAd();
         loadUserData();
         editData();
         savedData();

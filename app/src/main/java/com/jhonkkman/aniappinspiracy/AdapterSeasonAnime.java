@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,16 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.ads.nativetemplates.TemplateView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.material.card.MaterialCardView;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,22 +37,22 @@ public class AdapterSeasonAnime extends RecyclerView.Adapter<AdapterSeasonAnime.
     private Context context;
     private Activity activity;
 
-    public AdapterSeasonAnime(Context context,List<AnimeItem> lista,Activity activity){
+    public AdapterSeasonAnime(Context context, List<AnimeItem> lista, Activity activity) {
         this.context = context;
         this.lista = lista;
-        this.activity=activity;
+        this.activity = activity;
     }
 
     @NonNull
     @Override
     public AdapterSeasonAnime.ViewHolderSeasonAnime onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolderSeasonAnime(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_anime_with_name,null,false));
+        return new ViewHolderSeasonAnime(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_anime_with_name, null, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdapterSeasonAnime.ViewHolderSeasonAnime holder, int position) {
-        holder.loadData(lista.get(position),context);
-        holder.onClickAnime(lista.get(position),context,activity);
+        holder.loadData(lista.get(position), context);
+        holder.onClickAnime(lista.get(position), context, activity, position);
     }
 
     @Override
@@ -51,7 +60,7 @@ public class AdapterSeasonAnime extends RecyclerView.Adapter<AdapterSeasonAnime.
         return lista.size();
     }
 
-    public static class ViewHolderSeasonAnime extends RecyclerView.ViewHolder{
+    public static class ViewHolderSeasonAnime extends RecyclerView.ViewHolder {
 
         TextView tv_nombre;
         ImageView iv_anime;
@@ -64,11 +73,11 @@ public class AdapterSeasonAnime extends RecyclerView.Adapter<AdapterSeasonAnime.
             cv_anime = v.findViewById(R.id.cv_anime_season);
         }
 
-        public void onClickAnime(AnimeItem anime,Context context,Activity activity){
+        public void onClickAnime(AnimeItem anime, Context context, Activity activity, int pos) {
             cv_anime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(context,AnimeActivity.class);
+                    Intent i = new Intent(context, AnimeActivity.class);
                     i.putExtra("anime", (Serializable) anime);
                     cv_anime.setTransitionName("anime_portada");
                     //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv_anime, ViewCompat.getTransitionName(cv_anime));
@@ -77,7 +86,7 @@ public class AdapterSeasonAnime extends RecyclerView.Adapter<AdapterSeasonAnime.
             });
         }
 
-        public void loadData(AnimeItem animeItem, Context context){
+        public void loadData(AnimeItem animeItem, Context context) {
             Glide.with(context).load(animeItem.getImage_url()).into(iv_anime);
             tv_nombre.setText(animeItem.getTitle());
         }

@@ -9,11 +9,14 @@
             android:id="@+id/nav_animes"
             android:icon="@drawable/ic_inicio_icon"
             android:title="@string/menu_inicio" />
-
         <item
             android:id="@+id/nav_comunidad"
             android:icon="@drawable/ic_comunidad_icon"
             android:title="@string/menu_comunidad" />
+        <item
+            android:id="@+id/nav_perfil"
+            android:icon="@drawable/ic_perfil_icon"
+            android:title="@string/menu_perfil" />
         <item
             android:id="@+id/nav_configuracion"
             android:icon="@drawable/ic_configuracion_icon"

@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.jhonkkman.aniappinspiracy.ui.acerca.AcercaFragment;
 import com.jhonkkman.aniappinspiracy.ui.configuracion.ConfiguracionFragment;
+import com.jhonkkman.aniappinspiracy.ui.perfil.PerfilFragment;
 
 public class ContainerNavActivity extends AppCompatActivity {
 
@@ -29,6 +30,10 @@ public class ContainerNavActivity extends AppCompatActivity {
             case "a":
                 toolbar.setTitle("Acerca de");
                 loadFragments(new AcercaFragment());
+                break;
+            case "p":
+                toolbar.setTitle("Perfil");
+                loadFragments(new PerfilFragment());
                 break;
         }
     }

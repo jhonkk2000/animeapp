@@ -16,7 +16,7 @@
             android:layout_height="120dp"
             android:focusable="true"
             android:clickable="true"
-            app:cardCornerRadius="15dp"
+            app:cardCornerRadius="10dp"
             app:strokeColor="@color/dark_red"
             app:strokeWidth="2dp">
 
@@ -53,7 +53,7 @@
             android:layout_height="120dp"
             android:focusable="true"
             android:clickable="true"
-            app:cardCornerRadius="15dp"
+            app:cardCornerRadius="10dp"
             app:strokeColor="@color/dark_red"
             app:strokeWidth="2dp">
 

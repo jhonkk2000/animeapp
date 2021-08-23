@@ -29,6 +29,7 @@
             android:id="@+id/btn_enter_episode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:layout_gravity="center"
             android:background="@color/transparency"
             android:src="@drawable/ic_enter_icon" />

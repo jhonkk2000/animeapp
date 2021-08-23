@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.ads.nativetemplates.TemplateView;
 import com.google.android.material.card.MaterialCardView;
 import com.jhonkkman.aniappinspiracy.data.models.Picture;
 

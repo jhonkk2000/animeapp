@@ -34,21 +34,17 @@
             android:fadeScrollbars="false"
             android:scrollbarSize="35dp"/>
 
-        <FrameLayout
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_latino"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <com.google.android.gms.ads.AdView
-                xmlns:ads="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/adView_players"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|bottom"
-                ads:adSize="BANNER"
-                ads:adUnitId="@string/admob_banner">
-            </com.google.android.gms.ads.AdView>
-        </FrameLayout>
-
-
+            android:layout_height="wrap_content"
+            android:text="@string/episodios_latino"
+            android:textAllCaps="false"
+            android:background="@drawable/background_mini_button"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
     </LinearLayout>
-
 </RelativeLayout>

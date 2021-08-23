@@ -1,44 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="5dp"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_anime_season"
-            android:layout_width="150dp"
-            android:layout_height="200dp"
-            android:focusable="true"
-            android:clickable="true"
-            android:transitionName="anime_image"
-            app:cardCornerRadius="15dp">
-
-            <ImageView
-                android:id="@+id/iv_anime_season"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ijiranaide_nagatoro_san"/>
-
-        </com.google.android.material.card.MaterialCardView>
+    android:layout_height="match_parent">
 
 
-        <TextView
-            android:id="@+id/tv_anime_season_name"
-            android:layout_width="150dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cual_es_tu_anime_fav"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="15dp"
             android:gravity="center"
-            android:textSize="12sp"
-            android:textStyle="bold"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_anime_season"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:transitionName="anime_image"
+                app:cardCornerRadius="15dp">
+
+                <ImageView
+                    android:id="@+id/iv_anime_season"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ijiranaide_nagatoro_san" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <TextView
+                android:id="@+id/tv_anime_season_name"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/cual_es_tu_anime_fav"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
 </RelativeLayout>

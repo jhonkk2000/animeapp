@@ -29,6 +29,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.ads.nativetemplates.NativeTemplateStyle;
+import com.google.android.ads.nativetemplates.TemplateView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.formats.UnifiedNativeAd;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
@@ -48,6 +60,8 @@ import com.jhonkkman.aniappinspiracy.data.models.AnimeTopSeasonResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeWeekRequest;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.data.models.User;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -78,7 +92,7 @@ public class InicioFragment extends Fragment {
     private ProgressBar pb_inicio;
     private ShimmerFrameLayout sm_season;
     private AppCompatButton btn_acceder;
-    private SharedPreferences pref, prefR,prefU;
+    private SharedPreferences pref, prefR, prefU;
     private ArrayList<AnimeItem> animesI = new ArrayList<>();
     private ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
     private ArrayList<AnimeItem> animeOfDay = new ArrayList<>();
@@ -109,7 +123,7 @@ public class InicioFragment extends Fragment {
         year = getArguments().getInt("year");
         dbr = FirebaseDatabase.getInstance().getReference();
         prefR = getActivity().getSharedPreferences("recommendation", Context.MODE_PRIVATE);
-        prefU = getActivity().getSharedPreferences("update",Context.MODE_PRIVATE);
+        prefU = getActivity().getSharedPreferences("update", Context.MODE_PRIVATE);
         API_SERVICE = ApiClientData.getClient().create(ApiAnimeData.class);
         pref = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         sm_season = root.findViewById(R.id.sm_season);
@@ -122,6 +136,7 @@ public class InicioFragment extends Fragment {
         loadContinue();
         finalL = -1;
         loadDataSeason();
+
         //setRetainInstance(true);
         return root;
     }
@@ -280,7 +295,7 @@ public class InicioFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<AnimeTopSeasonResource> call, Throwable t) {
-
+                    Log.d("NOCARGASEASON",t.toString());
                 }
             });
         }
@@ -570,10 +585,17 @@ public class InicioFragment extends Fragment {
                         pb_inicio.setVisibility(View.INVISIBLE);
                         if (!estado_seasion) {
                             dialog.dismissDialog();
-                            //if(!prefU.getBoolean("state",false)){
+                            if (!prefU.getBoolean("state", false)) {
                                 AlertUpdate alertUpdate = new AlertUpdate();
                                 alertUpdate.showDialog(getActivity());
-                            //}
+                            }
+                            if (!prefU.getBoolean("stateC", false)) {
+                                AlertUpdate alertUpdate = new AlertUpdate();
+                                alertUpdate.alert = "com";
+                                alertUpdate.showDialog(getActivity());
+                                alertUpdate.setTitulo("Presentamos nuestra comunidad");
+                                alertUpdate.setDesc("Ahora puedes acceder al apartado de comunidad, pulsa aceptar para continuar.");
+                            }
                         }
                         if (!prefR.getBoolean("no_mostrar", false)) {
                             AlertRecommendation dialogR = new AlertRecommendation();
@@ -598,7 +620,7 @@ public class InicioFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<AnimeWeekRequest> call, Throwable t) {
-                    Log.d("NOCARGA", t.getMessage());
+                    Log.d("NOCARGA", t.getCause() + " - " + t.getMessage());
                 }
             });
         }, 1000);

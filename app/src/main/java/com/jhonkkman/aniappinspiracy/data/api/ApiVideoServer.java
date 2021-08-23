@@ -4,12 +4,16 @@ package com.jhonkkman.aniappinspiracy.data.api;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.jhonkkman.aniappinspiracy.CenterActivity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
+import static com.jhonkkman.aniappinspiracy.CenterActivity.extras;
 
 public class ApiVideoServer {
 
@@ -24,6 +28,10 @@ public class ApiVideoServer {
     public ApiVideoServer(String ANIME_NAME, int EPISODE) {
         this.ANIME_NAME = ANIME_NAME;
         this.EPISODE = EPISODE;
+    }
+
+    public void setBASE_URL(String BASE_URL) {
+        this.BASE_URL = BASE_URL;
     }
 
     public ArrayList<String> getVideoServers() throws IOException {
@@ -41,7 +49,35 @@ public class ApiVideoServer {
                 anime_final = anime_final + dat[i].toLowerCase() + "-";
             }
         }
-        URL oracle = new URL(BASE_URL + anime_final + "/" + EPISODE);
+        String url = "";
+        if (BASE_URL.equals("https://jkanime.net/")) {
+            for (int i = 0; i < extras.getSub_es().size(); i++) {
+                if (ANIME_NAME.equals(extras.getSub_es().get(i).split(",")[0])) {
+                    anime_final = extras.getSub_es().get(i).split(",")[1];
+                    break;
+                }
+            }
+            url = BASE_URL + anime_final + "/" + EPISODE;
+        } else {
+            boolean state = false;
+            for (int i = 0; i < extras.getLatino().size(); i++) {
+                if (ANIME_NAME.equalsIgnoreCase(extras.getLatino().get(i).split(",")[0])) {
+                    if (extras.getLatino().get(i).contains(";")) {
+                        state = true;
+                        anime_final = extras.getLatino().get(i).split(",")[1].replace(";","");
+                    }else{
+                        anime_final = extras.getLatino().get(i).split(",")[1];
+                    }
+                    break;
+                }
+            }
+            if (state) {
+                url = BASE_URL + "/" + anime_final;
+            } else {
+                url = BASE_URL + "/episode/" + anime_final + "-espanol-latino-hd-1x" + EPISODE;
+            }
+        }
+        URL oracle = new URL(url);
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(oracle.openStream()));
         String inputLine;
@@ -62,6 +98,20 @@ public class ApiVideoServer {
                     url_videos.add(datos.get(i).trim().split("src=")[1].split(" width")[0].replace("\"", ""));
                 }
                 v++;
+            } else {
+                if (datos.get(i).contains("TPlayerTb Current")) {
+                    String[] videos = datos.get(i).split("src=");
+                    for (int j = 1; j < videos.length; j++) {
+                        if (j == 1) {
+                            url_videos.add(datos.get(i).trim().split("src=\"")[1].split("\" frameborder")[0].replace("#038;", ""));
+                        } else {
+                            url_videos.add(videos[j].split("quot;")[1].replace("amp;", "").replace("#038;", ""));
+                        }
+                    }
+                    for (int j = 0; j < url_videos.size(); j++) {
+                        Log.d("URLVIDEOSLATINO", url_videos.get(j));
+                    }
+                }
             }
         }
         return url_videos;
@@ -93,14 +143,14 @@ public class ApiVideoServer {
         in.close();
         ArrayList<String> datos2 = new ArrayList<>();
         for (int i = 0; i < datos.size(); i++) {
-            if(datos.get(i).contains("<a class=\"numbers\"")){
-                Log.d("NUMBRES",datos.get(i) + "CAN");
+            if (datos.get(i).contains("<a class=\"numbers\"")) {
+                Log.d("NUMBRES", datos.get(i) + "CAN");
                 datos2.add(datos.get(i));
             }
         }
         int ep = 0;
-        if(datos2.size()>0){
-            ep = Integer.parseInt(datos2.get(datos2.size()-1).split(" - ")[1].split("</a>")[0]);
+        if (datos2.size() > 0) {
+            ep = Integer.parseInt(datos2.get(datos2.size() - 1).split(" - ")[1].split("</a>")[0]);
         }
         return ep;
     }
@@ -131,7 +181,7 @@ public class ApiVideoServer {
                 }
             }
         }
-        Log.d("URL DIRECTOOOOOO: " , url);
+        Log.d("URL DIRECTOOOOOO: ", url);
         return url;
     }
 

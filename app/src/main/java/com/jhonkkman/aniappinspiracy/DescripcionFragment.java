@@ -40,11 +40,15 @@ public class DescripcionFragment extends Fragment {
             @Override
             public void run() {
                 if(AnimeActivity.load_desc){
-                    desc = getArguments().getString("desc");
-                    sm_anime.stopShimmer();
-                    sm_anime.setVisibility(View.INVISIBLE);
-                    tv_desc.setText("Resumen: " + desc);
-                    AnimeActivity.load_desc = false;
+                    try {
+                        desc = getArguments().getString("desc");
+                        sm_anime.stopShimmer();
+                        sm_anime.setVisibility(View.INVISIBLE);
+                        tv_desc.setText("Resumen: " + desc);
+                        AnimeActivity.load_desc = false;
+                    }catch (Exception e){
+                    }
+
                 }else{
                     loadDesc();
                 }

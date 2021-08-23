@@ -3,5 +3,5 @@
     <solid
         android:color="@color/background_edittext"/>
     <corners
-        android:radius="20dp"/>
+        android:radius="10dp"/>
 </shape>

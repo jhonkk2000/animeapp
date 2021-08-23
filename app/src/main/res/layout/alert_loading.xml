@@ -28,6 +28,17 @@
             android:layout_gravity="center"
             android:indeterminateDrawable="@drawable/progress"/>
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cancel_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:background="@drawable/background_mini_button"
+            android:textColor="@color/white"
+            android:text="@string/cancel_options"/>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -15,9 +15,17 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.ads.nativetemplates.TemplateView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.material.card.MaterialCardView;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 import com.jhonkkman.aniappinspiracy.data.models.Picture;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;

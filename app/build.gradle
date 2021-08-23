@@ -11,8 +11,8 @@ android {
         applicationId "com.jhonkkman.aniappinspiracy"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 10
-        versionName "0.8"
+        versionCode 12
+        versionName "1.01"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,7 +46,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.google.firebase:firebase-database'
 
     //Glide
@@ -64,6 +64,7 @@ dependencies {
 
     //AdsGoogle
     implementation 'com.google.android.gms:play-services-ads:20.2.0'
+    implementation project(':nativetemplates')
 
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'

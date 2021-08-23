@@ -17,6 +17,8 @@
     <string name="olvidaste_tu">Olvidaste tu contraseña?</string>
     <string name="recuperala">Recuperala</string>
     <string name="o">O</string>
+    <string name="unete_discord">Unete a nuestro servidor!</string>
+    <string name="desc_discord">Explora esta pequeña comunidad, realiza tus solicitudes de animes faltantes, y mas!.</string>
 
     <string name="unete">Unete!</string>
     <string name="repetir_c">Repetir contraseña</string>
@@ -48,7 +50,7 @@
     <string name="menu_top">Top</string>
     <string name="menu_fav">Favoritos</string>
     <string name="menu_perfil">Perfil</string>
-    <string name="menu_comunidad">Comunidad (Pronto)</string>
+    <string name="menu_comunidad">Comunidad</string>
     <string name="menu_config">Configuracion</string>
     <string name="menu_acerca">Acerca de</string>
     <string name="username">Nombre de usuario</string>
@@ -127,6 +129,7 @@ PROGMASTERPC está altamente comprometido para cumplir con el compromiso de mant
     <string name="nodata_c">No se encontraron comentarios. Sé el primero en comentar</string>
     <string name="no_disponible">No disponible</string>
     <string name="cargar_mas">Cargar mas...</string>
+    <string name="episodios_latino">Buscar episodio en latino</string>
 
     <string name="comentario">Comentario acerca de la serie que tal te parecio, recomendaciones a otrasseries, y todo lo que te alcance con 150 caracteres, mas nada porque si no me</string>
 
@@ -200,6 +203,7 @@ PROGMASTERPC está altamente comprometido para cumplir con el compromiso de mant
     <string name="admob_id">ca-app-pub-8207111865354553~9009787179</string>
     <string name="admob_banner">ca-app-pub-8207111865354553/8818215487</string>
     <string name="admob_interstitial">ca-app-pub-8207111865354553/2252807139</string>
+    <string name="admob_native">ca-app-pub-8207111865354553/7884554527</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

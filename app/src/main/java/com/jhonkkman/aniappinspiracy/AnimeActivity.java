@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,7 +73,7 @@ import static com.jhonkkman.aniappinspiracy.CenterActivity.animesGuardados;
 public class AnimeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private ImageView iv_select_fav,iv_anime;
+    private ImageView iv_select_fav,iv_anime,iv_share;
     private TabLayout tabs;
     private ViewPager vp_anime;
     public static AnimeItem anime_previous;
@@ -105,6 +106,7 @@ public class AnimeActivity extends AppCompatActivity {
         iv_anime = findViewById(R.id.iv_anime);
         vp_anime = findViewById(R.id.vp_anime);
         tv_title = findViewById(R.id.tv_title_anime);
+        iv_share = findViewById(R.id.iv_share);
         tv_year = findViewById(R.id.tv_year_anime);
         tv_generos = findViewById(R.id.tv_generos_anime);
         yt_trailer = findViewById(R.id.yt_trailer);
@@ -123,6 +125,7 @@ public class AnimeActivity extends AppCompatActivity {
             //loadKeyComentario();
             onSelectFav();
         }
+        onShare();
         loadTabs();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -132,6 +135,21 @@ public class AnimeActivity extends AppCompatActivity {
         },800);
         savedLoadState();
         loadData();
+    }
+
+    public void onShare(){
+        iv_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendI = new Intent();
+                sendI.setAction(Intent.ACTION_SEND);
+                sendI.putExtra(Intent.EXTRA_TEXT,"Descarga ANIME SHOW, y mira " + anime_previous.getTitle() +" asi como muchos otros animes más: https://play.google.com/store/apps/details?id=com.jhonkkman.aniappinspiracy");
+                sendI.setType("text/plain");
+
+                Intent shareI = Intent.createChooser(sendI,null);
+                startActivity(shareI);
+            }
+        });
     }
 
     public void loadAd(){
@@ -389,7 +407,10 @@ public class AnimeActivity extends AppCompatActivity {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("desc",desc);
                                 bundle.putBoolean("state",true);
-                                descF.setArguments(bundle);
+                                try {
+                                    descF.setArguments(bundle);
+                                }catch (Exception e){
+                                }
                                 load_desc = true;
                             }
                         },800);

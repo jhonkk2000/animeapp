@@ -53,7 +53,7 @@ public class AnimesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_animes, container, false);
         bnv = view.findViewById(R.id.bnv_animes);
         vp_animes = view.findViewById(R.id.container_animes);
-        vp_animes.setOffscreenPageLimit(5);
+        vp_animes.setOffscreenPageLimit(4);
         dbr = FirebaseDatabase.getInstance().getReference("season");
         loadViewPager();
         openFragments(0, R.id.nav_inicio);
@@ -86,17 +86,6 @@ public class AnimesFragment extends Fragment {
                             }
                         }
                         break;
-                    case R.id.nav_perfil:
-                        if (CenterActivity.login) {
-                            openFragments(4, R.id.nav_perfil);
-                        } else {
-                            bnv.setSelectedItemId(last_item);
-                            if (!state_no_session) {
-                                Toast.makeText(getContext(), "No haz iniciado sesión", Toast.LENGTH_SHORT).show();
-                                state_no_session = true;
-                            }
-                        }
-                        break;
                 }
                 return true;
             }
@@ -115,15 +104,14 @@ public class AnimesFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 Bundle bundle = new Bundle();
-                bundle.putString("season",snapshot.child("nombre").getValue().toString());
-                bundle.putInt("year",Integer.parseInt(snapshot.child("year").getValue().toString()));
+                bundle.putString("season", snapshot.child("nombre").getValue().toString());
+                bundle.putInt("year", Integer.parseInt(snapshot.child("year").getValue().toString()));
                 inicioFragment.setArguments(bundle);
                 fragments.add(inicioFragment);
                 fragments.add(exploraFragment);
                 fragments.add(topFragment);
                 if (CenterActivity.login) {
                     fragments.add(favoritoFragment);
-                    fragments.add(perfilFragment);
                 }
                 AdapterPager adapter = new AdapterPager(getActivity().getSupportFragmentManager(), fragments.size(), fragments);
                 vp_animes.setAdapter(adapter);

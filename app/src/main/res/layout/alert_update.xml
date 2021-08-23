@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_titulo_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/notes_update"
@@ -22,6 +23,7 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:id="@+id/tv_desc_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/notas"

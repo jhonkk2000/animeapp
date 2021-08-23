@@ -82,12 +82,12 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
                             videosLinks = videos[0];
                         }
                     }).start();
-                    loadActivity(context);
+                    loadActivity(context,position);
                 }
             });
         }
 
-        public void loadActivity( Context context) {
+        public void loadActivity( Context context,int ep) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -95,15 +95,21 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
                         if (videosLinks.size() != 0) {
                             Intent i = new Intent(context, PlayersActivity.class);
                             i.putExtra("videos", videosLinks);
+                            i.putExtra("ep",ep);
                             context.startActivity(i);
                         } else {
                             if(AnimeActivity.dialog.state){
                                 AnimeActivity.dialog.dismissDialog();
                             }
-                            Toast.makeText(context, "Episodio no disponible.", Toast.LENGTH_SHORT).show();
+                            AlertUpdate alertUpdate = new AlertUpdate();
+                            alertUpdate.alert = "play";
+                            alertUpdate.showDialog((Activity) context);
+                            alertUpdate.setTitulo("No disponible");
+                            alertUpdate.setDesc("Vaya!, no hemos encontrado este anime, pero puedes solicitarlo a traves de nuestro servidor de discord, y se agregara lo mas pronto posible, puedes encontrar" +
+                                    " nuestro discord en el apartado de comunidad");
                         }
                     } else {
-                        loadActivity(context);
+                        loadActivity(context,ep);
                     }
                 }
             }, 1000);

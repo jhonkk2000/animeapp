@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp">
+
+
+        <TextView
+            android:id="@+id/tv_titulo_comunidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@string/title_activity_center"/>
+
+        <TextView
+            android:id="@+id/tv_hora_comunidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textSize="10sp"
+            android:text="@string/title_activity_center"/>
+        <TextView
+            android:id="@+id/tv_desc_comunidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/desc_discord"/>
+        <ImageView
+            android:id="@+id/iv_aviso"
+            android:layout_width="match_parent"
+            android:layout_height="410dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ijiranaide_nagatoro_san"/>
+    </LinearLayout>
+
+</RelativeLayout>

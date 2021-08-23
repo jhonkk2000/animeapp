@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -21,11 +22,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jhonkkman.aniappinspiracy.data.models.Aviso;
+import com.jhonkkman.aniappinspiracy.data.models.Extra;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.ui.inicio.InicioFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.jhonkkman.aniappinspiracy.CenterActivity.avisos;
 import static com.jhonkkman.aniappinspiracy.CenterActivity.generos;
 
 public class SplashActivity extends AppCompatActivity {
@@ -72,9 +76,15 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 generos.clear();
+                avisos.clear();
                 for (DataSnapshot ds : snapshot.child("genres").getChildren()) {
                     generos.add(ds.getValue(GeneroItem.class));
                 }
+                for (DataSnapshot ds : snapshot.child("avisos").getChildren()) {
+                    avisos.add(ds.getValue(Aviso.class));
+                    Log.d("PROBANDING","1" + avisos.size());
+                }
+                CenterActivity.extras = snapshot.child("extras").getValue(Extra.class);
                 if (!getIntent().getBooleanExtra("register", true)) {
                     startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("prueba",snapshot.child("prueba").child("nombre").getValue().toString()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     CenterActivity.login = false;
