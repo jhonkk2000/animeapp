@@ -200,6 +200,11 @@ PROGMASTERPC está altamente comprometido para cumplir con el compromiso de mant
         <item>Comentarios mas relevante</item>
     </string-array>
 
+    <!--TESTAD<string name="admob_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_banner">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_interstitial">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="admob_native">ca-app-pub-3940256099942544/2247696110</string>-->
+
     <string name="admob_id">ca-app-pub-8207111865354553~9009787179</string>
     <string name="admob_banner">ca-app-pub-8207111865354553/8818215487</string>
     <string name="admob_interstitial">ca-app-pub-8207111865354553/2252807139</string>

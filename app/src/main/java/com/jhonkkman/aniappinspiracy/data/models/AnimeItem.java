@@ -23,7 +23,7 @@ public class AnimeItem implements Serializable {
     private boolean kids;
     private String airing_start;
 
-    public AnimeItem(){
+    public AnimeItem() {
 
     }
 
@@ -42,9 +42,9 @@ public class AnimeItem implements Serializable {
     }
 
     public String getRated() {
-        if(rated!=null){
+        if (rated != null) {
             return rated;
-        }else{
+        } else {
             return "Rx";
         }
     }
@@ -99,5 +99,9 @@ public class AnimeItem implements Serializable {
 
     public boolean isAiring() {
         return airing;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
     }
 }

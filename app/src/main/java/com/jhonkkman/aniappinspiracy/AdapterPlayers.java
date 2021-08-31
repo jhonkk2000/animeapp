@@ -1,8 +1,12 @@
 package com.jhonkkman.aniappinspiracy;
 
+import android.Manifest;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.ads.nativetemplates.TemplateView;
@@ -77,7 +83,26 @@ public class AdapterPlayers extends RecyclerView.Adapter<AdapterPlayers.ViewHold
         public void loadPlayer(Context context, String video, int pos, DatabaseReference dbr, String key, String type) {
             if (type.equals("primary")) {
                 tv_reproductor.setText("Reproductor primario ");
+                /*btn_download.setEnabled(true);
+                btn_download.setVisibility(View.VISIBLE);
+                btn_download.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(video));
+                        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI| DownloadManager.Request.NETWORK_MOBILE);
+                        request.setTitle("Descargar");
+                        request.setDescription("Descargando...");
+                        request.allowScanningByMediaScanner();
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"" + System.currentTimeMillis());
+                        DownloadManager manager = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
+                        manager.enqueue(request);
+                    }
+                });*/
             } else {
+                //btn_download.setEnabled(false);
+                //btn_download.setVisibility(View.INVISIBLE);
                 if(type.equals("lat")){
                     tv_reproductor.setText("Reproductor Latino");
                 }else{

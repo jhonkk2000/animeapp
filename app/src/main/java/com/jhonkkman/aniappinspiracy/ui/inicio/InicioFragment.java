@@ -276,7 +276,7 @@ public class InicioFragment extends Fragment {
                         for (int i = 0; i < atsr.getAnime().size(); i++) {
                             boolean gen = false;
                             for (int j = 0; j < atsr.getAnime().get(i).getGenres().size(); j++) {
-                                if (atsr.getAnime().get(i).getGenres().get(j).getMal_id() == 15) {
+                                if (atsr.getAnime().get(i).getGenres().get(j).getMal_id() == 15 || atsr.getAnime().get(i).getGenres().get(j).getMal_id() == 12) {
                                     gen = true;
                                     break;
                                 }
@@ -434,121 +434,140 @@ public class InicioFragment extends Fragment {
                         String day = getDayEnglish(dayOfWeek);
                         int val = 0;
                         for (int i = 0; i < animes.getMonday().size(); i++) {
-                            if (day.equalsIgnoreCase("monday")) {
-                                animeOfDay.add(animes.getMonday().get(i));
-                            }
-                            if (val == 0) {
-                                list1.add(animes.getMonday().get(i));
-                                val++;
-                            } else {
-                                if (val == 1) {
-                                    list2.add(animes.getMonday().get(i));
+                            if (animes.getMonday().get(i).getGenres().get(0).getMal_id()!=12){
+                                if (day.equalsIgnoreCase("monday")) {
+                                    animeOfDay.add(animes.getMonday().get(i));
+                                }
+                                if (val == 0) {
+                                    list1.add(animes.getMonday().get(i));
                                     val++;
                                 } else {
-                                    list3.add(animes.getMonday().get(i));
-                                    val = 0;
+                                    if (val == 1) {
+                                        list2.add(animes.getMonday().get(i));
+                                        val++;
+                                    } else {
+                                        list3.add(animes.getMonday().get(i));
+                                        val = 0;
+                                    }
                                 }
                             }
                         }
                         for (int i = 0; i < animes.getTuesday().size(); i++) {
-                            if (day.equalsIgnoreCase("tuesday")) {
-                                animeOfDay.add(animes.getTuesday().get(i));
-                            }
-                            if (val == 0) {
-                                list1.add(animes.getTuesday().get(i));
-                                val++;
-                            } else {
-                                if (val == 1) {
-                                    list2.add(animes.getTuesday().get(i));
+                            if (animes.getTuesday().get(i).getGenres().get(0).getMal_id()!=12){
+                                if (day.equalsIgnoreCase("tuesday")) {
+                                    animeOfDay.add(animes.getTuesday().get(i));
+                                }
+                                if (val == 0) {
+                                    list1.add(animes.getTuesday().get(i));
                                     val++;
                                 } else {
-                                    list3.add(animes.getTuesday().get(i));
-                                    val = 0;
+                                    if (val == 1) {
+                                        list2.add(animes.getTuesday().get(i));
+                                        val++;
+                                    } else {
+                                        list3.add(animes.getTuesday().get(i));
+                                        val = 0;
+                                    }
                                 }
                             }
+
                         }
                         for (int i = 0; i < animes.getWednesday().size(); i++) {
-                            if (day.equalsIgnoreCase("wednesday")) {
-                                animeOfDay.add(animes.getWednesday().get(i));
-                            }
-                            if (val == 0) {
-                                list1.add(animes.getWednesday().get(i));
-                                val++;
-                            } else {
-                                if (val == 1) {
-                                    list2.add(animes.getWednesday().get(i));
+                            if (animes.getWednesday().get(i).getGenres().get(0).getMal_id()!=12){
+                                if (day.equalsIgnoreCase("wednesday")) {
+                                    animeOfDay.add(animes.getWednesday().get(i));
+                                }
+                                if (val == 0) {
+                                    list1.add(animes.getWednesday().get(i));
                                     val++;
                                 } else {
-                                    list3.add(animes.getWednesday().get(i));
-                                    val = 0;
+                                    if (val == 1) {
+                                        list2.add(animes.getWednesday().get(i));
+                                        val++;
+                                    } else {
+                                        list3.add(animes.getWednesday().get(i));
+                                        val = 0;
+                                    }
                                 }
                             }
+
                         }
                         for (int i = 0; i < animes.getThursday().size(); i++) {
-                            if (day.equalsIgnoreCase("thursday")) {
-                                animeOfDay.add(animes.getThursday().get(i));
-                            }
-                            if (val == 0) {
-                                list1.add(animes.getThursday().get(i));
-                                val++;
-                            } else {
-                                if (val == 1) {
-                                    list2.add(animes.getThursday().get(i));
+                            if (animes.getThursday().get(i).getGenres().get(0).getMal_id()!=12){
+                                if (day.equalsIgnoreCase("thursday")) {
+                                    animeOfDay.add(animes.getThursday().get(i));
+                                }
+                                if (val == 0) {
+                                    list1.add(animes.getThursday().get(i));
                                     val++;
                                 } else {
-                                    list3.add(animes.getThursday().get(i));
-                                    val = 0;
+                                    if (val == 1) {
+                                        list2.add(animes.getThursday().get(i));
+                                        val++;
+                                    } else {
+                                        list3.add(animes.getThursday().get(i));
+                                        val = 0;
+                                    }
                                 }
                             }
+
                         }
                         for (int i = 0; i < animes.getFriday().size(); i++) {
-                            if (day.equalsIgnoreCase("Friday")) {
-                                animeOfDay.add(animes.getFriday().get(i));
-                            }
-                            if (val == 0) {
-                                list1.add(animes.getFriday().get(i));
-                                val++;
-                            } else {
-                                if (val == 1) {
-                                    list2.add(animes.getFriday().get(i));
+                            if (animes.getFriday().get(i).getGenres().get(0).getMal_id()!=12){
+                                if (day.equalsIgnoreCase("Friday")) {
+                                    animeOfDay.add(animes.getFriday().get(i));
+                                }
+                                if (val == 0) {
+                                    list1.add(animes.getFriday().get(i));
                                     val++;
                                 } else {
-                                    list3.add(animes.getFriday().get(i));
-                                    val = 0;
+                                    if (val == 1) {
+                                        list2.add(animes.getFriday().get(i));
+                                        val++;
+                                    } else {
+                                        list3.add(animes.getFriday().get(i));
+                                        val = 0;
+                                    }
                                 }
                             }
+
                         }
                         for (int i = 0; i < animes.getSaturday().size(); i++) {
-                            if (day.equalsIgnoreCase("saturday")) {
-                                animeOfDay.add(animes.getSaturday().get(i));
-                            }
-                            if (val == 0) {
-                                list1.add(animes.getSaturday().get(i));
-                                val++;
-                            } else {
-                                if (val == 1) {
-                                    list2.add(animes.getSaturday().get(i));
+                            if (animes.getSaturday().get(i).getGenres().get(0).getMal_id()!=12){
+                                if (day.equalsIgnoreCase("saturday")) {
+                                    animeOfDay.add(animes.getSaturday().get(i));
+                                }
+                                if (val == 0) {
+                                    list1.add(animes.getSaturday().get(i));
                                     val++;
                                 } else {
-                                    list3.add(animes.getSaturday().get(i));
-                                    val = 0;
+                                    if (val == 1) {
+                                        list2.add(animes.getSaturday().get(i));
+                                        val++;
+                                    } else {
+                                        list3.add(animes.getSaturday().get(i));
+                                        val = 0;
+                                    }
                                 }
                             }
+
                         }
                         for (int i = 0; i < animes.getSunday().size(); i++) {
-                            if (day.equalsIgnoreCase("sunday")) {
-                                animeOfDay.add(animes.getSunday().get(i));
-                            }
-                            if (val == 0) {
-                                list1.add(animes.getSunday().get(i));
-                                val++;
-                            } else {
-                                if (val == 1) {
-                                    list2.add(animes.getSunday().get(i));
+                            if (animes.getSunday().get(i).getGenres().get(0).getMal_id()!=12){
+                                if (day.equalsIgnoreCase("sunday")) {
+                                    animeOfDay.add(animes.getSunday().get(i));
+                                }
+                                if (val == 0) {
+                                    list1.add(animes.getSunday().get(i));
                                     val++;
                                 } else {
-                                    list3.add(animes.getSunday().get(i));
-                                    val = 0;
+                                    if (val == 1) {
+                                        list2.add(animes.getSunday().get(i));
+                                        val++;
+                                    } else {
+                                        list3.add(animes.getSunday().get(i));
+                                        val = 0;
+                                    }
                                 }
                             }
                         }

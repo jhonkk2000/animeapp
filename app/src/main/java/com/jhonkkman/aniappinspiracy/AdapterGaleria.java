@@ -56,6 +56,7 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
 
         ImageView iv_1,iv_2,iv_3;
         MaterialCardView cv_1,cv_2,cv_3;
+        TemplateView templateView;
 
         public ViewHolderGaleria(@NonNull View v) {
             super(v);
@@ -65,9 +66,12 @@ public class AdapterGaleria extends RecyclerView.Adapter<AdapterGaleria.ViewHold
             cv_1 = v.findViewById(R.id.cv_resultado_1);
             cv_2 = v.findViewById(R.id.cv_resultado_2);
             cv_3 = v.findViewById(R.id.cv_resultado_3);
+            templateView = v.findViewById(R.id.templateview_resultados);
         }
 
         public void loadData(ArrayList<Picture> lista1,ArrayList<Picture> lista2,ArrayList<Picture> lista3,int pos,Context context,Activity activity){
+            templateView.getLayoutParams().height = 0;
+            templateView.requestLayout();
             if(lista1.size()>=pos+1){
                 Glide.with(context).load(lista1.get(pos).getSmall()).into(iv_1);
                 openImage(cv_1,context,lista1.get(pos).getLarge(),activity);

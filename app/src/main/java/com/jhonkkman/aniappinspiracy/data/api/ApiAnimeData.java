@@ -16,11 +16,11 @@ import retrofit2.http.Query;
 
 public interface ApiAnimeData {
 
-    @GET("genre/anime/{id}")
-    Call<AnimeGenResource> getGeneroAnime(@Path("id")int id);
+    @GET("genre/anime/{id}/{page}")
+    Call<AnimeGenResource> getGeneroAnime(@Path("id")int id,@Path("page")int page);
 
     @GET("anime/{id}")
-    Call<AnimeResource> getAnime(@Path("id")int id);
+    Call<AnimeResource> getAnime(@Path("id")long id);
 
     @GET("anime/{id}/characters_staff")
     Call<PersonajesResource> getPersonajes(@Path("id")int id);
@@ -32,19 +32,19 @@ public interface ApiAnimeData {
     Call<AnimeTopSeasonResource> getAnimeTopSeason(@Path("year") int year,@Path("season") String season);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeSearch(@Query("q") String name);
+    Call<AnimeSearchRequest> getAnimeSearch(@Query("q") String name,@Query("page")int page);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeLetter(@Query("letter") String name,@Query("order_by") String order,@Query("sort") String sort);
+    Call<AnimeSearchRequest> getAnimeLetter(@Query("letter") String name,@Query("order_by") String order,@Query("sort") String sort,@Query("page")int page);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeType(@Query("type") String name,@Query("order_by") String order,@Query("sort") String sort);
+    Call<AnimeSearchRequest> getAnimeType(@Query("type") String name,@Query("order_by") String order,@Query("sort") String sort,@Query("page")int page);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeRated(@Query("rated") String name,@Query("order_by") String order,@Query("sort") String sort);
+    Call<AnimeSearchRequest> getAnimeRated(@Query("rated") String name,@Query("order_by") String order,@Query("sort") String sort,@Query("page")int page);
 
     @GET("search/anime")
-    Call<AnimeSearchRequest> getAnimeScore(@Query("score") float name);
+    Call<AnimeSearchRequest> getAnimeScore(@Query("score") float name,@Query("page")int page);
 
     @GET("search/anime")
     Call<AnimeSearchRequest> getAnimeGenre(@Query("genre") int name,@Query("order_by") String order,@Query("sort") String sort);

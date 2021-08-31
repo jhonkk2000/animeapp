@@ -15,6 +15,24 @@ public class AnimeResource {
     private float score;
     private List<GeneroItem> genres;
 
+    public AnimeResource(){
+
+    }
+
+    public AnimeResource(int mal_id, int episodes, String image_url, String title, String type, String source, String synopsis, String url, boolean airing, float score, List<GeneroItem> genres) {
+        this.mal_id = mal_id;
+        this.episodes = episodes;
+        this.image_url = image_url;
+        this.title = title;
+        this.type = type;
+        this.source = source;
+        this.synopsis = synopsis;
+        this.url = url;
+        this.airing = airing;
+        this.score = score;
+        this.genres = genres;
+    }
+
     public String getUrl() {
         return url;
     }

@@ -26,6 +26,9 @@ import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -161,19 +164,19 @@ public class AnimeActivity extends AppCompatActivity {
                 if (mInterstitialAd != null) {
                     mInterstitialAd.show(AnimeActivity.this);
                 } else {
-                    Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                    Log.d("TAGAD", "The interstitial ad wasn't ready yet.");
                 }
                 mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback(){
                     @Override
                     public void onAdDismissedFullScreenContent() {
                         // Called when fullscreen content is dismissed.
-                        Log.d("TAG", "The ad was dismissed.");
+                        Log.d("TAGAD", "The ad was dismissed.");
                     }
 
                     @Override
                     public void onAdFailedToShowFullScreenContent(AdError adError) {
                         // Called when fullscreen content failed to show.
-                        Log.d("TAG", "The ad failed to show.");
+                        Log.d("TAGAD", "The ad failed to show.");
                     }
 
                     @Override
@@ -187,6 +190,7 @@ public class AnimeActivity extends AppCompatActivity {
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 // Handle the error
                 mInterstitialAd = null;
+                Log.d("TAGAD", loadAdError.toString());
             }
         });
     }
@@ -292,18 +296,23 @@ public class AnimeActivity extends AppCompatActivity {
 
             }
         });
-        iv_select_fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(iv_select_fav.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.ic_fav_lleno_icon).getConstantState())){
-                    animesFavUpdate[0].remove(new Long(anime_previous.getMal_id()));
-                    dbr.child(pref.getString("id","")).child("animes_fav").setValue(animesFavUpdate[0]);
-                }else{
-                    animesFavUpdate[0].add(anime_previous.getMal_id());
-                    dbr.child(pref.getString("id","")).child("animes_fav").setValue(animesFavUpdate[0]);
+        try {
+            iv_select_fav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(iv_select_fav.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.ic_fav_lleno_icon).getConstantState())){
+                        animesFavUpdate[0].remove(new Long(anime_previous.getMal_id()));
+                        dbr.child(pref.getString("id","")).child("animes_fav").setValue(animesFavUpdate[0]);
+                    }else{
+                        animesFavUpdate[0].add(anime_previous.getMal_id());
+                        dbr.child(pref.getString("id","")).child("animes_fav").setValue(animesFavUpdate[0]);
+                    }
                 }
-            }
-        });
+            });
+        }catch (Exception e){
+
+        }
+
     }
 
     public void loadTabs(){

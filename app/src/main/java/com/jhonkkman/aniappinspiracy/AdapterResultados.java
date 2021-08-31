@@ -3,11 +3,14 @@ package com.jhonkkman.aniappinspiracy;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
@@ -21,8 +24,10 @@ import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeResource;
 import com.jhonkkman.aniappinspiracy.data.models.Picture;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,15 +35,18 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AdapterResultados extends RecyclerView.Adapter<AdapterResultados.ViewHolderResultados> {
-    private ArrayList<AnimeItem> lista1 = new ArrayList<>();
-    private ArrayList<AnimeItem> lista2 = new ArrayList<>();
-    private ArrayList<AnimeItem> lista3 = new ArrayList<>();
+public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private ArrayList<AnimeItem> lista1;
+    private ArrayList<AnimeItem> lista2;
+    private ArrayList<AnimeItem> lista3;
+    private AnimeResource anime;
     private Context context;
     private Activity activity;
     private String activityUp;
+    private final int BODY = 1;
+    private final int HEADER = 2;
 
-    public AdapterResultados(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, Context context,Activity activity,String activityUp) {
+    public AdapterResultados(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, Context context, Activity activity, String activityUp) {
         this.lista1 = lista1;
         this.lista2 = lista2;
         this.lista3 = lista3;
@@ -47,26 +55,64 @@ public class AdapterResultados extends RecyclerView.Adapter<AdapterResultados.Vi
         this.activityUp = activityUp;
     }
 
+    public void setAnime(AnimeResource anime) {
+        this.anime = anime;
+    }
+
     @NonNull
     @Override
-    public AdapterResultados.ViewHolderResultados onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolderResultados(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_resultados,null,false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == HEADER && activityUp.equals("Found")) {
+            return new AdapterAnimeFav.ViewHolderAnimeFav(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_anime_fav, null, false));
+        } else {
+            return new ViewHolderResultados(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_resultados, null, false));
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterResultados.ViewHolderResultados holder, int position) {
-        holder.loadData(lista1,lista2,lista3,position,context,activity,activityUp);
+    public int getItemViewType(int position) {
+        if(activityUp.equals("Found")){
+            if (position == 0) {
+                return HEADER;
+            } else {
+                return BODY;
+            }
+        }else{
+            return super.getItemViewType(position);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof AdapterAnimeFav.ViewHolderAnimeFav && activityUp.equals("Found")) {
+            ((AdapterAnimeFav.ViewHolderAnimeFav) holder).loadData(context,activity,anime,activityUp);
+        } else {
+            if (holder instanceof ViewHolderResultados) {
+                if(activityUp.equals("Found")){
+                    ((ViewHolderResultados) holder).loadData(lista1, lista2, lista3, position-1, context, activity, activityUp,getItemCount());
+                }else{
+                    ((ViewHolderResultados) holder).loadData(lista1, lista2, lista3, position, context, activity, activityUp,getItemCount());
+                }
+            }
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return lista1.size();
+        if(activityUp.equals("Found")){
+            return lista1.size() + 1;
+        }else{
+            return lista1.size();
+        }
     }
 
-    public static class ViewHolderResultados extends RecyclerView.ViewHolder{
+    public static class ViewHolderResultados extends RecyclerView.ViewHolder {
 
-        ImageView iv_1,iv_2,iv_3;
-        MaterialCardView cv_1,cv_2,cv_3;
+        ImageView iv_1, iv_2, iv_3;
+        MaterialCardView cv_1, cv_2, cv_3;
+        MaterialButton btn_more;
+        TemplateView templateView;
 
         public ViewHolderResultados(@NonNull View v) {
             super(v);
@@ -76,64 +122,104 @@ public class AdapterResultados extends RecyclerView.Adapter<AdapterResultados.Vi
             cv_1 = v.findViewById(R.id.cv_resultado_1);
             cv_2 = v.findViewById(R.id.cv_resultado_2);
             cv_3 = v.findViewById(R.id.cv_resultado_3);
+            templateView = v.findViewById(R.id.templateview_resultados);
+            btn_more = v.findViewById(R.id.btn_mas_resultados);
             cv_1.setTransitionName("anime_portada");
             cv_2.setTransitionName("anime_portada");
             cv_3.setTransitionName("anime_portada");
         }
 
-        public void loadData(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, int pos, Context context, Activity activity,String activityUp){
-            if(activityUp.equals("inicio")){
+        public void loadData(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, int pos, Context context, Activity activity, String activityUp,int itemC) {
+            templateView.getLayoutParams().height = 0;
+            templateView.requestLayout();
+            int val = (pos+1)%4;
+            if(val==0){
+                AdLoader.Builder builder = new AdLoader.Builder(context, context.getString(R.string.admob_native));
+                builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
+                    @Override
+                    public void onNativeAdLoaded(@NonNull @NotNull NativeAd nativeAd) {
+                        Log.d("TESTAD","funciona");
+                        templateView.setNativeAd(nativeAd);
+                        templateView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                        templateView.requestLayout();
+                    }
+                }).withAdListener(new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull @NotNull LoadAdError loadAdError) {
+                        Log.d("TESTAD","fallo en carga: " + loadAdError.getMessage());
+                    }
+                });
+                AdLoader adLoader = builder.build();
+                adLoader.loadAd(new AdRequest.Builder().build());
+            }
+            if(activityUp.equals("Found") && (pos+2) == itemC){
+                Log.d("POSITION", "" + pos + " - " + itemC);
+                btn_more.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                btn_more.requestLayout();
+                btn_more.setEnabled(true);
+                btn_more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FoundAnimeActivity.loadMoreAnimes(activity);
+                    }
+                });
+            }else{
+                btn_more.getLayoutParams().height = 0;
+                btn_more.setEnabled(false);
+                btn_more.requestLayout();
+            }
+            if (activityUp.equals("inicio")) {
                 cv_1.setStrokeWidth(0);
                 cv_2.setStrokeWidth(0);
                 cv_3.setStrokeWidth(0);
             }
-            if(lista1.size()>=pos+1){
+            if (lista1.size() >= pos + 1) {
                 Glide.with(context).load(lista1.get(pos).getImage_url()).into(iv_1);
                 cv_1.setVisibility(View.VISIBLE);
                 cv_1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent i = new Intent(context,AnimeActivity.class);
+                        Intent i = new Intent(context, AnimeActivity.class);
                         i.putExtra("anime", (Serializable) lista1.get(pos));
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv_1, ViewCompat.getTransitionName(cv_1));
-                        context.startActivity(i,options.toBundle());
+                        context.startActivity(i, options.toBundle());
                     }
                 });
-            }else{
+            } else {
                 cv_1.setVisibility(View.INVISIBLE);
 
             }
-            if(lista2.size()>=pos+1){
+            if (lista2.size() >= pos + 1) {
                 Glide.with(context).load(lista2.get(pos).getImage_url()).into(iv_2);
                 cv_2.setVisibility(View.VISIBLE);
                 cv_2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent i = new Intent(context,AnimeActivity.class);
+                        Intent i = new Intent(context, AnimeActivity.class);
                         i.putExtra("anime", (Serializable) lista2.get(pos));
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv_2, ViewCompat.getTransitionName(cv_2));
-                        context.startActivity(i,options.toBundle());
+                        context.startActivity(i, options.toBundle());
                     }
                 });
-            }else{
+            } else {
                 cv_2.setVisibility(View.INVISIBLE);
-                Log.d("Falla2",lista2.size()+"");
+                Log.d("Falla2", lista2.size() + "");
             }
-            if(lista3.size()>=pos+1){
+            if (lista3.size() >= pos + 1) {
                 Glide.with(context).load(lista3.get(pos).getImage_url()).into(iv_3);
                 cv_3.setVisibility(View.VISIBLE);
                 cv_3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent i = new Intent(context,AnimeActivity.class);
+                        Intent i = new Intent(context, AnimeActivity.class);
                         i.putExtra("anime", (Serializable) lista3.get(pos));
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv_3, ViewCompat.getTransitionName(cv_3));
-                        context.startActivity(i,options.toBundle());
+                        context.startActivity(i, options.toBundle());
                     }
                 });
-            }else{
+            } else {
                 cv_3.setVisibility(View.INVISIBLE);
-                Log.d("Falla3",lista3.size()+"");
+                Log.d("Falla3", lista3.size() + "");
             }
 
         }

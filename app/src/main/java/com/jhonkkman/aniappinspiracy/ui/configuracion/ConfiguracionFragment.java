@@ -169,6 +169,7 @@ public class ConfiguracionFragment extends Fragment {
                         startActivity(new Intent(getContext(), MainActivity.class));
                         dialog.dismissDialog();
                         getActivity().finish();
+                        CenterActivity.centerActivity.finish();
                         System.exit(0);
                         cleanData();
                     }

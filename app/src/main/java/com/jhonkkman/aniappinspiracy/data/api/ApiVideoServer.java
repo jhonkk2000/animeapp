@@ -38,7 +38,7 @@ public class ApiVideoServer {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         if (ANIME_NAME.contains("__")) {
-            ANIME_NAME = ANIME_NAME.split("__")[0] + "-" + ANIME_NAME.split("__")[1];
+            ANIME_NAME = ANIME_NAME.replace("__","_");
         }
         String[] dat = ANIME_NAME.split("_");
         String anime_final = "";

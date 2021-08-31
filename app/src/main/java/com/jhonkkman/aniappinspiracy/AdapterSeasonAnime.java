@@ -65,15 +65,39 @@ public class AdapterSeasonAnime extends RecyclerView.Adapter<AdapterSeasonAnime.
         TextView tv_nombre;
         ImageView iv_anime;
         MaterialCardView cv_anime;
+        TemplateView templateView;
 
         public ViewHolderSeasonAnime(@NonNull View v) {
             super(v);
             tv_nombre = v.findViewById(R.id.tv_anime_season_name);
             iv_anime = v.findViewById(R.id.iv_anime_season);
             cv_anime = v.findViewById(R.id.cv_anime_season);
+            templateView = v.findViewById(R.id.templateview_season);
         }
 
         public void onClickAnime(AnimeItem anime, Context context, Activity activity, int pos) {
+            templateView.getLayoutParams().width = 0;
+            templateView.requestLayout();
+            int val = (pos+1)%6;
+            if(val==0){
+                AdLoader.Builder builder = new AdLoader.Builder(context, context.getString(R.string.admob_native));
+                builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
+                    @Override
+                    public void onNativeAdLoaded(@NonNull @NotNull NativeAd nativeAd) {
+                        Log.d("TESTAD","funciona");
+                        templateView.setNativeAd(nativeAd);
+                        templateView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                        templateView.requestLayout();
+                    }
+                }).withAdListener(new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull @NotNull LoadAdError loadAdError) {
+                        Log.d("TESTAD","fallo en carga: " + loadAdError.getMessage());
+                    }
+                });
+                AdLoader adLoader = builder.build();
+                adLoader.loadAd(new AdRequest.Builder().build());
+            }
             cv_anime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

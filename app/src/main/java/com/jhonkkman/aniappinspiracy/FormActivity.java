@@ -34,6 +34,8 @@ public class FormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.dark_red));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.light_red));
         btn_back = findViewById(R.id.btn_back_form);
         iv_image = findViewById(R.id.iv_form_image);
         nav_controller = Navigation.findNavController(this,R.id.fragment_form);

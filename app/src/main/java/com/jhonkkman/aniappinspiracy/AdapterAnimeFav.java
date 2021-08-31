@@ -45,11 +45,13 @@ public class AdapterAnimeFav extends RecyclerView.Adapter<AdapterAnimeFav.ViewHo
     private Context context;
     private Activity activity;
     private ArrayList<AnimeResource> animes;
+    private String activityUp;
 
-    public AdapterAnimeFav(Context context, Activity activity, ArrayList<AnimeResource> animes) {
+    public AdapterAnimeFav(Context context, Activity activity, ArrayList<AnimeResource> animes,String activityUp) {
         this.context = context;
         this.activity = activity;
         this.animes = animes;
+        this.activityUp = activityUp;
     }
 
     @NonNull
@@ -60,7 +62,7 @@ public class AdapterAnimeFav extends RecyclerView.Adapter<AdapterAnimeFav.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull AdapterAnimeFav.ViewHolderAnimeFav holder, int position) {
-        holder.loadData(context,activity,animes.get(position));
+        holder.loadData(context,activity,animes.get(position),activityUp);
     }
 
     @Override
@@ -72,11 +74,13 @@ public class AdapterAnimeFav extends RecyclerView.Adapter<AdapterAnimeFav.ViewHo
 
         ImageView iv_anime;
         MaterialCardView cv_anime;
-        TextView tv_titulo,tv_synopsis,tv_emision,tv_fecha,tv_score,tv_type;
+        TextView tv_titulo,tv_synopsis,tv_emision,tv_fecha,tv_score,tv_type,tv_mejor,tv_mas;
 
         public ViewHolderAnimeFav(@NonNull View v) {
             super(v);
             iv_anime = v.findViewById(R.id.iv_anime_fav);
+            tv_mas = v.findViewById(R.id.tv_mas);
+            tv_mejor = v.findViewById(R.id.tv_mejor);
             tv_titulo = v.findViewById(R.id.tv_anime_fav_user);
             tv_synopsis = v.findViewById(R.id.tv_synopsis_fav);
             tv_emision = v.findViewById(R.id.tv_emision_fav);
@@ -86,9 +90,29 @@ public class AdapterAnimeFav extends RecyclerView.Adapter<AdapterAnimeFav.ViewHo
             cv_anime = v.findViewById(R.id.cv_anime_fav);
         }
 
-        public void loadData(Context context, Activity activity, AnimeResource anime){
+        public void loadData(Context context, Activity activity, AnimeResource anime,String acitivityUp){
+            if(acitivityUp.equals("Found")){
+                tv_mejor.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                tv_mejor.requestLayout();
+                tv_mas.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                tv_mas.requestLayout();
+            }else{
+                tv_mejor.getLayoutParams().height = 0;
+                tv_mejor.requestLayout();
+                tv_mas.getLayoutParams().height = 0;
+                tv_mas.requestLayout();
+
+            }
             Glide.with(context).load(anime.getImage_url()).into(iv_anime);
             tv_titulo.setText(anime.getTitle());
+            if(anime.isAiring()){
+                tv_emision.setText("En emision");
+            }else{
+                tv_emision.setText("Finalizado");
+            }
+            //tv_fecha.setText("Fecha de estreno: " + anime.getAired().getProp().getFrom().getDay() + "/" + anime.getAired().getProp().getFrom().getMonth() + "/" + anime.getAired().getProp().getFrom().getYear());
+            tv_type.setText(anime.getType());
+            tv_score.setText(String.valueOf(anime.getScore()));
             TranslatorOptions options =
                     new TranslatorOptions.Builder()
                             .setSourceLanguage(TranslateLanguage.ENGLISH)
@@ -107,14 +131,6 @@ public class AdapterAnimeFav extends RecyclerView.Adapter<AdapterAnimeFav.ViewHo
                         @Override
                         public void onSuccess(String s) {
                             tv_synopsis.setText(s);
-                            if(anime.isAiring()){
-                                tv_emision.setText("En emision");
-                            }else{
-                                tv_emision.setText("Finalizado");
-                            }
-                            tv_fecha.setText("Fecha de estreno: " + anime.getAired().getProp().getFrom().getDay() + "/" + anime.getAired().getProp().getFrom().getMonth() + "/" + anime.getAired().getProp().getFrom().getYear());
-                            tv_type.setText(anime.getType());
-                            tv_score.setText(String.valueOf(anime.getScore()));
                         }
                     });
                 }

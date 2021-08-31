@@ -44,7 +44,7 @@
             android:textStyle="bold"
             android:inputType="date"
             android:layout_marginTop="20dp"
-            android:textColor="@color/gray_text_hint"/>
+            android:textColorHint="@color/gray_text"/>
 
 
         <LinearLayout

@@ -4,15 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
@@ -32,6 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.jhonkkman.aniappinspiracy.AnimeActivity.anime_previous;
+import static com.jhonkkman.aniappinspiracy.CenterActivity.PERMISSION_REQUEST_CODE;
 
 public class PlayersActivity extends AppCompatActivity {
 
@@ -57,12 +63,7 @@ public class PlayersActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.reproductor);
         videos = getIntent().getStringArrayListExtra("videos");
         btn_latino = findViewById(R.id.btn_latino);
-        episodio = getIntent().getIntExtra("ep",0);
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
+        episodio = getIntent().getIntExtra("ep", 0);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pref = getSharedPreferences("user", MODE_PRIVATE);
@@ -76,7 +77,7 @@ public class PlayersActivity extends AppCompatActivity {
         }
     }
 
-    public void loadLatino(){
+    public void loadLatino() {
         btn_latino.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,14 +89,14 @@ public class PlayersActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length - 1],episodio);
+                        ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length - 1], episodio);
                         apiVideoServer.setBASE_URL("https://henaojara.com/");
                         try {
                             videosLat = apiVideoServer.getVideoServers();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        if(videosLat.size()!=0){
+                        if (videosLat.size() != 0) {
                             videos_final.addAll(videosLat);
                             for (int i = 0; i < videosLat.size(); i++) {
                                 type.add("lat");
@@ -104,7 +105,7 @@ public class PlayersActivity extends AppCompatActivity {
                             btn_latino.setEnabled(false);
                             btn_latino.getLayoutParams().height = 0;
                             btn_latino.requestLayout();
-                        }else{
+                        } else {
                             AlertUpdate alertUpdate = new AlertUpdate();
                             alertUpdate.alert = "play";
                             alertUpdate.showDialog(PlayersActivity.this);
@@ -114,7 +115,7 @@ public class PlayersActivity extends AppCompatActivity {
                                     " nuestro discord en el apartado de comunidad");
                         }
                     }
-                },300);
+                }, 300);
             }
         });
     }
@@ -129,19 +130,19 @@ public class PlayersActivity extends AppCompatActivity {
                 if (mInterstitialAd != null) {
                     mInterstitialAd.show(PlayersActivity.this);
                 } else {
-                    Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                    Log.d("TAGAD", "The interstitial ad wasn't ready yet.");
                 }
                 mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                     @Override
                     public void onAdDismissedFullScreenContent() {
                         // Called when fullscreen content is dismissed.
-                        Log.d("TAG", "The ad was dismissed.");
+                        Log.d("TAGAD", "The ad was dismissed.");
                     }
 
                     @Override
                     public void onAdFailedToShowFullScreenContent(AdError adError) {
                         // Called when fullscreen content failed to show.
-                        Log.d("TAG", "The ad failed to show.");
+                        Log.d("TAGAD", "The ad failed to show.");
                     }
 
                     @Override

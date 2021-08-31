@@ -38,7 +38,7 @@ public class AnimesFragment extends Fragment {
     private InicioFragment inicioFragment = new InicioFragment();
     private ExploraFragment exploraFragment = new ExploraFragment();
     private TopFragment topFragment = new TopFragment();
-    private FavoritoFragment favoritoFragment = new FavoritoFragment();
+    public static FavoritoFragment favoritoFragment = new FavoritoFragment();
     private PerfilFragment perfilFragment = new PerfilFragment();
     private NonSwipeableViewPager vp_animes;
     private List<Fragment> fragments = new ArrayList<>();

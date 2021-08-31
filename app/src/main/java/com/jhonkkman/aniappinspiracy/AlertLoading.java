@@ -16,7 +16,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 public class AlertLoading {
 
-    Dialog dialog;
+    public Dialog dialog;
     TextView tv_mensaje;
     AppCompatButton btn_cancel;
     public boolean state = false;

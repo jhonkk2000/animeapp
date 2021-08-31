@@ -91,6 +91,7 @@ public class Register2Fragment extends Fragment {
                                                     List<Integer> listagf = new ArrayList<>();
                                                     List<Integer> listalav = new ArrayList<>();
                                                     Toast.makeText(getContext(), "Registro completado, se ha enviado un enlace de verificacion a tu correo electronico", Toast.LENGTH_LONG).show();
+                                                    mauth.signOut();
                                                     dbr.push().setValue(new User(nombre_usuario,"","https://cdn.myanimelist.net/images/anime/1900/110097.jpg",correo,listaf,listagf,listalav,true));
                                                     getActivity().finish();
                                                 }else{
