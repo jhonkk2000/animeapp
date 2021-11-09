@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,10 +31,12 @@ public class EpisodiosFragment extends Fragment {
 
     private RecyclerView rv_episodios;
     private AdapterEpisodio adapter;
-    private boolean busqueda = true;
+    private boolean busqueda = false;
     private TextView tv_load;
     private LinearLayout ly_carga, ly_nodata;
     private int episodios;
+    private String url="";
+    private ProgressBar pb_episodes;
 
     public EpisodiosFragment() {
 
@@ -49,11 +53,13 @@ public class EpisodiosFragment extends Fragment {
         ly_carga.setVisibility(View.INVISIBLE);
         ly_nodata.setVisibility(View.INVISIBLE);
         rv_episodios.setVisibility(View.VISIBLE);
+        pb_episodes = view.findViewById(R.id.pb_episodes);
         episodios = getArguments().getInt("ep");
+        url = getArguments().getString("url");
         //testEpisodes();
         //verify();
+        Log.d("ARGUMENTO EP", "" + getArguments().getInt("ep"));
         loadEpisodes();
-        Log.d("ARGUMENTO EP","" + getArguments().getInt("ep"));
         return view;
     }
 
@@ -62,20 +68,47 @@ public class EpisodiosFragment extends Fragment {
         ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length - 1], 0);
         episodios = apiVideoServer.getCountEpisodes();
         Bundle bundle = new Bundle();
-        bundle.putInt("ep",episodios);
+        bundle.putInt("ep", episodios);
         this.setArguments(bundle);
+        busqueda = true;
     }
 
     public void loadEpisodes() {
         if (episodios == 0) {
-            try {
-                loadCount();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            loading();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        loadCount();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }else{
+            loadRecycler();
         }
+    }
+
+    public void loading(){
+        if(busqueda){
+            //Log.d("ARGUMENTO EP", "entrando" + busqueda);
+            loadRecycler();
+        }else{
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loading();
+                }
+            },400);
+        }
+    }
+
+    public void loadRecycler(){
+        pb_episodes.setVisibility(View.INVISIBLE);
         rv_episodios.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new AdapterEpisodio(getContext(), episodios);
+        adapter = new AdapterEpisodio(getContext(), episodios,url);
         rv_episodios.setAdapter(adapter);
     }
 }

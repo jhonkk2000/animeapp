@@ -41,6 +41,14 @@
         android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
         android:scrollbars="vertical" />
 
+    <ProgressBar
+        android:id="@+id/pb_episodes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="100dp"
+        android:indeterminateDrawable="@drawable/progress"/>
+
     <LinearLayout
         android:id="@+id/ly_nodata_episodios"
         android:layout_width="match_parent"

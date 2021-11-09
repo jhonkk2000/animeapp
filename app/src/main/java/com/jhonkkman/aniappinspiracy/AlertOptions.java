@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -17,19 +18,20 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class AlertOptions {
     public Dialog dialog;
-    EditText et_mensaje;
     AppCompatButton btn_ok, btn_cancel;
     public boolean send = false;
+    TextView tv_alert;
 
-    public void showDialog(Activity activity){
+    public void showDialog(Activity activity,String msg){
         dialog = new Dialog(activity);
         dialog.getWindow().getAttributes().windowAnimations = R.style.SlidingDialogAnimation;
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.setContentView(R.layout.alert_options);
-        et_mensaje = dialog.findViewById(R.id.et_recommendation);
         btn_cancel = dialog.findViewById(R.id.btn_cancel_options);
         btn_ok = dialog.findViewById(R.id.btn_ok_options);
+        tv_alert = dialog.findViewById(R.id.tv_alert_options);
+        tv_alert.setText(msg);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override

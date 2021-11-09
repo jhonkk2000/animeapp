@@ -14,9 +14,11 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdError;
@@ -53,6 +55,9 @@ public class PlayersActivity extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     private AppCompatButton btn_latino;
     private int episodio;
+    private boolean cargaP = false;
+    private ProgressBar pb_players;
+    private String url="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,10 @@ public class PlayersActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.reproductor);
         videos = getIntent().getStringArrayListExtra("videos");
         btn_latino = findViewById(R.id.btn_latino);
+        btn_latino.setVisibility(View.INVISIBLE);
         episodio = getIntent().getIntExtra("ep", 0);
+        pb_players = findViewById(R.id.pb_players);
+        url = getIntent().getStringExtra("urlA");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pref = getSharedPreferences("user", MODE_PRIVATE);
@@ -71,7 +79,6 @@ public class PlayersActivity extends AppCompatActivity {
         loadAd();
         try {
             loadPlayers();
-            loadLatino();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,7 +92,7 @@ public class PlayersActivity extends AppCompatActivity {
                 String btn = btn_latino.getText().toString();
                 btn_latino.setText("Buscando...");
                 loadAd();
-                String[] anime_name = anime_previous.getUrl().split("/");
+                String[] anime_name = url.split("/");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -166,40 +173,66 @@ public class PlayersActivity extends AppCompatActivity {
         ApiVideoServer apiVideoServer = new ApiVideoServer();
         videos_final = new ArrayList<>();
         type = new ArrayList<>();
-        for (int i = 0; i < videos.size(); i++) {
-            if (videos.get(i).startsWith("https://jkanime.net/um.php")) {
-                String video = apiVideoServer.getDirectLink(videos.get(i));
-                //Log.d("VideoPlayers",video);
-                if (!video.equals("nada")) {
-                    videos_final.add(video);
-                    type.add("primary");
-                }
-            } else {
-                if (videos.get(i).startsWith("https://jkanime.net/jk.php")) {
-                    String video = apiVideoServer.getDirectLink(videos.get(i));
-                    //Log.d("VideoPlayers",video);
-                    if (!video.equals("nada")) {
-                        videos_final.add(video);
-                        type.add("primary");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    for (int i = 0; i < videos.size(); i++) {
+                        if (videos.get(i).startsWith("https://jkanime.net/um.php")) {
+                            String video = apiVideoServer.getDirectLink(videos.get(i));
+                            //Log.d("VideoPlayers",video);
+                            if (!video.equals("nada")) {
+                                videos_final.add(video);
+                                type.add("primary");
+                            }
+                        } else {
+                            if (videos.get(i).startsWith("https://jkanime.net/jk.php")) {
+                                String video = apiVideoServer.getDirectLink(videos.get(i));
+                                //Log.d("VideoPlayers",video);
+                                if (!video.equals("nada")) {
+                                    videos_final.add(video);
+                                    type.add("primary");
+                                }
+                            } else {
+                                if (!videos.get(i).startsWith("https://jkanime.net/um2.php")) {
+                                    videos_final.add(videos.get(i));
+                                    type.add("secondary");
+                                }
+                            }
+                        }
                     }
-                } else {
-                    if (!videos.get(i).startsWith("https://jkanime.net/um2.php")) {
-                        videos_final.add(videos.get(i));
-                        type.add("secondary");
-                    }
+                    cargaP = true;
+                }catch (IOException e){
                 }
             }
-        }
+        }).start();
         for (int i = 0; i < videos_final.size(); i++) {
             Log.d("VIDEOSFINAL:", videos_final.get(i));
         }
-        rv_player.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AdapterPlayers(this, videos_final, dbr, pref.getString("id", ""), type);
-        rv_player.setAdapter(adapter);
+        loadRecycler();
         try {
             AnimeActivity.dialog.dismissDialog();
         } catch (Exception e) {
         }
+    }
+
+    public void loadRecycler(){
+        if(cargaP){
+            rv_player.setLayoutManager(new LinearLayoutManager(this));
+            adapter = new AdapterPlayers(this, videos_final, dbr, pref.getString("id", ""), type);
+            rv_player.setAdapter(adapter);
+            pb_players.setVisibility(View.INVISIBLE);
+            btn_latino.setVisibility(View.VISIBLE);
+            loadLatino();
+        }else{
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadRecycler();
+                }
+            },200);
+        }
+
     }
 
     @Override

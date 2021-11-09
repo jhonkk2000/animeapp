@@ -51,24 +51,28 @@ public class ApiVideoServer {
         }
         String url = "";
         if (BASE_URL.equals("https://jkanime.net/")) {
-            for (int i = 0; i < extras.getSub_es().size(); i++) {
-                if (ANIME_NAME.equals(extras.getSub_es().get(i).split(",")[0])) {
-                    anime_final = extras.getSub_es().get(i).split(",")[1];
-                    break;
+            if(extras.getSub_es()!=null){
+                for (int i = 0; i < extras.getSub_es().size(); i++) {
+                    if (ANIME_NAME.equals(extras.getSub_es().get(i).split(",")[0])) {
+                        anime_final = extras.getSub_es().get(i).split(",")[1];
+                        break;
+                    }
                 }
             }
             url = BASE_URL + anime_final + "/" + EPISODE;
         } else {
             boolean state = false;
-            for (int i = 0; i < extras.getLatino().size(); i++) {
-                if (ANIME_NAME.equalsIgnoreCase(extras.getLatino().get(i).split(",")[0])) {
-                    if (extras.getLatino().get(i).contains(";")) {
-                        state = true;
-                        anime_final = extras.getLatino().get(i).split(",")[1].replace(";","");
-                    }else{
-                        anime_final = extras.getLatino().get(i).split(",")[1];
+            if(extras.getLatino()!=null){
+                for (int i = 0; i < extras.getLatino().size(); i++) {
+                    if (ANIME_NAME.equalsIgnoreCase(extras.getLatino().get(i).split(",")[0])) {
+                        if (extras.getLatino().get(i).contains(";")) {
+                            state = true;
+                            anime_final = extras.getLatino().get(i).split(",")[1].replace(";","");
+                        }else{
+                            anime_final = extras.getLatino().get(i).split(",")[1];
+                        }
+                        break;
                     }
-                    break;
                 }
             }
             if (state) {

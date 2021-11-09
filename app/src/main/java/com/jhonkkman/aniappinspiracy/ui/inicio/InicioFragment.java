@@ -1,11 +1,18 @@
 package com.jhonkkman.aniappinspiracy.ui.inicio;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +28,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,10 +56,12 @@ import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.AdapterResultados;
 import com.jhonkkman.aniappinspiracy.AdapterSeasonAnime;
 import com.jhonkkman.aniappinspiracy.AlertLoading;
+import com.jhonkkman.aniappinspiracy.AlertOptions;
 import com.jhonkkman.aniappinspiracy.AlertRecommendation;
 import com.jhonkkman.aniappinspiracy.AlertUpdate;
 import com.jhonkkman.aniappinspiracy.AnimeActivity;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
+import com.jhonkkman.aniappinspiracy.DownloadTask;
 import com.jhonkkman.aniappinspiracy.R;
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
 import com.jhonkkman.aniappinspiracy.data.api.ApiClientData;
@@ -60,9 +71,11 @@ import com.jhonkkman.aniappinspiracy.data.models.AnimeTopSeasonResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeWeekRequest;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.data.models.User;
+import com.jhonkkman.aniappinspiracy.data.update.NewUpdate;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,8 +89,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.jhonkkman.aniappinspiracy.CenterActivity.animeItems;
+import static com.jhonkkman.aniappinspiracy.CenterActivity.PERMISSION_REQUEST_CODE;
 import static com.jhonkkman.aniappinspiracy.CenterActivity.generos;
+import static com.jhonkkman.aniappinspiracy.CenterActivity.update_gp;
+import static com.jhonkkman.aniappinspiracy.CenterActivity.urlApkDownload;
 
 public class InicioFragment extends Fragment {
 
@@ -105,6 +120,7 @@ public class InicioFragment extends Fragment {
     private boolean estado_genres = false;
     private String season;
     public static boolean estado_last = false;
+    public List<AnimeItem> animeItems = new ArrayList<>();
     private AlertLoading dialog = new AlertLoading();
     private int carouselCount = 0, year;
 
@@ -219,6 +235,7 @@ public class InicioFragment extends Fragment {
             btn_acceder.setAnimation(anim_out);
             tv_titulo.startAnimation(anim_out);
             tv_desc.setAnimation(anim_out);
+
         } catch (Exception e) {
         }
 
@@ -241,7 +258,7 @@ public class InicioFragment extends Fragment {
     }
 
     public void loadSeasonState() {
-        if (CenterActivity.animeItems.size() != 0) {
+        if (animeItems.size() != 0) {
             estado_seasion = true;
         } else {
             dialog.showDialog(getActivity(), "Cargando animes!");
@@ -283,7 +300,8 @@ public class InicioFragment extends Fragment {
                             }
                             if (!atsr.getAnime().get(i).getType().equals("Special") && !atsr.getAnime().get(i).getType().equals("Ona") && !atsr.getAnime().get(i).getType().equals("Music")
                                     && !gen) {
-                                CenterActivity.animeItems.add(atsr.getAnime().get(i));
+                                //Log.d("INICIOEPISODESIZE",""+atsr.getAnime().get(i).getEpisodes() + atsr.getAnime().get(i).getTitle());
+                                animeItems.add(atsr.getAnime().get(i));
                             }
                         }
                         sm_season.stopShimmer();
@@ -295,7 +313,7 @@ public class InicioFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<AnimeTopSeasonResource> call, Throwable t) {
-                    Log.d("NOCARGASEASON",t.toString());
+                    Log.d("NOCARGASEASON", t.toString());
                 }
             });
         }
@@ -393,25 +411,25 @@ public class InicioFragment extends Fragment {
     public String getDayEnglish(int d) {
         String day = "";
         switch (d) {
-            case 1:
+            case 2:
                 day = "sunday";
                 break;
-            case 2:
+            case 3:
                 day = "monday";
                 break;
-            case 3:
+            case 4:
                 day = "tuesday";
                 break;
-            case 4:
+            case 5:
                 day = "wednesday";
                 break;
-            case 5:
+            case 6:
                 day = "thursday";
                 break;
-            case 6:
+            case 7:
                 day = "friday";
                 break;
-            case 7:
+            case 1:
                 day = "saturday";
                 break;
         }
@@ -434,7 +452,8 @@ public class InicioFragment extends Fragment {
                         String day = getDayEnglish(dayOfWeek);
                         int val = 0;
                         for (int i = 0; i < animes.getMonday().size(); i++) {
-                            if (animes.getMonday().get(i).getGenres().get(0).getMal_id()!=12){
+                            Log.d("PROBANDOLAST", "" + animes.getMonday().get(i).getGenres().size());
+                            if (animes.getMonday().get(i).getGenres().get(0).getMal_id() != 12) {
                                 if (day.equalsIgnoreCase("monday")) {
                                     animeOfDay.add(animes.getMonday().get(i));
                                 }
@@ -453,7 +472,7 @@ public class InicioFragment extends Fragment {
                             }
                         }
                         for (int i = 0; i < animes.getTuesday().size(); i++) {
-                            if (animes.getTuesday().get(i).getGenres().get(0).getMal_id()!=12){
+                            if (animes.getTuesday().get(i).getGenres().get(0).getMal_id() != 12) {
                                 if (day.equalsIgnoreCase("tuesday")) {
                                     animeOfDay.add(animes.getTuesday().get(i));
                                 }
@@ -473,7 +492,7 @@ public class InicioFragment extends Fragment {
 
                         }
                         for (int i = 0; i < animes.getWednesday().size(); i++) {
-                            if (animes.getWednesday().get(i).getGenres().get(0).getMal_id()!=12){
+                            if (animes.getWednesday().get(i).getGenres().get(0).getMal_id() != 12) {
                                 if (day.equalsIgnoreCase("wednesday")) {
                                     animeOfDay.add(animes.getWednesday().get(i));
                                 }
@@ -493,7 +512,7 @@ public class InicioFragment extends Fragment {
 
                         }
                         for (int i = 0; i < animes.getThursday().size(); i++) {
-                            if (animes.getThursday().get(i).getGenres().get(0).getMal_id()!=12){
+                            if (animes.getThursday().get(i).getGenres().get(0).getMal_id() != 12) {
                                 if (day.equalsIgnoreCase("thursday")) {
                                     animeOfDay.add(animes.getThursday().get(i));
                                 }
@@ -513,7 +532,7 @@ public class InicioFragment extends Fragment {
 
                         }
                         for (int i = 0; i < animes.getFriday().size(); i++) {
-                            if (animes.getFriday().get(i).getGenres().get(0).getMal_id()!=12){
+                            if (animes.getFriday().get(i).getGenres().get(0).getMal_id() != 12) {
                                 if (day.equalsIgnoreCase("Friday")) {
                                     animeOfDay.add(animes.getFriday().get(i));
                                 }
@@ -533,7 +552,7 @@ public class InicioFragment extends Fragment {
 
                         }
                         for (int i = 0; i < animes.getSaturday().size(); i++) {
-                            if (animes.getSaturday().get(i).getGenres().get(0).getMal_id()!=12){
+                            if (animes.getSaturday().get(i).getGenres().get(0).getMal_id() != 12) {
                                 if (day.equalsIgnoreCase("saturday")) {
                                     animeOfDay.add(animes.getSaturday().get(i));
                                 }
@@ -553,7 +572,8 @@ public class InicioFragment extends Fragment {
 
                         }
                         for (int i = 0; i < animes.getSunday().size(); i++) {
-                            if (animes.getSunday().get(i).getGenres().get(0).getMal_id()!=12){
+                            Log.d("TAGANIME", animes.getSunday().get(i).getTitle());
+                            if (animes.getSunday().get(i).getGenres().get(0).getMal_id() != 12) {
                                 if (day.equalsIgnoreCase("sunday")) {
                                     animeOfDay.add(animes.getSunday().get(i));
                                 }
@@ -630,6 +650,10 @@ public class InicioFragment extends Fragment {
                             ImageViewAnimatedChange(iv_carousel, animeOfDay.get(0).getImage_url(), animeOfDay.get(0).getTitle(), animeOfDay.get(0).getSynopsis());
                             carouselCount = 1;
                             loadCarousel();
+                        }
+                        if(update_gp){
+                            NewUpdate newUpdate = new NewUpdate(getActivity(),urlApkDownload);
+                            newUpdate.loadDialogSecondApp();
                         }
                     } else {
                         loadAnimeOfTheWeek();

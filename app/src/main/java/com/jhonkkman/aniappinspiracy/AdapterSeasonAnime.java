@@ -78,6 +78,7 @@ public class AdapterSeasonAnime extends RecyclerView.Adapter<AdapterSeasonAnime.
         public void onClickAnime(AnimeItem anime, Context context, Activity activity, int pos) {
             templateView.getLayoutParams().width = 0;
             templateView.requestLayout();
+            //Log.d("SEASIONANIMEEPISODE",""+anime.getEpisodes()+" - " + anime.getTitle());
             int val = (pos+1)%6;
             if(val==0){
                 AdLoader.Builder builder = new AdLoader.Builder(context, context.getString(R.string.admob_native));

@@ -17,7 +17,12 @@ public class AnimeItem implements Serializable {
     private String rated;
     private boolean airing;
     private ArrayList<GeneroItem> genres = new ArrayList<>();
+    private ArrayList<GeneroItem> themes = new ArrayList<>();
+    private ArrayList<GeneroItem> demographics = new ArrayList<>();
+
+    @SerializedName("episodes")
     private int episodes;
+
     private String source;
     private float score;
     private boolean kids;
@@ -50,7 +55,23 @@ public class AnimeItem implements Serializable {
     }
 
     public ArrayList<GeneroItem> getGenres() {
-        return genres;
+        ArrayList<GeneroItem> allgenres = new ArrayList<>();
+        for (int i = 0; i < genres.size(); i++) {
+            allgenres.add(genres.get(0));
+        }
+        for (int i = 0; i < themes.size(); i++) {
+            allgenres.add(themes.get(0));
+        }
+        for (int i = 0; i < demographics.size(); i++) {
+            allgenres.add(demographics.get(0));
+        }
+        if(allgenres.size()==0){
+            GeneroItem generoItem = new GeneroItem();
+            generoItem.setMal_id(12);
+            generoItem.setName("Desconocido");
+            allgenres.add(generoItem);
+        }
+        return allgenres;
     }
 
     public void setUrl(String url) {

@@ -17,4 +17,39 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
+
+    <FrameLayout
+        android:id="@+id/fl_update_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="80dp"
+            app:backgroundTint="@color/dark_red"
+            android:src="@drawable/ic_update_icon"
+            app:tint="@android:color/white"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginEnd="65dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="15dp"
+            android:layout_marginBottom="90dp"
+            android:textColor="@color/black"
+            android:text="@string/fab_update_text"
+            android:textStyle="bold"
+            android:background="@drawable/background_comentario"/>
+    </FrameLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

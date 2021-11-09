@@ -27,10 +27,12 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
 
     Context context;
     private int episodios;
+    private String url;
 
-    public AdapterEpisodio(Context context, int episodios) {
+    public AdapterEpisodio(Context context, int episodios,String url) {
         this.context = context;
         this.episodios = episodios;
+        this.url = url;
     }
 
     @NonNull
@@ -41,7 +43,7 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderEpisodio holder, int position) {
-        holder.loadPlayers(context, position + 1);
+        holder.loadPlayers(context, position + 1,url);
         holder.loadText(position + 1);
     }
 
@@ -68,7 +70,7 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
             tv_episodio.setText("Episodio " + position);
         }
 
-        public void loadPlayers(Context context, int position) {
+        public void loadPlayers(Context context, int position,String url) {
             btn_enter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -82,12 +84,12 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
                             videosLinks = videos[0];
                         }
                     }).start();
-                    loadActivity(context,position);
+                    loadActivity(context,position,url);
                 }
             });
         }
 
-        public void loadActivity( Context context,int ep) {
+        public void loadActivity( Context context,int ep,String url) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -96,6 +98,7 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
                             Intent i = new Intent(context, PlayersActivity.class);
                             i.putExtra("videos", videosLinks);
                             i.putExtra("ep",ep);
+                            i.putExtra("urlA",url);
                             context.startActivity(i);
                         } else {
                             if(AnimeActivity.dialog.state){
@@ -109,7 +112,7 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
                                     " nuestro discord en el apartado de comunidad");
                         }
                     } else {
-                        loadActivity(context,ep);
+                        loadActivity(context,ep,url);
                     }
                 }
             }, 1000);

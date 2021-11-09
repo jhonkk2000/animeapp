@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +36,7 @@ import com.jhonkkman.aniappinspiracy.data.models.Extra;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.data.models.TopMemoria;
 import com.jhonkkman.aniappinspiracy.data.models.User;
+import com.jhonkkman.aniappinspiracy.data.update.NewUpdate;
 import com.jhonkkman.aniappinspiracy.ui.favorito.FavoritoFragment;
 
 import androidx.annotation.NonNull;
@@ -61,12 +64,14 @@ public class CenterActivity extends AppCompatActivity {
     private TextView tv_nombreu;
     private ImageView iv_user;
     private NavigationView navigationView;
+    private FloatingActionButton fab_update;
+    private FrameLayout fl_update;
     public static boolean login;
     public static final int PERMISSION_REQUEST_CODE = 1;
     public static ArrayList<AnimeItem> animesI = new ArrayList<>();
     public static ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
     public static List<GeneroItem> generosG = new ArrayList<>();
-    public static List<AnimeItem> animeItems = new ArrayList<>();
+    //public static List<AnimeItem> animeItems = new ArrayList<>();
     public static ArrayList<AnimeCompleto> animesGuardados = new ArrayList<>();
     public static ArrayList<TopMemoria> animesTop = new ArrayList<>();
     public static ArrayList<AnimeResource> animesFav = new ArrayList<>();
@@ -74,10 +79,12 @@ public class CenterActivity extends AppCompatActivity {
     public static String season;
     public static String prueba;
     public static boolean carousel_state = false;
+    public static boolean update_gp = false;
     public static ArrayList<Aviso> avisos = new ArrayList<>();
     private int finish_state = 0;
     private DrawerLayout drawerLayout;
     public static Activity centerActivity;
+    public static String urlApkDownload = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +104,11 @@ public class CenterActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         dbr = FirebaseDatabase.getInstance().getReference();
         pref = getSharedPreferences("user", MODE_PRIVATE);
-        prueba = getIntent().getStringExtra("prueba");
+        if(getIntent().getStringExtra("prueba")!=null){
+            prueba = getIntent().getStringExtra("prueba");
+        }else{
+            prueba = "T1";
+        }
         loadUser();
         updateUserLocal();
         updateFav();
@@ -111,6 +122,39 @@ public class CenterActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        fab_update = findViewById(R.id.fab_update);
+        fl_update = findViewById(R.id.fl_update_container);
+        loadFab();
+    }
+
+    public void loadFab(){
+        fl_update.setVisibility(View.INVISIBLE);
+        dbr.child("update").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    update_gp = (boolean) snapshot.child("state_gp").getValue();
+                    urlApkDownload = snapshot.child("urlApkGp").getValue().toString();
+                    if(update_gp){
+                        fl_update.setVisibility(View.VISIBLE);
+                        fab_update.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                NewUpdate newUpdate = new NewUpdate(CenterActivity.this,urlApkDownload);
+                                newUpdate.loadDialogSecondApp();
+                            }
+                        });
+                    }else{
+                        fl_update.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override

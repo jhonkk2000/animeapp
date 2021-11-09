@@ -8,7 +8,8 @@ import java.util.List;
 
 public class AnimeResource {
 
-    private int mal_id,episodes;
+    private int episodes;
+    private int mal_id;
     private String image_url,trailer_url,title,type,source,status,rating,synopsis="",url;
     private Aired aired;
     private boolean airing;

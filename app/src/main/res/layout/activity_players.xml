@@ -47,4 +47,12 @@
             android:textColor="@color/white"
             android:textStyle="bold"/>
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_players"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="100dp"
+        android:indeterminateDrawable="@drawable/progress"/>
 </RelativeLayout>

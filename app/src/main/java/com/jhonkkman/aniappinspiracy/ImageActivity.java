@@ -39,7 +39,7 @@ public class ImageActivity extends AppCompatActivity {
         btn_set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.showDialog(ImageActivity.this);
+                dialog.showDialog(ImageActivity.this,getString(R.string.repregunta));
                 dialog.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface d) {
