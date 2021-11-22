@@ -11,10 +11,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class AlertUpdate {
 
     Dialog dialog;
-    private AppCompatButton btn_ok;
+    AppCompatButton btn_ok;
     SharedPreferences prefU;
     TextView tv_titulo,tv_desc;
     public String alert = "";
@@ -30,7 +33,9 @@ public class AlertUpdate {
         tv_titulo = dialog.findViewById(R.id.tv_titulo_update);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         prefU = activity.getSharedPreferences("update", Context.MODE_PRIVATE);
-        dismissDialog();
+        if(!alert.equals("play")){
+            dismissDialog();
+        }
         dialog.show();
     }
 
@@ -53,14 +58,10 @@ public class AlertUpdate {
                     dialog.getContext().startActivity(new Intent(dialog.getContext(),ComunidadActivity.class));
                     dialog.dismiss();
                 }else{
-                    if(alert.equals("play")){
-                        dialog.dismiss();
-                    }else{
                         SharedPreferences.Editor editor = prefU.edit();
                         editor.putBoolean("state",true);
                         editor.apply();
                         dialog.dismiss();
-                    }
                 }
             }
         });

@@ -18,7 +18,6 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.ads.nativetemplates.TemplateView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -112,7 +111,6 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
         ImageView iv_1, iv_2, iv_3;
         MaterialCardView cv_1, cv_2, cv_3;
         MaterialButton btn_more;
-        TemplateView templateView;
 
         public ViewHolderResultados(@NonNull View v) {
             super(v);
@@ -122,7 +120,6 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
             cv_1 = v.findViewById(R.id.cv_resultado_1);
             cv_2 = v.findViewById(R.id.cv_resultado_2);
             cv_3 = v.findViewById(R.id.cv_resultado_3);
-            templateView = v.findViewById(R.id.templateview_resultados);
             btn_more = v.findViewById(R.id.btn_mas_resultados);
             cv_1.setTransitionName("anime_portada");
             cv_2.setTransitionName("anime_portada");
@@ -130,28 +127,6 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void loadData(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, int pos, Context context, Activity activity, String activityUp,int itemC) {
-            templateView.getLayoutParams().height = 0;
-            templateView.requestLayout();
-            int val = (pos+1)%4;
-            if(val==0){
-                AdLoader.Builder builder = new AdLoader.Builder(context, context.getString(R.string.admob_native));
-                builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
-                    @Override
-                    public void onNativeAdLoaded(@NonNull @NotNull NativeAd nativeAd) {
-                        Log.d("TESTAD","funciona");
-                        templateView.setNativeAd(nativeAd);
-                        templateView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                        templateView.requestLayout();
-                    }
-                }).withAdListener(new AdListener() {
-                    @Override
-                    public void onAdFailedToLoad(@NonNull @NotNull LoadAdError loadAdError) {
-                        Log.d("TESTAD","fallo en carga: " + loadAdError.getMessage());
-                    }
-                });
-                AdLoader adLoader = builder.build();
-                adLoader.loadAd(new AdRequest.Builder().build());
-            }
             if(activityUp.equals("Found") && (pos+2) == itemC){
                 Log.d("POSITION", "" + pos + " - " + itemC);
                 btn_more.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;

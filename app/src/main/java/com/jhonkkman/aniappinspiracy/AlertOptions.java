@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,6 +23,7 @@ public class AlertOptions {
     AppCompatButton btn_ok, btn_cancel;
     public boolean send = false;
     TextView tv_alert;
+    ImageView img;
 
     public void showDialog(Activity activity,String msg){
         dialog = new Dialog(activity);
@@ -48,6 +51,11 @@ public class AlertOptions {
             }
         });
         dialog.show();
+    }
+
+    public void loadImage(Context context,String url){
+        img = dialog.findViewById(R.id.iv_img_an);
+        Glide.with(context).load(url).into(img);
     }
 
     public void dismissDialog(){

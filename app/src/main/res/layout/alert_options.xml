@@ -22,6 +22,11 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/iv_img_an"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

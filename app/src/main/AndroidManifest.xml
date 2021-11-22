@@ -31,8 +31,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ImageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".WebPlayerActivity"
             android:screenOrientation="landscape"

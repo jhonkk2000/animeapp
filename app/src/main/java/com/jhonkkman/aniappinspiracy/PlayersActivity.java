@@ -57,7 +57,7 @@ public class PlayersActivity extends AppCompatActivity {
     private int episodio;
     private boolean cargaP = false;
     private ProgressBar pb_players;
-    private String url="";
+    private String url="-/-";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,9 @@ public class PlayersActivity extends AppCompatActivity {
         btn_latino.setVisibility(View.INVISIBLE);
         episodio = getIntent().getIntExtra("ep", 0);
         pb_players = findViewById(R.id.pb_players);
-        url = getIntent().getStringExtra("urlA");
+        if(getIntent().getStringExtra("urlA")!= null){
+            url = getIntent().getStringExtra("urlA");
+        }
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pref = getSharedPreferences("user", MODE_PRIVATE);
@@ -118,6 +120,15 @@ public class PlayersActivity extends AppCompatActivity {
                             alertUpdate.showDialog(PlayersActivity.this);
                             alertUpdate.setTitulo("No disponible");
                             btn_latino.setText("No se encontro :(");
+                            alertUpdate.btn_ok.setText("Solicitar");
+                            alertUpdate.btn_ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    DatabaseReference dbr = FirebaseDatabase.getInstance().getReference("request");
+                                    dbr.child(anime_previous.getTitle()+"_latino").setValue(0);
+                                    alertUpdate.dialog.dismiss();
+                                }
+                            });
                             alertUpdate.setDesc("Vaya!, no hemos encontrado este anime en latino, pero puedes solicitarlo a traves de nuestro servidor de discord, y se agregara lo mas pronto posible, puedes encontrar" +
                                     " nuestro discord en el apartado de comunidad");
                         }

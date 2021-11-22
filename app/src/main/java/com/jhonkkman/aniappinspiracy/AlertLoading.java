@@ -41,13 +41,14 @@ public class AlertLoading {
                 Toast.makeText(activity, "Vuelve a intentarlo mas tarde.", Toast.LENGTH_SHORT).show();
             }
         });
-        new Handler().postDelayed(new Runnable() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 btn_cancel.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 btn_cancel.requestLayout();
             }
-        },10000);
+        },8000);
     }
 
     public void dismissDialog(){

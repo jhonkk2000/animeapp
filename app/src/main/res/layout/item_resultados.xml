@@ -83,15 +83,8 @@
                     android:src="@drawable/ijiranaide_nagatoro_san" />
 
             </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
 
-        <com.google.android.ads.nativetemplates.TemplateView
-            android:id="@+id/templateview_resultados"
-            android:layout_width="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_height="wrap_content"
-            app:gnt_template_type="@layout/gnt_small_template_view" />
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_mas_resultados"

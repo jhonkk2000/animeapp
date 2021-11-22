@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jhonkkman.aniappinspiracy.data.api.ApiVideoServer;
 import com.jhonkkman.aniappinspiracy.data.models.Episodio;
 
@@ -108,7 +110,16 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
                             alertUpdate.alert = "play";
                             alertUpdate.showDialog((Activity) context);
                             alertUpdate.setTitulo("No disponible");
-                            alertUpdate.setDesc("Vaya!, no hemos encontrado este anime, pero puedes solicitarlo a traves de nuestro servidor de discord, y se agregara lo mas pronto posible, puedes encontrar" +
+                            alertUpdate.btn_ok.setText("Solicitar");
+                            alertUpdate.btn_ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    DatabaseReference dbr = FirebaseDatabase.getInstance().getReference("request");
+                                    dbr.child(anime_previous.getTitle()).setValue(0);
+                                    alertUpdate.dialog.dismiss();
+                                }
+                            });
+                            alertUpdate.setDesc("Vaya!, no hemos encontrado este anime, pero puedes solicitarlo pulsando el boton SOLICITAR o a traves de nuestro servidor de discord, y se agregara lo mas pronto posible, puedes encontrar" +
                                     " nuestro discord en el apartado de comunidad");
                         }
                     } else {

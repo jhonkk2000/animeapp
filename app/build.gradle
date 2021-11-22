@@ -11,8 +11,8 @@ android {
         applicationId "com.jhonkkman.aniappinspiracy"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 22
-        versionName "1.5"
+        versionCode 25
+        versionName "1.55"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -63,7 +63,6 @@ dependencies {
 
     //AdsGoogle
     implementation 'com.google.android.gms:play-services-ads:20.3.0'
-    implementation project(':nativetemplates')
 
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'

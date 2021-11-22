@@ -38,8 +38,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.ads.nativetemplates.NativeTemplateStyle;
-import com.google.android.ads.nativetemplates.TemplateView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -61,6 +59,7 @@ import com.jhonkkman.aniappinspiracy.AlertRecommendation;
 import com.jhonkkman.aniappinspiracy.AlertUpdate;
 import com.jhonkkman.aniappinspiracy.AnimeActivity;
 import com.jhonkkman.aniappinspiracy.CenterActivity;
+import com.jhonkkman.aniappinspiracy.ComunidadActivity;
 import com.jhonkkman.aniappinspiracy.DownloadTask;
 import com.jhonkkman.aniappinspiracy.R;
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
@@ -69,6 +68,7 @@ import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeTopSeasonResource;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeWeekRequest;
+import com.jhonkkman.aniappinspiracy.data.models.Aviso;
 import com.jhonkkman.aniappinspiracy.data.models.GeneroItem;
 import com.jhonkkman.aniappinspiracy.data.models.User;
 import com.jhonkkman.aniappinspiracy.data.update.NewUpdate;
@@ -90,6 +90,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.jhonkkman.aniappinspiracy.CenterActivity.PERMISSION_REQUEST_CODE;
+import static com.jhonkkman.aniappinspiracy.CenterActivity.avisos;
 import static com.jhonkkman.aniappinspiracy.CenterActivity.generos;
 import static com.jhonkkman.aniappinspiracy.CenterActivity.update_gp;
 import static com.jhonkkman.aniappinspiracy.CenterActivity.urlApkDownload;
@@ -628,13 +629,6 @@ public class InicioFragment extends Fragment {
                                 AlertUpdate alertUpdate = new AlertUpdate();
                                 alertUpdate.showDialog(getActivity());
                             }
-                            if (!prefU.getBoolean("stateC", false)) {
-                                AlertUpdate alertUpdate = new AlertUpdate();
-                                alertUpdate.alert = "com";
-                                alertUpdate.showDialog(getActivity());
-                                alertUpdate.setTitulo("Presentamos nuestra comunidad");
-                                alertUpdate.setDesc("Ahora puedes acceder al apartado de comunidad, pulsa aceptar para continuar.");
-                            }
                         }
                         if (!prefR.getBoolean("no_mostrar", false)) {
                             AlertRecommendation dialogR = new AlertRecommendation();
@@ -655,6 +649,7 @@ public class InicioFragment extends Fragment {
                             NewUpdate newUpdate = new NewUpdate(getActivity(),urlApkDownload);
                             newUpdate.loadDialogSecondApp();
                         }
+                        loadAnnouncement();
                     } else {
                         loadAnimeOfTheWeek();
                     }
@@ -667,5 +662,28 @@ public class InicioFragment extends Fragment {
                 }
             });
         }, 1000);
+    }
+
+    public void loadAnnouncement(){
+            if(avisos != null){
+                for (int i = 0; i < avisos.size(); i++) {
+                    if(avisos.get(i).getTitulo().startsWith("$")){
+                        Aviso aviso = avisos.get(i);
+                        AlertOptions alert = new AlertOptions();
+                        alert.showDialog(getActivity(),aviso.getTitulo());
+                        alert.loadImage(getContext(),aviso.getImagen());
+                        alert.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                if(alert.send){
+                                    startActivity(new Intent(getContext(), ComunidadActivity.class));
+                                }
+                            }
+                        });
+                        break;
+                    }
+                }
+            }
+
     }
 }

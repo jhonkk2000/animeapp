@@ -21,7 +21,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.ads.nativetemplates.TemplateView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -72,7 +71,6 @@ public class AdapterPlayers extends RecyclerView.Adapter<AdapterPlayers.ViewHold
 
         TextView tv_reproductor;
         ImageButton btn_reproducir;
-        TemplateView templateView;
 
         public ViewHolderPlayers(@NonNull View v) {
             super(v);
