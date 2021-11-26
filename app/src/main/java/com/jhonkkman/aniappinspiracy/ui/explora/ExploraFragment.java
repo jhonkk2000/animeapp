@@ -153,6 +153,7 @@ public class ExploraFragment extends Fragment {
     }
 
     public void loadSearchItems() {
+        itemSearches.add(new ItemSearch("Anime Latino"));
         itemSearches.add(new ItemSearch(getString(R.string.generos)));
         itemSearches.add(new ItemSearch("Letra"));
         itemSearches.add(new ItemSearch("Categoria"));

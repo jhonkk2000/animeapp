@@ -48,8 +48,11 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.AdapterResultados;
 import com.jhonkkman.aniappinspiracy.AdapterSeasonAnime;
@@ -97,14 +100,14 @@ import static com.jhonkkman.aniappinspiracy.CenterActivity.urlApkDownload;
 
 public class InicioFragment extends Fragment {
 
-    private RecyclerView rv_season, rv_continue;
-    private AdapterSeasonAnime adapter;
+    private RecyclerView rv_season, rv_continue, rv_continue_last;
+    private AdapterSeasonAnime adapter, adapterLast;
     private AdapterResultados adapter2;
     private LinearLayoutManager lym, lym2;
     private ImageView iv_carousel;
     private ApiAnimeData API_SERVICE;
     private DatabaseReference dbr;
-    private TextView tv_season, tv_titulo, tv_desc;
+    private TextView tv_season, tv_titulo, tv_desc, tv_last;
     private ProgressBar pb_inicio;
     private ShimmerFrameLayout sm_season;
     private AppCompatButton btn_acceder;
@@ -112,6 +115,7 @@ public class InicioFragment extends Fragment {
     private ArrayList<AnimeItem> animesI = new ArrayList<>();
     private ArrayList<ArrayList<AnimeItem>> animesG = new ArrayList<>();
     private ArrayList<AnimeItem> animeOfDay = new ArrayList<>();
+    private ArrayList<AnimeItem> lastAnimeView = new ArrayList<>();
     private User user;
     private List<GeneroItem> generosG = new ArrayList<>();
     private View in_1, in_2, in_3, in_4;
@@ -124,6 +128,7 @@ public class InicioFragment extends Fragment {
     public List<AnimeItem> animeItems = new ArrayList<>();
     private AlertLoading dialog = new AlertLoading();
     private int carouselCount = 0, year;
+    private String id_user = "";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -131,10 +136,12 @@ public class InicioFragment extends Fragment {
         rv_season = root.findViewById(R.id.rv_season_anime);
         btn_acceder = root.findViewById(R.id.btn_acceder_carousel);
         rv_continue = root.findViewById(R.id.rv_generos_inicio);
+        rv_continue_last = root.findViewById(R.id.rv_last_anime);
         iv_carousel = root.findViewById(R.id.iv_carousel);
         pb_inicio = root.findViewById(R.id.pb_inicio);
         tv_season = root.findViewById(R.id.tv_season_anime);
         tv_titulo = root.findViewById(R.id.tv_titulo_carousel);
+        tv_last = root.findViewById(R.id.tv_last_anime);
         tv_desc = root.findViewById(R.id.tv_desc_carousel);
         season = getArguments().getString("season");
         year = getArguments().getInt("year");
@@ -275,7 +282,9 @@ public class InicioFragment extends Fragment {
     public void loadUser() {
         Gson gson = new Gson();
         String json = pref.getString("usuario", "");
+        id_user = pref.getString("id", "");
         user = gson.fromJson(json, User.class);
+        loadDataContinueLast();
     }
 
     public void loadDataSeason() {
@@ -352,46 +361,33 @@ public class InicioFragment extends Fragment {
     }
 
     public void loadDataContinueLast() {
-        new Handler().postDelayed(() -> {
-            finalL++;
-            List<Integer> animes = user.getLast_anime_view();
-            List<Integer> newanimes = new ArrayList<>();
-            for (int i = 1; i < animes.size() + 1; i++) {
-                newanimes.add(animes.get(animes.size() - i));
-            }
-            //animeItems.clear();
-            Call<AnimeResource> call = API_SERVICE.getAnime(newanimes.get(finalL));
-            call.enqueue(new Callback<AnimeResource>() {
-                @Override
-                public void onResponse(Call<AnimeResource> call, Response<AnimeResource> response) {
-                    if (response.isSuccessful()) {
-                        AnimeResource anime = response.body();
-                        AnimeItem a = new AnimeItem(anime.getMal_id(), anime.getTitle(), anime.getImage_url());
-                        a.setUrl(anime.getUrl());
-                        CenterActivity.animesI.add(a);
-                        if (animes.size() != 0) {
-                            in_1.setVisibility(View.INVISIBLE);
-                            adapter2.notifyDataSetChanged();
-                        }
-                        if (finalL < animes.size() - 1) {
-                            loadDataContinueLast();
-                        } else {
-                            estado_last = true;
-                        }
-                    } else {
-                        finalL--;
-                        Log.d("NOCARGA", "no response last");
-                        loadDataContinueLast();
+        adapterLast = new AdapterSeasonAnime(getContext(), lastAnimeView, getActivity());
+        rv_continue_last.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        rv_continue_last.setAdapter(adapterLast);
+        dbr.child("users").child(id_user).child("last_anime").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                lastAnimeView.clear();
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        lastAnimeView.add(ds.getValue(AnimeItem.class));
                     }
-
+                    Collections.reverse(lastAnimeView);
+                    adapterLast.notifyDataSetChanged();
+                    tv_last.setVisibility(View.VISIBLE);
+                    tv_last.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                } else {
+                    tv_last.setVisibility(View.INVISIBLE);
+                    tv_last.getLayoutParams().height = 0;
                 }
+                adapterLast.notifyDataSetChanged();
+            }
 
-                @Override
-                public void onFailure(Call<AnimeResource> call, Throwable t) {
-                    Log.d("NOCARGA", t.getMessage());
-                }
-            });
-        }, 700);
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void disablePb() {
@@ -447,7 +443,6 @@ public class InicioFragment extends Fragment {
                         AnimeWeekRequest animes = response.body();
                         ArrayList<AnimeItem> list1 = new ArrayList<>();
                         ArrayList<AnimeItem> list2 = new ArrayList<>();
-                        ArrayList<AnimeItem> list3 = new ArrayList<>();
                         Calendar c = Calendar.getInstance();
                         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
                         String day = getDayEnglish(dayOfWeek);
@@ -462,13 +457,8 @@ public class InicioFragment extends Fragment {
                                     list1.add(animes.getMonday().get(i));
                                     val++;
                                 } else {
-                                    if (val == 1) {
-                                        list2.add(animes.getMonday().get(i));
-                                        val++;
-                                    } else {
-                                        list3.add(animes.getMonday().get(i));
-                                        val = 0;
-                                    }
+                                    list2.add(animes.getMonday().get(i));
+                                    val=0;
                                 }
                             }
                         }
@@ -481,13 +471,9 @@ public class InicioFragment extends Fragment {
                                     list1.add(animes.getTuesday().get(i));
                                     val++;
                                 } else {
-                                    if (val == 1) {
-                                        list2.add(animes.getTuesday().get(i));
-                                        val++;
-                                    } else {
-                                        list3.add(animes.getTuesday().get(i));
-                                        val = 0;
-                                    }
+                                    list2.add(animes.getTuesday().get(i));
+                                    val=0;
+
                                 }
                             }
 
@@ -501,16 +487,11 @@ public class InicioFragment extends Fragment {
                                     list1.add(animes.getWednesday().get(i));
                                     val++;
                                 } else {
-                                    if (val == 1) {
-                                        list2.add(animes.getWednesday().get(i));
-                                        val++;
-                                    } else {
-                                        list3.add(animes.getWednesday().get(i));
-                                        val = 0;
-                                    }
+                                    list2.add(animes.getWednesday().get(i));
+                                    val = 0;
                                 }
-                            }
 
+                            }
                         }
                         for (int i = 0; i < animes.getThursday().size(); i++) {
                             if (animes.getThursday().get(i).getGenres().get(0).getMal_id() != 12) {
@@ -521,13 +502,9 @@ public class InicioFragment extends Fragment {
                                     list1.add(animes.getThursday().get(i));
                                     val++;
                                 } else {
-                                    if (val == 1) {
-                                        list2.add(animes.getThursday().get(i));
-                                        val++;
-                                    } else {
-                                        list3.add(animes.getThursday().get(i));
-                                        val = 0;
-                                    }
+                                    list2.add(animes.getThursday().get(i));
+                                    val = 0;
+
                                 }
                             }
 
@@ -541,13 +518,8 @@ public class InicioFragment extends Fragment {
                                     list1.add(animes.getFriday().get(i));
                                     val++;
                                 } else {
-                                    if (val == 1) {
-                                        list2.add(animes.getFriday().get(i));
-                                        val++;
-                                    } else {
-                                        list3.add(animes.getFriday().get(i));
-                                        val = 0;
-                                    }
+                                    list2.add(animes.getFriday().get(i));
+                                    val = 0;
                                 }
                             }
 
@@ -561,13 +533,8 @@ public class InicioFragment extends Fragment {
                                     list1.add(animes.getSaturday().get(i));
                                     val++;
                                 } else {
-                                    if (val == 1) {
-                                        list2.add(animes.getSaturday().get(i));
-                                        val++;
-                                    } else {
-                                        list3.add(animes.getSaturday().get(i));
-                                        val = 0;
-                                    }
+                                    list2.add(animes.getSaturday().get(i));
+                                    val = 0;
                                 }
                             }
 
@@ -582,13 +549,8 @@ public class InicioFragment extends Fragment {
                                     list1.add(animes.getSunday().get(i));
                                     val++;
                                 } else {
-                                    if (val == 1) {
-                                        list2.add(animes.getSunday().get(i));
-                                        val++;
-                                    } else {
-                                        list3.add(animes.getSunday().get(i));
-                                        val = 0;
-                                    }
+                                    list2.add(animes.getSunday().get(i));
+                                    val = 0;
                                 }
                             }
                         }
@@ -610,14 +572,8 @@ public class InicioFragment extends Fragment {
                                 return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
                             }
                         });
-                        Collections.sort(list3, new Comparator<AnimeItem>() {
-                            @Override
-                            public int compare(AnimeItem o1, AnimeItem o2) {
-                                return new Float(o2.getScore()).compareTo(new Float(o1.getScore()));
-                            }
-                        });
                         lym2 = new LinearLayoutManager(getContext());
-                        adapter2 = new AdapterResultados(list1, list2, list3, getContext(), getActivity(), "inicio");
+                        adapter2 = new AdapterResultados(list1, list2, getContext(), getActivity(), "inicio");
                         rv_continue.setLayoutManager(lym2);
                         rv_continue.setAdapter(adapter2);
                         rv_continue.scheduleLayoutAnimation();
@@ -645,8 +601,8 @@ public class InicioFragment extends Fragment {
                             carouselCount = 1;
                             loadCarousel();
                         }
-                        if(update_gp){
-                            NewUpdate newUpdate = new NewUpdate(getActivity(),urlApkDownload);
+                        if (update_gp) {
+                            NewUpdate newUpdate = new NewUpdate(getActivity(), urlApkDownload);
                             newUpdate.loadDialogSecondApp();
                         }
                         loadAnnouncement();
@@ -664,26 +620,26 @@ public class InicioFragment extends Fragment {
         }, 1000);
     }
 
-    public void loadAnnouncement(){
-            if(avisos != null){
-                for (int i = 0; i < avisos.size(); i++) {
-                    if(avisos.get(i).getTitulo().startsWith("$")){
-                        Aviso aviso = avisos.get(i);
-                        AlertOptions alert = new AlertOptions();
-                        alert.showDialog(getActivity(),aviso.getTitulo());
-                        alert.loadImage(getContext(),aviso.getImagen());
-                        alert.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                if(alert.send){
-                                    startActivity(new Intent(getContext(), ComunidadActivity.class));
-                                }
+    public void loadAnnouncement() {
+        if (avisos != null) {
+            for (int i = 0; i < avisos.size(); i++) {
+                if (avisos.get(i).getTitulo().startsWith("$")) {
+                    Aviso aviso = avisos.get(i);
+                    AlertOptions alert = new AlertOptions();
+                    alert.showDialog(getActivity(), aviso.getTitulo());
+                    alert.loadImage(getContext(), aviso.getImagen());
+                    alert.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            if (alert.send) {
+                                startActivity(new Intent(getContext(), ComunidadActivity.class));
                             }
-                        });
-                        break;
-                    }
+                        }
+                    });
+                    break;
                 }
             }
+        }
 
     }
 }

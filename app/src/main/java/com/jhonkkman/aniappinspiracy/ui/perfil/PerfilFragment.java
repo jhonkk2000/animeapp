@@ -15,13 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,27 +26,32 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.jhonkkman.aniappinspiracy.AdapterGaleria;
-import com.jhonkkman.aniappinspiracy.CenterActivity;
 import com.jhonkkman.aniappinspiracy.R;
+import com.jhonkkman.aniappinspiracy.data.models.Picture;
 import com.jhonkkman.aniappinspiracy.data.models.User;
 import com.jhonkkman.aniappinspiracy.ui.favorito.FavoritoFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PerfilFragment extends Fragment {
 
     private RecyclerView rv_change_img;
     private LinearLayoutManager lym;
     private AdapterGaleria adapter;
-    private EditText et_nombre,et_desc;
-    private ImageButton btn_nombre,btn_desc;
+    private EditText et_nombre, et_desc;
+    private ImageButton btn_nombre, btn_desc;
     private AppCompatButton btn_guardar;
     private SharedPreferences pref;
     private User user;
     private DatabaseReference dbr;
-    private AdView mAdView;
+    private ArrayList<String> imgs = new ArrayList<>();
+    private String id_user;
+    private ImageView iv_perfil;
+    private ValueEventListener listenerImgP;
 
 
     @Override
@@ -62,11 +64,10 @@ public class PerfilFragment extends Fragment {
         et_nombre = view.findViewById(R.id.et_nombre_usuario_perfil);
         btn_nombre = view.findViewById(R.id.btn_cambiar_usuario);
         btn_guardar = view.findViewById(R.id.btn_guardar_perfil);
+        iv_perfil = view.findViewById(R.id.iv_perfil);
         btn_guardar.setVisibility(View.INVISIBLE);
         pref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        mAdView = view.findViewById(R.id.adView_perfil);
-        dbr = FirebaseDatabase.getInstance().getReference("users");
-        //loadImg();
+        dbr = FirebaseDatabase.getInstance().getReference();
         //loadAd();
         loadUserData();
         editData();
@@ -74,17 +75,64 @@ public class PerfilFragment extends Fragment {
         return view;
     }
 
-    public void loadAd(){
-        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+
+    public void loadImgs() {
+        listenerImgP = dbr.child("users").child(id_user).child("url_foto").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (getActivity() == null) {
+                    return;
+                }
+                Glide.with(getActivity()).load(snapshot.getValue().toString()).into(iv_perfil);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
             }
         });
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        dbr.child("img_perfil").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    imgs.add(ds.getValue().toString());
+                }
+                ArrayList<String> lista1 = new ArrayList<>();
+                ArrayList<String> lista2 = new ArrayList<>();
+                int pos = 0;
+                for (int i = 0; i < imgs.size(); i++) {
+                    if (pos == 0) {
+                        lista1.add(imgs.get(i));
+                        pos = 1;
+                    } else {
+                        lista2.add(imgs.get(i));
+                        pos = 0;
+
+                    }
+                }
+                lym = new LinearLayoutManager(getContext());
+                adapter = new AdapterGaleria(lista1, lista2, getContext(), "perfil", dbr, id_user);
+                rv_change_img.setLayoutManager(lym);
+                rv_change_img.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
-    public void editData(){
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (dbr != null && listenerImgP != null) {
+            dbr.removeEventListener(listenerImgP);
+        }
+    }
+
+    public void editData() {
         btn_nombre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,13 +161,13 @@ public class PerfilFragment extends Fragment {
             public void onClick(View view) {
                 String nu = et_nombre.getText().toString();
                 String desc = et_desc.getText().toString();
-                if(nu.isEmpty()){
+                if (nu.isEmpty()) {
                     Toast.makeText(getContext(), "No se permite un nombre de usuario vacio", Toast.LENGTH_SHORT).show();
                     et_nombre.setText(user.getNombre_usuario());
                     et_desc.setText("Descripcion: " + user.getDescripcion());
-                }else{
-                    dbr.child(pref.getString("id","")).child("nombre_usuario").setValue(nu);
-                    dbr.child(pref.getString("id","")).child("descripcion").setValue(desc);
+                } else {
+                    dbr.child("users").child(pref.getString("id", "")).child("nombre_usuario").setValue(nu);
+                    dbr.child("users").child(pref.getString("id", "")).child("descripcion").setValue(desc);
                     Toast.makeText(getContext(), "Cambios guardados correctamente!", Toast.LENGTH_SHORT).show();
                     et_nombre.setText(nu);
                     et_desc.setText("Descripcion: " + desc);
@@ -133,18 +181,13 @@ public class PerfilFragment extends Fragment {
         });
     }
 
-    public void loadUserData(){
+    public void loadUserData() {
         Gson gson = new Gson();
-        String json = pref.getString("usuario","");
+        String json = pref.getString("usuario", "");
+        id_user = pref.getString("id", "");
         user = gson.fromJson(json, User.class);
         et_nombre.setText(user.getNombre_usuario());
         et_desc.setText("Descripcion: " + user.getDescripcion());
-    }
-
-    public void loadImg(){
-        lym = new LinearLayoutManager(getContext());
-        //adapter = new AdapterResultados();
-        rv_change_img.setLayoutManager(lym);
-        rv_change_img.setAdapter(adapter);
+        loadImgs();
     }
 }

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.jhonkkman.aniappinspiracy.data.models.Character;
 
 import org.jetbrains.annotations.NotNull;
@@ -59,14 +60,16 @@ public class AdapterPersonaje extends RecyclerView.Adapter<AdapterPersonaje.View
         }
 
         public void loadData(Context context,Character character){
-            Glide.with(context).load(character.getImage_url()).into(iv_anime);
+            RequestOptions myOptions = new RequestOptions()
+                    .override(200, 350);
+            Glide.with(context).asBitmap().apply(myOptions).load(character.getImage_url()).into(iv_anime);
             tv_anime.setText(character.getName());
             if(character.getVoice_actors().size()!=0){
                 tv_actor.setText(character.getVoice_actors().get(0).getName());
-                Glide.with(context).load(character.getVoice_actors().get(0).getImage_url()).into(iv_actor);
+                Glide.with(context).asBitmap().apply(myOptions).load(character.getVoice_actors().get(0).getImage_url()).into(iv_actor);
             }else{
                 tv_actor.setText("Aun no disponible");
-                Glide.with(context).load(AnimeActivity.anime_previous.getImage_url()).into(iv_actor);
+                Glide.with(context).asBitmap().apply(myOptions).load(AnimeActivity.anime_previous.getImage_url()).into(iv_actor);
             }
         }
     }

@@ -9,6 +9,7 @@ public class User {
     private List<Integer> genero_fav = new ArrayList<>();
     private List<Integer> last_anime_view = new ArrayList<>();
     private boolean first_time;
+    private ArrayList<AnimeItem> last_animes = new ArrayList<>();
 
     public User(){
 
@@ -23,6 +24,10 @@ public class User {
         this.genero_fav = genero_fav;
         this.last_anime_view = last_anime_view;
         this.first_time = first_time;
+    }
+
+    public ArrayList<AnimeItem> getLast_animes() {
+        return last_animes;
     }
 
     public List<Integer> getAnimes_fav() {

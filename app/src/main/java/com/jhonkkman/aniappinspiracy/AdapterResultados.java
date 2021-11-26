@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -37,7 +39,6 @@ import java.util.ArrayList;
 public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<AnimeItem> lista1;
     private ArrayList<AnimeItem> lista2;
-    private ArrayList<AnimeItem> lista3;
     private AnimeResource anime;
     private Context context;
     private Activity activity;
@@ -45,10 +46,9 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int BODY = 1;
     private final int HEADER = 2;
 
-    public AdapterResultados(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, Context context, Activity activity, String activityUp) {
+    public AdapterResultados(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, Context context, Activity activity, String activityUp) {
         this.lista1 = lista1;
         this.lista2 = lista2;
-        this.lista3 = lista3;
         this.context = context;
         this.activity = activity;
         this.activityUp = activityUp;
@@ -70,13 +70,13 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
-        if(activityUp.equals("Found")){
+        if (activityUp.equals("Found")) {
             if (position == 0) {
                 return HEADER;
             } else {
                 return BODY;
             }
-        }else{
+        } else {
             return super.getItemViewType(position);
         }
     }
@@ -84,13 +84,13 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof AdapterAnimeFav.ViewHolderAnimeFav && activityUp.equals("Found")) {
-            ((AdapterAnimeFav.ViewHolderAnimeFav) holder).loadData(context,activity,anime,activityUp);
+            ((AdapterAnimeFav.ViewHolderAnimeFav) holder).loadData(context, activity, anime, activityUp);
         } else {
             if (holder instanceof ViewHolderResultados) {
-                if(activityUp.equals("Found")){
-                    ((ViewHolderResultados) holder).loadData(lista1, lista2, lista3, position-1, context, activity, activityUp,getItemCount());
-                }else{
-                    ((ViewHolderResultados) holder).loadData(lista1, lista2, lista3, position, context, activity, activityUp,getItemCount());
+                if (activityUp.equals("Found")) {
+                    ((ViewHolderResultados) holder).loadData(lista1, lista2, position - 1, context, activity, activityUp, getItemCount());
+                } else {
+                    ((ViewHolderResultados) holder).loadData(lista1, lista2, position, context, activity, activityUp, getItemCount());
                 }
             }
         }
@@ -99,35 +99,35 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        if(activityUp.equals("Found")){
+        if (activityUp.equals("Found")) {
             return lista1.size() + 1;
-        }else{
+        } else {
             return lista1.size();
         }
     }
 
     public static class ViewHolderResultados extends RecyclerView.ViewHolder {
 
-        ImageView iv_1, iv_2, iv_3;
-        MaterialCardView cv_1, cv_2, cv_3;
+        ImageView iv_1, iv_2;
+        MaterialCardView cv_1, cv_2;
         MaterialButton btn_more;
+        TextView tv_res1, tv_res2;
 
         public ViewHolderResultados(@NonNull View v) {
             super(v);
             iv_1 = v.findViewById(R.id.iv_resultado_1);
             iv_2 = v.findViewById(R.id.iv_resultado_2);
-            iv_3 = v.findViewById(R.id.iv_resultado_3);
             cv_1 = v.findViewById(R.id.cv_resultado_1);
             cv_2 = v.findViewById(R.id.cv_resultado_2);
-            cv_3 = v.findViewById(R.id.cv_resultado_3);
+            tv_res1 = v.findViewById(R.id.tv_res1);
+            tv_res2 = v.findViewById(R.id.tv_res2);
             btn_more = v.findViewById(R.id.btn_mas_resultados);
             cv_1.setTransitionName("anime_portada");
             cv_2.setTransitionName("anime_portada");
-            cv_3.setTransitionName("anime_portada");
         }
 
-        public void loadData(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, ArrayList<AnimeItem> lista3, int pos, Context context, Activity activity, String activityUp,int itemC) {
-            if(activityUp.equals("Found") && (pos+2) == itemC){
+        public void loadData(ArrayList<AnimeItem> lista1, ArrayList<AnimeItem> lista2, int pos, Context context, Activity activity, String activityUp, int itemC) {
+            if (activityUp.equals("Found") && (pos + 2) == itemC) {
                 Log.d("POSITION", "" + pos + " - " + itemC);
                 btn_more.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 btn_more.requestLayout();
@@ -138,18 +138,16 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
                         FoundAnimeActivity.loadMoreAnimes(activity);
                     }
                 });
-            }else{
+            } else {
                 btn_more.getLayoutParams().height = 0;
                 btn_more.setEnabled(false);
                 btn_more.requestLayout();
             }
-            if (activityUp.equals("inicio")) {
-                cv_1.setStrokeWidth(0);
-                cv_2.setStrokeWidth(0);
-                cv_3.setStrokeWidth(0);
-            }
+            RequestOptions myOptions = new RequestOptions()
+                    .override(200, 350);
             if (lista1.size() >= pos + 1) {
-                Glide.with(context).load(lista1.get(pos).getImage_url()).into(iv_1);
+                Glide.with(context).asBitmap().apply(myOptions).load(lista1.get(pos).getImage_url()).into(iv_1);
+                tv_res1.setText(lista1.get(pos).getTitle());
                 cv_1.setVisibility(View.VISIBLE);
                 cv_1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -162,10 +160,10 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
                 });
             } else {
                 cv_1.setVisibility(View.INVISIBLE);
-
             }
             if (lista2.size() >= pos + 1) {
-                Glide.with(context).load(lista2.get(pos).getImage_url()).into(iv_2);
+                Glide.with(context).asBitmap().apply(myOptions).load(lista2.get(pos).getImage_url()).into(iv_2);
+                tv_res2.setText(lista2.get(pos).getTitle());
                 cv_2.setVisibility(View.VISIBLE);
                 cv_2.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -180,23 +178,6 @@ public class AdapterResultados extends RecyclerView.Adapter<RecyclerView.ViewHol
                 cv_2.setVisibility(View.INVISIBLE);
                 Log.d("Falla2", lista2.size() + "");
             }
-            if (lista3.size() >= pos + 1) {
-                Glide.with(context).load(lista3.get(pos).getImage_url()).into(iv_3);
-                cv_3.setVisibility(View.VISIBLE);
-                cv_3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent i = new Intent(context, AnimeActivity.class);
-                        i.putExtra("anime", (Serializable) lista3.get(pos));
-                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, cv_3, ViewCompat.getTransitionName(cv_3));
-                        context.startActivity(i, options.toBundle());
-                    }
-                });
-            } else {
-                cv_3.setVisibility(View.INVISIBLE);
-                Log.d("Falla3", lista3.size() + "");
-            }
-
         }
 
     }

@@ -133,7 +133,7 @@ public class ApiClientData {
                                 break;
                             }
                         }
-                        if (!animeItems.get(i).getRated().equals("Rx") && !animeItems.get(i).getRated().equals("PG") && !animeItems.get(i).getType().equals("ONA") && !animeItems.get(i).getType().equals("Music")
+                        if (!animeItems.get(i).getRated().equals("Rx") && !animeItems.get(i).getRated().equals("PG") && !animeItems.get(i).getType().equals("Music")
                                 && !gen && !animeItems.get(i).getRated().equals("G")) {
                             finalItems.add(animeItems.get(i));
                         }
@@ -168,20 +168,14 @@ public class ApiClientData {
         AnimeItem anime1 = animeItems.get(0);
         ArrayList<AnimeItem> lista1 = new ArrayList<>();
         ArrayList<AnimeItem> lista2 = new ArrayList<>();
-        ArrayList<AnimeItem> lista3 = new ArrayList<>();
         for (int i = 0; i < animeItems.size(); i++) {
             if (i != 0) {
                 if (p == 0) {
                     lista1.add(animeItems.get(i));
                     p = 1;
                 } else {
-                    if (p == 1) {
-                        lista2.add(animeItems.get(i));
-                        p = 2;
-                    } else {
-                        lista3.add(animeItems.get(i));
-                        p = 0;
-                    }
+                    lista2.add(animeItems.get(i));
+                    p = 0;
                 }
             }
         }
@@ -189,7 +183,6 @@ public class ApiClientData {
         intent.putExtra("anime1", anime1);
         intent.putExtra("list1", lista1);
         intent.putExtra("list2", lista2);
-        intent.putExtra("list3", lista3);
         intent.putExtra("type", type);
         intent.putExtra("pos", pos);
         intent.putExtra("b", busqueda);

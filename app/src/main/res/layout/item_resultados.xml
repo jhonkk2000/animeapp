@@ -14,23 +14,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingRight="10dp"
+            android:orientation="horizontal"
             android:paddingLeft="10dp"
-            android:orientation="horizontal">
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_resultado_1"
                 android:layout_width="0dp"
-                android:layout_height="170dp"
+                android:layout_height="250dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight=".30"
                 android:clickable="true"
                 android:focusable="true"
                 android:transitionName="anime_image"
-                app:cardCornerRadius="15dp"
-                app:strokeColor="@color/dark_red"
-                app:strokeWidth="2dp">
+                app:cardCornerRadius="5dp">
 
                 <ImageView
                     android:id="@+id/iv_resultado_1"
@@ -39,21 +37,38 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ijiranaide_nagatoro_san" />
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_carousel_text"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="50dp"
+                    android:layout_gravity="bottom">
+
+                    <TextView
+                        android:id="@+id/tv_res1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+
 
             </com.google.android.material.card.MaterialCardView>
+
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_resultado_2"
                 android:layout_width="0dp"
-                android:layout_height="170dp"
+                android:layout_height="250dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight=".30"
                 android:clickable="true"
                 android:focusable="true"
                 android:transitionName="anime_image"
-                app:cardCornerRadius="15dp"
-                app:strokeColor="@color/dark_red"
-                app:strokeWidth="2dp">
+                app:cardCornerRadius="5dp">
 
                 <ImageView
                     android:id="@+id/iv_resultado_2"
@@ -61,28 +76,29 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ijiranaide_nagatoro_san" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_resultado_3"
-                android:layout_width="0dp"
-                android:layout_height="170dp"
-                android:layout_weight=".30"
-                android:clickable="true"
-                android:focusable="true"
-                android:transitionName="anime_image"
-                app:cardCornerRadius="15dp"
-                app:strokeColor="@color/dark_red"
-                app:strokeWidth="2dp">
-
-                <ImageView
-                    android:id="@+id/iv_resultado_3"
+                
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ijiranaide_nagatoro_san" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_carousel_text"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="50dp"
+                    android:layout_gravity="bottom">
+                    <TextView
+                        android:id="@+id/tv_res2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </FrameLayout>
+
 
             </com.google.android.material.card.MaterialCardView>
+
+
 
         </LinearLayout>
 
@@ -90,19 +106,18 @@
             android:id="@+id/btn_mas_resultados"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="@string/mas_resultados"
-            android:textAllCaps="false"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
             android:background="@drawable/background_mini_button"
+            android:focusable="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:text="@string/mas_resultados"
+            android:textAllCaps="false"
             android:textColor="@color/white"
-            android:layout_marginTop="5dp"
-            android:layout_gravity="center"
-            android:focusable="true"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

@@ -14,7 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.jhonkkman.aniappinspiracy.data.models.Comentario;
 import com.jhonkkman.aniappinspiracy.data.models.User;
 
@@ -79,16 +82,21 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
             }
             ArrayList<String> likes = comentario.getLikes();
             ArrayList<String> dislikes = comentario.getDislikes();
-            User user = new User();
-            for (int i = 0; i < users.size(); i++) {
-                if(users.get(i).getCorreo().equals(comentario.getUser())){
-                    user = users.get(i);
-                    break;
+            dbr.child("users").child(comentario.getId_user()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    User user = new User();
+                    user = snapshot.getValue(User.class);
+                    Glide.with(context).load(user.getUrl_foto()).into(iv_user);
+                    tv_user.setText(user.getNombre_usuario());
                 }
-            }
-            Glide.with(context).load(user.getUrl_foto()).into(iv_user);
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
             tv_comentario.setText(comentario.getComentario());
-            tv_user.setText(user.getNombre_usuario());
             tv_like.setText(String.valueOf(comentario.getLikes().size()));
             tv_dislike.setText(String.valueOf(comentario.getDislikes().size()));
             boolean userLike = false;

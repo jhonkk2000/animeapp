@@ -115,9 +115,13 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             cv_search_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(context, SearchItemAtivity.class);
-                    i.putExtra("type", tv_nombre.getText().toString());
-                    context.startActivity(i);
+                    if(tv_nombre.getText().toString().equalsIgnoreCase("anime latino")){
+                        context.startActivity(new Intent(context,LatinoActivity.class));
+                    }else{
+                        Intent i = new Intent(context, SearchItemAtivity.class);
+                        i.putExtra("type", tv_nombre.getText().toString());
+                        context.startActivity(i);
+                    }
                 }
             });
         }
@@ -130,24 +134,25 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
                 public void onClick(View v) {
                     dialog.showDialog(activity, "Buscando...");
                     if (type.equals("Generos")) {
-                        ApiClientData.cargarLlamada(5, String.valueOf(item.getMall_id()), API, context,activity,tv_nombre.getText().toString(),dialog,1);
-                    }else{
+                        ApiClientData.cargarLlamada(5, String.valueOf(item.getMall_id()), API, context, activity, tv_nombre.getText().toString(), dialog, 1);
+                    } else {
                         int val;
-                        if(type.equals("Letra")) {
+                        if (type.equals("Letra")) {
                             val = 1;
-                        }else{
-                            if(type.equals("Categoria")){
-                                val =3;
-                            }else{
-                                if(type.equals("Tipo")){
+                        } else {
+                            if (type.equals("Categoria")) {
+                                val = 3;
+                            } else {
+                                if (type.equals("Tipo")) {
                                     val = 2;
-                                }else{
+                                } else {
                                     val = 4;
                                 }
                             }
                         }
-                        ApiClientData.cargarLlamada(val, tv_nombre.getText().toString(), API, context,activity,tv_nombre.getText().toString(),dialog,1);
+                        ApiClientData.cargarLlamada(val, tv_nombre.getText().toString(), API, context, activity, tv_nombre.getText().toString(), dialog, 1);
                     }
+
                 }
             });
         }

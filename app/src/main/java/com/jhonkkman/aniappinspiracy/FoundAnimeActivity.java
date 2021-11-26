@@ -68,7 +68,6 @@ public class FoundAnimeActivity extends AppCompatActivity {
     public static AlertLoading dialogL = new AlertLoading();
     public static ArrayList<AnimeItem> lista1 = new ArrayList<>();
     public static ArrayList<AnimeItem> lista2 = new ArrayList<>();
-    public static ArrayList<AnimeItem> lista3 = new ArrayList<>();
     private InterstitialAd mInterstitialAd;
 
 
@@ -86,6 +85,7 @@ public class FoundAnimeActivity extends AppCompatActivity {
         loadAnimes();
         loadAd();
     }
+
     public void loadAd() {
         AdRequest adRequest = new AdRequest.Builder().build();
         //Interstitial
@@ -129,11 +129,10 @@ public class FoundAnimeActivity extends AppCompatActivity {
     }
 
     public void loadAnimes() {
-        AnimeResource animeResource = new AnimeResource(anime.getMal_id(),anime.getEpisodes(),anime.getImage_url(),anime.getTitle(),anime.getType(),anime.getSource(),anime.getSynopsis(),anime.getUrl(),anime.isAiring(),anime.getScore(),anime.getGenres());
+        AnimeResource animeResource = new AnimeResource(anime.getMal_id(), anime.getEpisodes(), anime.getImage_url(), anime.getTitle(), anime.getType(), anime.getSource(), anime.getSynopsis(), anime.getUrl(), anime.isAiring(), anime.getScore(), anime.getGenres());
         lista1 = (ArrayList<AnimeItem>) getIntent().getSerializableExtra("list1");
         lista2 = (ArrayList<AnimeItem>) getIntent().getSerializableExtra("list2");
-        lista3 = (ArrayList<AnimeItem>) getIntent().getSerializableExtra("list3");
-        adapter = new AdapterResultados(lista1, lista2, lista3, this, this, "Found");
+        adapter = new AdapterResultados(lista1, lista2, this, this, "Found");
         adapter.setAnime(animeResource);
         rv_search_items.setLayoutManager(new LinearLayoutManager(this));
         rv_search_items.setAdapter(adapter);
@@ -141,7 +140,7 @@ public class FoundAnimeActivity extends AppCompatActivity {
 
     public static void loadMoreAnimes(Activity context) {
         page++;
-        dialogL.showDialog(context,"Cargando...");
+        dialogL.showDialog(context, "Cargando...");
         cargarLlamadaR(context.getIntent().getIntExtra("pos", 0), context.getIntent().getStringExtra("b"));
         /*btn_mas_r.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,13 +267,9 @@ public class FoundAnimeActivity extends AppCompatActivity {
                 lista1.add(animeItems.get(i));
                 p = 1;
             } else {
-                if (p == 1) {
-                    lista2.add(animeItems.get(i));
-                    p = 2;
-                } else {
-                    lista3.add(animeItems.get(i));
-                    p = 0;
-                }
+                lista2.add(animeItems.get(i));
+                p = 0;
+
             }
         }
         adapter.notifyDataSetChanged();

@@ -34,6 +34,8 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,10 +50,12 @@ import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.jhonkkman.aniappinspiracy.data.api.ApiAnimeData;
 import com.jhonkkman.aniappinspiracy.data.api.ApiClientData;
+import com.jhonkkman.aniappinspiracy.data.api.ApiVideoServer;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeCompleto;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 import com.jhonkkman.aniappinspiracy.data.models.AnimeResource;
 import com.jhonkkman.aniappinspiracy.data.models.Episodio;
+import com.jhonkkman.aniappinspiracy.data.models.Extra;
 import com.jhonkkman.aniappinspiracy.data.models.User;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -59,6 +63,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,22 +78,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.jhonkkman.aniappinspiracy.CenterActivity.animesGuardados;
+import static com.jhonkkman.aniappinspiracy.CenterActivity.extras;
 
 public class AnimeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private AppBarLayout abl_anime;
+    private CollapsingToolbarLayout cbl_anime;
     private ImageView iv_select_fav, iv_anime, iv_share;
     private TabLayout tabs;
     private ViewPager vp_anime;
     public static AnimeItem anime_previous;
-    private TextView tv_title, tv_year, tv_generos, tv_en_emision, tv_finalizado, tv_stars;
+    private TextView tv_title, tv_year, tv_generos, tv_en_emision, tv_finalizado, tv_stars, tv_broadcast, tv_latino;
     private ApiAnimeData API_SERVICE;
     private YouTubePlayerView yt_trailer;
     private DatabaseReference dbr;
     private SharedPreferences pref;
-    public static String KEY_COMENTARIO = "";
     public static AlertLoading dialog = new AlertLoading();
-    public static boolean load_desc = false;
+    public static boolean load_desc = false,avaibleLat = true;
     //public static ArrayList<Episodio> episodios = new ArrayList<>();
     private AnimeResource anime = new AnimeResource();
     private ArrayList<Episodio> episodios = new ArrayList<>();
@@ -97,7 +104,10 @@ public class AnimeActivity extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     private DescripcionFragment descF;
     private AlertLoading loading = new AlertLoading();
-
+    private Thread threadLatino;
+    private boolean threadLatinB = false;
+    Handler handlerLatino;
+    Runnable runnableLatino;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,10 +115,14 @@ public class AnimeActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_anime);
         loading.showDialog(this, "Cargando anime");
+        abl_anime = findViewById(R.id.abl_anime);
+        cbl_anime = findViewById(R.id.cbl_anime);
         toolbar = findViewById(R.id.toolbar_anime);
-        toolbar.setTitle(getString(R.string.nombre_de_anime));
+        tv_broadcast = findViewById(R.id.tv_broadcast);
+        //toolbar.setTitle(getString(R.string.nombre_de_anime));
         tabs = findViewById(R.id.tabs_anime);
         iv_select_fav = findViewById(R.id.iv_select_fav);
+        tv_latino = findViewById(R.id.tv_latino);
         iv_anime = findViewById(R.id.iv_anime);
         vp_anime = findViewById(R.id.vp_anime);
         tv_title = findViewById(R.id.tv_title_anime);
@@ -120,20 +134,104 @@ public class AnimeActivity extends AppCompatActivity {
         tv_finalizado = findViewById(R.id.tv_finalizado);
         tv_stars = findViewById(R.id.tv_stars_anime);
         pref = getSharedPreferences("user", MODE_PRIVATE);
-        dbr = FirebaseDatabase.getInstance().getReference("users");
+        dbr = FirebaseDatabase.getInstance().getReference();
         anime_previous = (AnimeItem) getIntent().getSerializableExtra("anime");
-        Log.d("ANIMEACTIVITYEPISODE",""+anime_previous.getEpisodes());
+        Log.d("ANIMEACTIVITYEPISODE", "" + anime_previous.getEpisodes());
         vp_anime.setOffscreenPageLimit(5);
+
         //dialog.showDialog(this,"Cargando episodios");
         loadAd();
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //loadKeyComentario();
+        collapsingData();
         onSelectFav();
 
         onShare();
         savedLoadState();
         loadData();
+    }
+
+
+
+    public void loadLatino(String url) {
+        dbr.child("animes_latino").child(String.valueOf(anime_previous.getMal_id())).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    avaibleLat = true;
+                    tv_latino.setText("Disponible en Latino");
+                }else{
+                    avaibleLat = false;
+                    tv_latino.setText("Solicitar en Latino");
+                    tv_latino.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertUpdate alertUpdate = new AlertUpdate();
+                            alertUpdate.alert = "play";
+                            alertUpdate.showDialog(AnimeActivity.this);
+                            alertUpdate.setTitulo("No disponible");
+                            alertUpdate.btn_ok.setText("Aceptar");
+                            alertUpdate.btn_ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alertUpdate.dialog.dismiss();
+                                }
+                            });
+                            alertUpdate.setDesc("Vaya!, no hemos encontrado este anime en latino, pero puedes solicitarlo a traves de nuestro servidor de discord, y se agregara lo mas pronto posible, puedes encontrar" +
+                                    " nuestro discord en el apartado de comunidad");
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void collapsingData() {
+        abl_anime.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset == -cbl_anime.getHeight() + toolbar.getHeight()) {
+                    cbl_anime.setTitle(anime_previous.getTitle());
+                } else {
+                    cbl_anime.setTitle("");
+                }
+            }
+        });
+    }
+
+    public void loadBroadcast(String b) {
+        if (b != null) {
+            switch (b.split(" ")[0].toLowerCase()) {
+                case "mondays":
+                    tv_broadcast.setText("Emisión los Domingos");
+                    break;
+                case "tuesdays":
+                    tv_broadcast.setText("Emisión los Lunes");
+                    break;
+                case "wednesdays":
+                    tv_broadcast.setText("Emisión los Martes");
+                    break;
+                case "thursdays":
+                    tv_broadcast.setText("Emisión los Miercoles");
+                    break;
+                case "fridays":
+                    tv_broadcast.setText("Emisión los Jueves");
+                    break;
+                case "saturdays":
+                    tv_broadcast.setText("Emisión los Viernes");
+                    break;
+                case "sundays":
+                    tv_broadcast.setText("Emisión los Sabados");
+                    break;
+
+            }
+        }
     }
 
     public void onShare() {
@@ -194,6 +292,9 @@ public class AnimeActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
+        if(handlerLatino!=null && runnableLatino != null){
+            handlerLatino.removeCallbacks(runnableLatino);
+        }
         if (change_data) {
             animesGuardados.add(new AnimeCompleto(anime, episodios));
         } else {
@@ -225,30 +326,11 @@ public class AnimeActivity extends AppCompatActivity {
         }
     }
 
-    public void loadKeyComentario() {
-        dbr.getParent().child("anime").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (Integer.parseInt(ds.child("mall_id").getValue().toString()) == anime_previous.getMal_id()) {
-                            KEY_COMENTARIO = ds.getKey();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-    }
-
     public void loadData() {
         Glide.with(this).load(anime_previous.getImage_url()).into(iv_anime);
-        toolbar.setTitle(anime_previous.getTitle());
+        //toolbar.setTitle(anime_previous.getTitle());
         tv_title.setText(anime_previous.getTitle());
+        tv_latino.setText("Cargando...");
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -266,7 +348,7 @@ public class AnimeActivity extends AppCompatActivity {
         }*/
         final ArrayList[] animesFavUpdate = new ArrayList[1];
         animesFavUpdate[0] = new ArrayList();
-        dbr.child(pref.getString("id", "")).child("animes_fav").addValueEventListener(new ValueEventListener() {
+        dbr.child("users").child(pref.getString("id", "")).child("animes_fav").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 boolean state = false;
@@ -292,10 +374,10 @@ public class AnimeActivity extends AppCompatActivity {
                             iv_select_fav.setEnabled(false);
                             if (iv_select_fav.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.ic_fav_lleno_icon).getConstantState())) {
                                 animesFavUpdate[0].remove(new Long(anime_previous.getMal_id()));
-                                dbr.child(pref.getString("id", "")).child("animes_fav").setValue(animesFavUpdate[0]);
+                                dbr.child("users").child(pref.getString("id", "")).child("animes_fav").setValue(animesFavUpdate[0]);
                             } else {
                                 animesFavUpdate[0].add(anime_previous.getMal_id());
-                                dbr.child(pref.getString("id", "")).child("animes_fav").setValue(animesFavUpdate[0]);
+                                dbr.child("users").child(pref.getString("id", "")).child("animes_fav").setValue(animesFavUpdate[0]);
                             }
                             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                 @Override
@@ -322,11 +404,11 @@ public class AnimeActivity extends AppCompatActivity {
     public void loadTabs() {
         tabs.addTab(tabs.newTab().setText(getString(R.string.descripcion_tab)));
         try {
-            if(CenterActivity.prueba != null){
+            if (CenterActivity.prueba != null) {
                 if (!CenterActivity.prueba.equals("T1")) {
                     tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
                 }
-            }else{
+            } else {
                 tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
             }
         } catch (Exception e) {
@@ -347,7 +429,7 @@ public class AnimeActivity extends AppCompatActivity {
             public void onResponse(Call<AnimeResource> call, Response<AnimeResource> response) {
                 if (response.isSuccessful()) {
                     anime = response.body();
-                    Log.d("animeSizeACTV",""+anime.getEpisodes());
+                    Log.d("animeSizeACTV", "" + anime.getEpisodes());
                     change_data = true;
                     loadDataAnime();
                     traducir();
@@ -371,7 +453,36 @@ public class AnimeActivity extends AppCompatActivity {
     public void loadDataAnime() {
         loadAiring(anime.isAiring());
         loadStars(anime.getScore());
+        try {
+            if (CenterActivity.prueba != null) {
+                if (!CenterActivity.prueba.equals("T1")) {
+                    tv_latino.setVisibility(View.VISIBLE);
+                }else{
+                    tv_latino.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                tabs.addTab(tabs.newTab().setText(getString(R.string.episodios)));
+            }
+        } catch (Exception e) {
+        }
+        //Log.d("DATAANIMETES","aire: " + anime.isAiring() + " broadcast: " + anime.getBroadcast());
+        if (anime.isAiring()) {
+            tv_broadcast.setVisibility(View.VISIBLE);
+            loadBroadcast(anime.getBroadcast());
+        } else {
+            tv_broadcast.getLayoutParams().width = 0;
+            tv_broadcast.getLayoutParams().height = 0;
+            tv_broadcast.setVisibility(View.INVISIBLE);
+        }
         tv_year.setText(String.valueOf(anime.getAired().getProp().getFrom().getYear()));
+        loadLatino(anime.getUrl());
+        /*tv_latino.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference dbr2 = FirebaseDatabase.getInstance().getReference("animes_latino");
+                dbr2.child(String.valueOf(anime_previous.getMal_id())).setValue(anime_previous);
+            }
+        });*/
         String generos = "";
         for (int i = 0; i < anime.getGenres().size(); i++) {
             for (int j = 0; j < CenterActivity.generos.size(); j++) {
@@ -447,17 +558,18 @@ public class AnimeActivity extends AppCompatActivity {
         descF = new DescripcionFragment();
         fragments.add(descF);
         try {
-            if(CenterActivity.prueba != null){
+            if (CenterActivity.prueba != null) {
                 if (!CenterActivity.prueba.equals("T1")) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("ep", anime.getEpisodes());
-                    bundle.putString("url",anime_previous.getUrl());
+                    //bundle.putBoolean("al",avaibleLat);
+                    bundle.putString("url", anime_previous.getUrl());
                     //Log.d("EPISODESIZEANIMEACTI",anime.getEpisodes() + "");
                     EpisodiosFragment episodiosFragment = new EpisodiosFragment();
                     episodiosFragment.setArguments(bundle);
                     fragments.add(episodiosFragment);
                 }
-            }else{
+            } else {
                 Bundle bundle = new Bundle();
                 bundle.putInt("ep", anime.getEpisodes());
                 //Log.d("EPISODESIZEANIMEACTI",anime.getEpisodes() + "");
@@ -465,7 +577,7 @@ public class AnimeActivity extends AppCompatActivity {
                 episodiosFragment.setArguments(bundle);
                 fragments.add(episodiosFragment);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 

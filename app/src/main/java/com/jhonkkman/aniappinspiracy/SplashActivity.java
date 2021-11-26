@@ -39,6 +39,7 @@ public class SplashActivity extends AppCompatActivity {
     private SharedPreferences prefD;
     private FirebaseUser user;
     private int im = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,34 +73,66 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void finishSplash() {
-        dbr.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbr.child("genres").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 generos.clear();
-                avisos.clear();
-                for (DataSnapshot ds : snapshot.child("genres").getChildren()) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
                     generos.add(ds.getValue(GeneroItem.class));
                 }
-                for (DataSnapshot ds : snapshot.child("avisos").getChildren()) {
-                    avisos.add(ds.getValue(Aviso.class));
-                    Log.d("PROBANDING","1" + avisos.size());
-                }
-                CenterActivity.extras = snapshot.child("extras").getValue(Extra.class);
-                if (!getIntent().getBooleanExtra("register", true)) {
-                    startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("prueba",snapshot.child("prueba").child("nombre").getValue().toString()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    CenterActivity.login = false;
-                } else {
-                    if (user != null) {
-                        startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("prueba",snapshot.child("prueba").child("nombre").getValue().toString()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        CenterActivity.login = true;
-                    } else {
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                dbr.child("avisos").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        avisos.clear();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            avisos.add(ds.getValue(Aviso.class));
+                            Log.d("PROBANDING", "1" + avisos.size());
+                        }
+                        dbr.child("extras").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                CenterActivity.extras = snapshot.getValue(Extra.class);
+                                dbr.child("prueba").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                        if (!getIntent().getBooleanExtra("register", true)) {
+                                            startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("prueba", snapshot.child("nombre").getValue().toString()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                            CenterActivity.login = false;
+                                        } else {
+                                            if (user != null) {
+                                                startActivity(new Intent(SplashActivity.this, CenterActivity.class).putExtra("prueba", snapshot.child("nombre").getValue().toString()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                                CenterActivity.login = true;
+                                            } else {
+                                                startActivity(new Intent(SplashActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                            }
+                                        }
+                                        //CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
+                                        //CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
+                                        //CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                    }
+                                });
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                            }
+                        });
                     }
-                }
-                //CenterActivity.prueba = snapshot.child("prueba").child("nombre").getValue().toString();
-                //CenterActivity.season = snapshot.child("season").child("nombre").getValue().toString();
-                //CenterActivity.year = Integer.parseInt(snapshot.child("season").child("year").getValue().toString());
-                finish();
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
+
             }
 
             @Override

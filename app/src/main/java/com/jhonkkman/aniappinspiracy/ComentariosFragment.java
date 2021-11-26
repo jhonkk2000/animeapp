@@ -53,6 +53,7 @@ public class ComentariosFragment extends Fragment {
     private ArrayList<Comentario> comentarios = new ArrayList<>();
     private SharedPreferences pref;
     public static User user;
+    private String user_id;
     private String KEY_COMENTARIO = "";
     private boolean comment = false;
     private ArrayList<User> users = new ArrayList<>();
@@ -74,9 +75,7 @@ public class ComentariosFragment extends Fragment {
         sp_filtro = view.findViewById(R.id.sp_comentarios);
         pref = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         //loadSpinner();
-        loadKey();
         loadUser();
-        loadUsers();
         //loadComentarios();
         //sendComment();
         //loadListComments();
@@ -117,24 +116,6 @@ public class ComentariosFragment extends Fragment {
         }
     }
 
-    public void loadUsers() {
-        dbr.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        users.add(ds.getValue(User.class));
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-    }
-
     @SuppressLint("UseCompatLoadingForDrawables")
     public void verifyComment() {
         if (this.isAdded()) {
@@ -149,30 +130,8 @@ public class ComentariosFragment extends Fragment {
         }
     }
 
-    public void loadKey() {
-        dbr.child("anime").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (Integer.parseInt(ds.child("mall_id").getValue().toString()) == AnimeActivity.anime_previous.getMal_id()) {
-                            KEY_COMENTARIO = ds.getKey();
-                        }
-                    }
-                }
-                loadComentarios();
-                loadListComments();
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-    }
-
     public void loadListComments() {
-        dbr.child("anime").child(KEY_COMENTARIO).child("comentarios").addValueEventListener(new ValueEventListener() {
+        dbr.child("anime").child(String.valueOf(AnimeActivity.anime_previous.getMal_id())).child("comentarios").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 comentarios.clear();
@@ -193,7 +152,6 @@ public class ComentariosFragment extends Fragment {
                 }
                 loadSpinner();
                 verifyComment();
-                sendComment();
                 orderList(sp_filtro.getSelectedItemPosition());
                 if (!first_time) {
                     loadComentarios();
@@ -212,12 +170,16 @@ public class ComentariosFragment extends Fragment {
     public void loadUser() {
         Gson gson = new Gson();
         String json = pref.getString("usuario", "");
+        user_id = pref.getString("id","");
         user = gson.fromJson(json, User.class);
+        loadListComments();
         if (!CenterActivity.login) {
             btn_enviar.getLayoutParams().height = 0;
             et_comentario.getLayoutParams().height = 0;
             btn_enviar.requestLayout();
             et_comentario.requestLayout();
+        }else{
+            sendComment();
         }
     }
 
@@ -229,14 +191,13 @@ public class ComentariosFragment extends Fragment {
                 if (!comentario.isEmpty()) {
                     ArrayList<String> likes = new ArrayList<>();
                     ArrayList<String> dislikes = new ArrayList<>();
-                    comentarios.add(new Comentario(comentario, user.getCorreo(), likes, dislikes));
+                    comentarios.add(new Comentario(user_id,comentario, user.getCorreo(), likes, dislikes));
                     if (KEY_COMENTARIO.isEmpty()) {
-                        dbr.child("anime").push().setValue(new AnimeComentarios(AnimeActivity.anime_previous.getMal_id(), comentarios));
+                        dbr.child("anime").child(String.valueOf(AnimeActivity.anime_previous.getMal_id())).setValue(new AnimeComentarios(AnimeActivity.anime_previous.getMal_id(), comentarios));
                     } else {
                         dbr.child("anime").child(KEY_COMENTARIO).child("comentarios").setValue(comentarios);
                     }
                     et_comentario.setText("");
-                    loadKey();
                 } else {
                     Toast.makeText(getContext(), "Ingresa un comentario", Toast.LENGTH_SHORT).show();
                 }
@@ -248,7 +209,7 @@ public class ComentariosFragment extends Fragment {
 
     public void loadComentarios() {
         lym = new LinearLayoutManager(getContext());
-        adapter = new AdapterComentario(getContext(), comentarios_filter, users, dbr, KEY_COMENTARIO);
+        adapter = new AdapterComentario(getContext(), comentarios_filter, users, dbr, String.valueOf(AnimeActivity.anime_previous.getMal_id()));
         rv_c.setLayoutManager(lym);
         rv_c.setAdapter(adapter);
     }

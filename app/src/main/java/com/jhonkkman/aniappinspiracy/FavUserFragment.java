@@ -124,7 +124,7 @@ public class FavUserFragment extends Fragment {
                 public void run() {
                     loadAnime((animesFav.get(cont)));
                 }
-            },500);
+            },1500);
         }
     }
 

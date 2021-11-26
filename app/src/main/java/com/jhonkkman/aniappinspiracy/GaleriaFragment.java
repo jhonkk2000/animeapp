@@ -55,23 +55,17 @@ public class GaleriaFragment extends Fragment {
                     ArrayList<Picture> pictures = response.body().getPictures();
                     ArrayList<Picture> lista1 = new ArrayList<>();
                     ArrayList<Picture> lista2 = new ArrayList<>();
-                    ArrayList<Picture> lista3 = new ArrayList<>();
                     int pos = 0;
                     for (int i = 0; i < pictures.size()/2; i++) {
                         if(pos==0){
                             lista1.add(pictures.get(i));
                             pos=1;
                         }else{
-                            if(pos==1){
                                 lista2.add(pictures.get(i));
-                                pos=2;
-                            }else{
-                                lista3.add(pictures.get(i));
                                 pos=0;
-                            }
                         }
                     }
-                    loadGaleria(lista1,lista2,lista3);
+                    loadGaleria(lista1,lista2);
                 }else{
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -89,9 +83,9 @@ public class GaleriaFragment extends Fragment {
         });
     }
 
-    public void loadGaleria(ArrayList<Picture> lista1,ArrayList<Picture> lista2,ArrayList<Picture> lista3){
+    public void loadGaleria(ArrayList<Picture> lista1,ArrayList<Picture> lista2){
         lym = new LinearLayoutManager(getContext());
-        adapter = new AdapterGaleria(lista1,lista2,lista3,getContext(),getActivity());
+        adapter = new AdapterGaleria(lista1,lista2,getContext(),getActivity(),"galeria");
         rv_g.setLayoutManager(lym);
         rv_g.setAdapter(adapter);
         ly_nodata.setVisibility(View.INVISIBLE);

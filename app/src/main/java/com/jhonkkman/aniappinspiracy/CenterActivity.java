@@ -112,6 +112,17 @@ public class CenterActivity extends AppCompatActivity {
         loadUser();
         updateUserLocal();
         updateFav();
+        /*dbr.child("extras").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                extras = snapshot.getValue(Extra.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });*/
         loadMenuItems();
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

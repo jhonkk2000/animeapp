@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
@@ -88,7 +89,9 @@ public class AdapterSeasonAnime extends RecyclerView.Adapter<AdapterSeasonAnime.
         }
 
         public void loadData(AnimeItem animeItem, Context context) {
-            Glide.with(context).load(animeItem.getImage_url()).into(iv_anime);
+            RequestOptions myOptions = new RequestOptions()
+                    .override(200, 350);
+            Glide.with(context).asBitmap().apply(myOptions).load(animeItem.getImage_url()).into(iv_anime);
             tv_nombre.setText(animeItem.getTitle());
         }
     }

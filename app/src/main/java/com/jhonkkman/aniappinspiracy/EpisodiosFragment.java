@@ -37,6 +37,7 @@ public class EpisodiosFragment extends Fragment {
     private int episodios;
     private String url="";
     private ProgressBar pb_episodes;
+    //private boolean avaibleLat;
 
     public EpisodiosFragment() {
 
@@ -55,6 +56,7 @@ public class EpisodiosFragment extends Fragment {
         rv_episodios.setVisibility(View.VISIBLE);
         pb_episodes = view.findViewById(R.id.pb_episodes);
         episodios = getArguments().getInt("ep");
+        //avaibleLat = getArguments().getBoolean("al");
         url = getArguments().getString("url");
         //testEpisodes();
         //verify();

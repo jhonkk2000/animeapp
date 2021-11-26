@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.jhonkkman.aniappinspiracy.data.models.AnimeItem;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -101,34 +102,38 @@ public class AdapterPlayers extends RecyclerView.Adapter<AdapterPlayers.ViewHold
             } else {
                 //btn_download.setEnabled(false);
                 //btn_download.setVisibility(View.INVISIBLE);
-                if(type.equals("lat")){
+                if (type.equals("lat")) {
                     tv_reproductor.setText("Reproductor Latino");
-                }else{
-                    tv_reproductor.setText("Reproductor secundario");
+                } else {
+                    if (type.equals("latP")) {
+                        tv_reproductor.setText("Reproductor Latino Premium");
+                    } else {
+                        tv_reproductor.setText("Reproductor secundario");
+                    }
                 }
             }
             btn_reproducir.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    /*if(CenterActivity.login){
-                        dbr.child(key).child("last_anime_view").addListenerForSingleValueEvent(new ValueEventListener() {
+                    if (CenterActivity.login) {
+                        dbr.child(key).child("last_anime").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                ArrayList<Integer> ids = new ArrayList();
-                                for (DataSnapshot ds: snapshot.getChildren()){
-                                    ids.add(Integer.parseInt(ds.getValue().toString()));
+                                ArrayList<AnimeItem> ids = new ArrayList();
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    ids.add(ds.getValue(AnimeItem.class));
                                 }
-                                if(ids.size()==4){
+                                if (ids.size() >= 10) {
                                     ids.remove(0);
                                 }
                                 for (int i = 0; i < ids.size(); i++) {
-                                    if(ids.get(i)==AnimeActivity.anime_previous.getMal_id()){
+                                    if (ids.get(i).getMal_id() == AnimeActivity.anime_previous.getMal_id()) {
                                         ids.remove(i);
                                         break;
                                     }
                                 }
-                                ids.add(AnimeActivity.anime_previous.getMal_id());
-                                dbr.child(key).child("last_anime_view").setValue(ids);
+                                ids.add(AnimeActivity.anime_previous);
+                                dbr.child(key).child("last_anime").setValue(ids);
                             }
 
                             @Override
@@ -136,8 +141,8 @@ public class AdapterPlayers extends RecyclerView.Adapter<AdapterPlayers.ViewHold
 
                             }
                         });
-                    }*/
-                    if (type.equals("primary")) {
+                    }
+                    if (type.equals("primary") || type.equals("latP")) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.parse(video), "video/*");
                         context.startActivity(Intent.createChooser(intent, "Reproducir video usando..."));

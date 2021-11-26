@@ -13,12 +13,12 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="80dp"
-            android:layout_height="120dp"
+            android:layout_height="150dp"
             android:focusable="true"
             android:clickable="true"
-            app:cardCornerRadius="10dp"
-            app:strokeColor="@color/dark_red"
-            app:strokeWidth="2dp">
+            android:layout_weight="0.3"
+            android:layout_marginEnd="5dp"
+            app:cardCornerRadius="5dp">
 
             <ImageView
                 android:id="@+id/iv_anime_personaje"
@@ -27,35 +27,36 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ijiranaide_nagatoro_san"/>
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_carousel_text"
+                android:paddingBottom="10dp"
+                android:paddingTop="50dp"
+                android:layout_gravity="bottom">
+                <TextView
+                    android:id="@+id/tv_anime_personaje"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nombre_personaje"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
+
+
+
         </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/tv_anime_personaje"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nombre_personaje"
-            android:layout_weight="1"
-            android:layout_marginLeft="5dp"
-            android:textSize="12sp"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv_actor_personaje"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nombre_actor"
-            android:layout_marginRight="5dp"
-            android:textSize="12sp"
-            android:layout_gravity="center"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="80dp"
-            android:layout_height="120dp"
+            android:layout_height="150dp"
             android:focusable="true"
             android:clickable="true"
-            app:cardCornerRadius="10dp"
-            app:strokeColor="@color/dark_red"
-            app:strokeWidth="2dp">
+            android:layout_weight="0.3"
+            android:layout_marginStart="5dp"
+            app:cardCornerRadius="5dp">
 
             <ImageView
                 android:id="@+id/iv_actor_personaje"
@@ -63,6 +64,25 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ijiranaide_nagatoro_san"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_carousel_text"
+                android:paddingBottom="10dp"
+                android:paddingTop="50dp"
+                android:layout_gravity="bottom">
+                <TextView
+                    android:id="@+id/tv_actor_personaje"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nombre_actor"
+                    android:layout_marginRight="5dp"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
+
+
 
         </com.google.android.material.card.MaterialCardView>
 

@@ -10,7 +10,7 @@ public class AnimeResource {
 
     private int episodes;
     private int mal_id;
-    private String image_url,trailer_url,title,type,source,status,rating,synopsis="",url;
+    private String image_url,trailer_url,title,type,source,status,rating,synopsis="",url,broadcast;
     private Aired aired;
     private boolean airing;
     private float score;
@@ -32,6 +32,10 @@ public class AnimeResource {
         this.airing = airing;
         this.score = score;
         this.genres = genres;
+    }
+
+    public String getBroadcast() {
+        return broadcast;
     }
 
     public String getUrl() {

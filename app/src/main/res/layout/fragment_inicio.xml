@@ -78,13 +78,31 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/tv_last_anime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/last_anime"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_last_anime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"/>
+
+            <TextView
                 android:id="@+id/tv_season_anime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/season_anime"
                 android:textStyle="bold"
                 android:textSize="25sp"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"/>
             <FrameLayout
@@ -153,8 +171,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.recyclerview.widget.RecyclerView
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:id="@+id/rv_generos_inicio"
                     android:layout_width="match_parent"
                     android:overScrollMode="never"
@@ -170,6 +188,7 @@
                 android:layout_margin="5dp"
                 android:indeterminateDrawable="@drawable/progress"/>
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

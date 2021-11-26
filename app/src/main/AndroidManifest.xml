@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
@@ -16,8 +16,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Aniappinspiracy">
-        <activity android:name=".FoundAnimeActivity"
-            android:parentActivityName=".CenterActivity"/>
+        <activity android:name=".LatinoActivity"></activity>
+        <activity
+            android:name=".FoundAnimeActivity"
+            android:parentActivityName=".CenterActivity" />
         <activity
             android:name=".SearchItemAtivity"
             android:parentActivityName=".CenterActivity"
@@ -31,7 +33,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ImageActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".WebPlayerActivity"
             android:screenOrientation="landscape"
@@ -76,6 +78,7 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_id" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

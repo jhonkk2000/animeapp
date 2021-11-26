@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -18,7 +20,9 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdError;
@@ -31,15 +35,23 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jhonkkman.aniappinspiracy.data.api.ApiVideoServer;
+import com.jhonkkman.aniappinspiracy.data.models.Extra;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.jhonkkman.aniappinspiracy.AnimeActivity.anime_previous;
+import static com.jhonkkman.aniappinspiracy.AnimeActivity.avaibleLat;
 import static com.jhonkkman.aniappinspiracy.CenterActivity.PERMISSION_REQUEST_CODE;
+import static com.jhonkkman.aniappinspiracy.CenterActivity.extras;
 
 public class PlayersActivity extends AppCompatActivity {
 
@@ -57,7 +69,13 @@ public class PlayersActivity extends AppCompatActivity {
     private int episodio;
     private boolean cargaP = false;
     private ProgressBar pb_players;
-    private String url="-/-";
+    private String url = "-/-";
+    private int epCount;
+    private TextView tv_ep;
+    private ImageButton btn_back, btn_forward;
+    int state = 0;
+    AlertLoading dialog = new AlertLoading();
+    ArrayList<String> videosLinks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,24 +84,147 @@ public class PlayersActivity extends AppCompatActivity {
         rv_player = findViewById(R.id.rv_players);
         toolbar = findViewById(R.id.toolbar_player);
         toolbar.setTitle(R.string.reproductor);
+        tv_ep = findViewById(R.id.tv_current_ep);
+        btn_forward = findViewById(R.id.btn_forward_ep);
+        btn_back = findViewById(R.id.btn_back_ep);
         videos = getIntent().getStringArrayListExtra("videos");
         btn_latino = findViewById(R.id.btn_latino);
         btn_latino.setVisibility(View.INVISIBLE);
         episodio = getIntent().getIntExtra("ep", 0);
+        epCount = getIntent().getIntExtra("epC", 0);
+        loadBtnLat();
         pb_players = findViewById(R.id.pb_players);
-        if(getIntent().getStringExtra("urlA")!= null){
+        if (getIntent().getStringExtra("urlA") != null) {
             url = getIntent().getStringExtra("urlA");
         }
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pref = getSharedPreferences("user", MODE_PRIVATE);
         dbr = FirebaseDatabase.getInstance().getReference("users");
         loadAd();
+        loadDataEp();
         try {
-            loadPlayers();
+            loadPlayers(false, episodio);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadBtnLat() {
+        if (avaibleLat) {
+            btn_latino.setEnabled(true);
+            btn_latino.setVisibility(View.VISIBLE);
+            btn_latino.getLayoutParams().height = RecyclerView.LayoutParams.WRAP_CONTENT;
+        } else {
+            btn_latino.setEnabled(false);
+            btn_latino.getLayoutParams().height = 0;
+            btn_latino.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void loadChangeEpisode() {
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("episodesendcurrent", "" + episodio);
+                loadEp(episodio - 1);
+            }
+        });
+        btn_forward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("episodesendcurrent", "" + episodio);
+                loadEp(episodio + 1);
+            }
+        });
+    }
+
+    public void loadEp(int position) {
+        dialog.showDialog(this, "Cargando reproductores");
+        final ArrayList<String>[] videos = new ArrayList[1];
+        videos[0] = new ArrayList<>();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                videos[0] = loadEpisode(position);
+                videosLinks = videos[0];
+            }
+        }).start();
+        updateData(position);
+    }
+
+    public void updateData(int newEp) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (state == 1) {
+                    state = 0;
+                    if (videosLinks.size() != 0 || avaibleLat) {
+                        videos_final.clear();
+                        videosLat.clear();
+                        videos = videosLinks;
+                        cargaP = false;
+                        try {
+                            loadPlayers(true, newEp);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            dialog.dismissDialog();
+                        } catch (Exception e) {
+                        }
+                        AlertUpdate alertUpdate = new AlertUpdate();
+                        alertUpdate.alert = "play";
+                        alertUpdate.showDialog(PlayersActivity.this);
+                        alertUpdate.setTitulo("No disponible");
+                        alertUpdate.btn_ok.setText("Aceptar");
+                        alertUpdate.btn_ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertUpdate.dismissDialog();
+                            }
+                        });
+                        alertUpdate.setDesc("Capitulo no encontrado. Quizas aun no se estrena, de no ser asi, reportalo en nuestro servidor de discord");
+                    }
+                } else {
+                    updateData(newEp);
+                }
+            }
+        }, 1000);
+    }
+
+    public void loadDataEp() {
+        tv_ep.setText("Episodio " + episodio);
+        Log.d("COUNTEPTOTAL", "" + epCount);
+        if (episodio == 1) {
+            btn_back.setVisibility(View.INVISIBLE);
+            btn_back.setEnabled(false);
+        } else {
+            btn_back.setVisibility(View.VISIBLE);
+            btn_back.setEnabled(true);
+        }
+        if (episodio < epCount) {
+            btn_forward.setEnabled(true);
+            btn_forward.setVisibility(View.VISIBLE);
+        } else {
+            btn_forward.setEnabled(false);
+            btn_forward.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public ArrayList<String> loadEpisode(int episode) {
+        String[] anime_name = anime_previous.getUrl().split("/");
+        ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length - 1], episode);
+        ArrayList<String> videos = new ArrayList<>();
+        try {
+            videos = apiVideoServer.getVideoServersSub();
+            state = 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return videos;
     }
 
     public void loadLatino() {
@@ -95,20 +236,23 @@ public class PlayersActivity extends AppCompatActivity {
                 btn_latino.setText("Buscando...");
                 loadAd();
                 String[] anime_name = url.split("/");
-                new Handler().postDelayed(new Runnable() {
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length - 1], episodio);
-                        apiVideoServer.setBASE_URL("https://henaojara.com/");
                         try {
-                            videosLat = apiVideoServer.getVideoServers();
+                            videosLat = apiVideoServer.getVideoServersLat();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         if (videosLat.size() != 0) {
                             videos_final.addAll(videosLat);
                             for (int i = 0; i < videosLat.size(); i++) {
-                                type.add("lat");
+                                if (videosLat.get(i).endsWith(".mp4")) {
+                                    type.add("latP");
+                                } else {
+                                    type.add("lat");
+                                }
                             }
                             adapter.notifyDataSetChanged();
                             btn_latino.setEnabled(false);
@@ -119,17 +263,15 @@ public class PlayersActivity extends AppCompatActivity {
                             alertUpdate.alert = "play";
                             alertUpdate.showDialog(PlayersActivity.this);
                             alertUpdate.setTitulo("No disponible");
-                            btn_latino.setText("No se encontro :(");
-                            alertUpdate.btn_ok.setText("Solicitar");
+                            btn_latino.setText("No se encontro...");
+                            alertUpdate.btn_ok.setText("Aceptar");
                             alertUpdate.btn_ok.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    DatabaseReference dbr = FirebaseDatabase.getInstance().getReference("request");
-                                    dbr.child(anime_previous.getTitle()+"_latino").setValue(0);
                                     alertUpdate.dialog.dismiss();
                                 }
                             });
-                            alertUpdate.setDesc("Vaya!, no hemos encontrado este anime en latino, pero puedes solicitarlo a traves de nuestro servidor de discord, y se agregara lo mas pronto posible, puedes encontrar" +
+                            alertUpdate.setDesc("Vaya!, no hemos encontrado este capitulo en latino, pero puedes solicitarlo a traves de nuestro servidor de discord, y se agregara lo mas pronto posible, puedes encontrar" +
                                     " nuestro discord en el apartado de comunidad");
                         }
                     }
@@ -180,9 +322,8 @@ public class PlayersActivity extends AppCompatActivity {
 
     }
 
-    public void loadPlayers() throws IOException {
+    public void loadPlayers(boolean update, int newEp) throws IOException {
         ApiVideoServer apiVideoServer = new ApiVideoServer();
-        videos_final = new ArrayList<>();
         type = new ArrayList<>();
         new Thread(new Runnable() {
             @Override
@@ -213,35 +354,47 @@ public class PlayersActivity extends AppCompatActivity {
                         }
                     }
                     cargaP = true;
-                }catch (IOException e){
+                } catch (IOException e) {
                 }
             }
         }).start();
         for (int i = 0; i < videos_final.size(); i++) {
             Log.d("VIDEOSFINAL:", videos_final.get(i));
         }
-        loadRecycler();
-        try {
-            AnimeActivity.dialog.dismissDialog();
-        } catch (Exception e) {
-        }
+        loadRecycler(update, newEp);
     }
 
-    public void loadRecycler(){
-        if(cargaP){
+    public void loadRecycler(boolean update, int newEp) {
+        if (cargaP) {
+            if (update) {
+                try {
+                    dialog.dismissDialog();
+                } catch (Exception e) {
+                }
+                episodio = newEp;
+                loadDataEp();
+                //adapter.notifyDataSetChanged();
+                if (avaibleLat) {
+                    btn_latino.setVisibility(View.VISIBLE);
+                    btn_latino.setText("Buscar en latino");
+                    btn_latino.getLayoutParams().height = RecyclerView.LayoutParams.WRAP_CONTENT;
+                    btn_latino.setEnabled(true);
+                }
+            }
             rv_player.setLayoutManager(new LinearLayoutManager(this));
             adapter = new AdapterPlayers(this, videos_final, dbr, pref.getString("id", ""), type);
             rv_player.setAdapter(adapter);
             pb_players.setVisibility(View.INVISIBLE);
-            btn_latino.setVisibility(View.VISIBLE);
+            loadChangeEpisode();
             loadLatino();
-        }else{
+
+        } else {
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    loadRecycler();
+                    loadRecycler(update, newEp);
                 }
-            },200);
+            }, 200);
         }
 
     }

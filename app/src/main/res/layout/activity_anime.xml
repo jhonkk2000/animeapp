@@ -1,236 +1,274 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AnimeActivity">
 
-    <LinearLayout
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_anime"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/transparency"
+        android:theme="@style/Theme.Aniappinspiracy.AppBarOverlay">
 
-        <FrameLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/cbl_anime"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:contentScrim="@color/light_red"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:title="">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                    android:id="@+id/yt_trailer"
-                    android:layout_width="match_parent"
-                    android:layout_height="240dp"
-                    app:autoPlay="false"
-                    app:showYouTubeButton="true"
-                    app:showSeekBar="false"
-                    app:showFullScreenButton="false"
-                    app:showVideoCurrentTime="false"
-                    app:showVideoDuration="false">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                        android:id="@+id/yt_trailer"
+                        android:layout_width="match_parent"
+                        android:layout_height="240dp"
+                        app:autoPlay="false"
+                        app:showFullScreenButton="false"
+                        app:showSeekBar="false"
+                        app:showVideoCurrentTime="false"
+                        app:showVideoDuration="false"
+                        app:showYouTubeButton="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginLeft="140dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_title_anime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/nombre_de_anime"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_year_anime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/veinte_veinte"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_generos_anime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/generouno_gen"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="140dp"
-                        android:layout_gravity="bottom"
-                        android:layout_marginBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/tv_title_anime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:text="@string/nombre_de_anime"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:id="@+id/tv_year_anime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:text="@string/veinte_veinte"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:id="@+id/tv_generos_anime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:text="@string/generouno_gen"
-                            android:textStyle="bold"/>
-
-                    </LinearLayout>
-
-
-
-                </com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:background="@color/light_red"
-                    android:gravity="top"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="140dp"
-                        android:orientation="vertical">
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp">
-
-                            <TextView
-                                android:id="@+id/tv_finalizado"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:text="@string/finalizar"
-                                android:gravity="center"
-                                android:textColor="@color/white"
-                                android:background="@drawable/background_no_live"
-                                android:paddingStart="15dp"
-                                android:textSize="15sp"
-                                android:paddingEnd="15dp"
-                                android:textStyle="bold"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"/>
-
-                            <TextView
-                                android:id="@+id/tv_en_emision"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:text="@string/en_emision"
-                                android:textColor="@color/white"
-                                android:gravity="center"
-                                android:background="@drawable/background_live"
-                                android:paddingStart="15dp"
-                                android:textSize="15sp"
-                                android:paddingEnd="15dp"
-                                android:textStyle="bold"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"/>
-
-                        </FrameLayout>
+                        android:layout_height="80dp"
+                        android:background="@color/light_red"
+                        android:gravity="top"
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
+                            android:layout_marginLeft="140dp"
+                            android:orientation="vertical">
 
-                            <ImageView
+                            <FrameLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_estrella_icon"/>
-                            <TextView
-                                android:id="@+id/tv_stars_anime"
+                                android:layout_marginTop="5dp">
+
+                                <TextView
+                                    android:id="@+id/tv_finalizado"
+                                    android:layout_width="110dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/background_no_live"
+                                    android:gravity="center"
+                                    android:paddingStart="15dp"
+                                    android:paddingTop="5dp"
+                                    android:paddingEnd="15dp"
+                                    android:paddingBottom="5dp"
+                                    android:text="@string/finalizar"
+                                    android:textColor="@color/white"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_en_emision"
+                                    android:layout_width="110dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/background_live"
+                                    android:gravity="center"
+                                    android:paddingStart="15dp"
+                                    android:paddingTop="5dp"
+                                    android:paddingEnd="15dp"
+                                    android:paddingBottom="5dp"
+                                    android:text="@string/en_emision"
+                                    android:textColor="@color/white"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+                            </FrameLayout>
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/estrellas"
-                                android:textStyle="bold"
-                                android:textColor="@color/white"/>
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/ic_estrella_icon" />
+
+                                <TextView
+                                    android:id="@+id/tv_stars_anime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/estrellas"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
 
                         </LinearLayout>
 
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_weight="1"
+                            android:gravity="center|end">
+
+                            <ImageView
+                                android:id="@+id/iv_select_fav"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_fav_icon" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="20dp"
+                            android:gravity="center|end">
+
+                            <ImageView
+                                android:id="@+id/iv_share"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_share_icon" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/light_red"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/tv_broadcast"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/background_no_live"
+                            android:gravity="center"
+                            android:paddingStart="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingEnd="15dp"
+                            android:paddingBottom="5dp"
+                            android:text="@string/finalizar"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_latino"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/background_live"
+                            android:gravity="center"
+                            android:paddingStart="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingEnd="15dp"
+                            android:paddingBottom="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:text="@string/finalizar"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="20dp"
-                        android:gravity="center|end">
-
-                        <ImageView
-                            android:id="@+id/iv_select_fav"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_fav_icon"/>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="20dp"
-                        android:gravity="center|end">
-
-                        <ImageView
-                            android:id="@+id/iv_share"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_share_icon"/>
-                    </RelativeLayout>
                 </LinearLayout>
 
-            </LinearLayout>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="110dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="50dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:transitionName="anime_portada"
+                    app:cardCornerRadius="15dp"
+                    app:strokeColor="@color/dark_red"
+                    app:strokeWidth="4dp">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="110dp"
-                android:layout_height="150dp"
-                android:focusable="true"
-                android:clickable="true"
-                android:layout_gravity="bottom"
-                android:layout_margin="20dp"
-                app:cardCornerRadius="15dp"
-                app:strokeColor="@color/dark_red"
-                android:transitionName="anime_portada"
-                app:strokeWidth="4dp">
+                    <ImageView
+                        android:id="@+id/iv_anime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ijiranaide_nagatoro_san" />
+                </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:id="@+id/iv_anime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ijiranaide_nagatoro_san"/>
-            </com.google.android.material.card.MaterialCardView>
+            </FrameLayout>
 
-        </FrameLayout>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs_anime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/dark_red"
-            app:tabIndicatorColor="@color/white"
-            app:tabTextColor="@color/white"
-            app:tabTextAppearance="@style/TabItemCustom"
-            app:tabMode="scrollable"/>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/vp_anime"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_anime"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </FrameLayout>
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/transparency"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/Theme.Aniappinspiracy.PopupOverlay" />
 
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    </LinearLayout>
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="0dp"
-        android:background="@color/transparency"
-        android:theme="@style/Theme.Aniappinspiracy.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_anime"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/transparency"
-            app:popupTheme="@style/Theme.Aniappinspiracy.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
-</RelativeLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <include layout="@layout/content_anime" />
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

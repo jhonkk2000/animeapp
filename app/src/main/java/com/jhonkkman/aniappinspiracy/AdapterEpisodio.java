@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.jhonkkman.aniappinspiracy.AnimeActivity.anime_previous;
+import static com.jhonkkman.aniappinspiracy.AnimeActivity.avaibleLat;
 
 public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHolderEpisodio> {
 
@@ -45,7 +46,7 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderEpisodio holder, int position) {
-        holder.loadPlayers(context, position + 1,url);
+        holder.loadPlayers(context, position + 1,url,getItemCount());
         holder.loadText(position + 1);
     }
 
@@ -72,7 +73,7 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
             tv_episodio.setText("Episodio " + position);
         }
 
-        public void loadPlayers(Context context, int position,String url) {
+        public void loadPlayers(Context context, int position,String url,int epC) {
             btn_enter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -86,22 +87,26 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
                             videosLinks = videos[0];
                         }
                     }).start();
-                    loadActivity(context,position,url);
+                    loadActivity(context,position,url,epC);
                 }
             });
         }
 
-        public void loadActivity( Context context,int ep,String url) {
+        public void loadActivity( Context context,int ep,String url,int epC) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (state == 1) {
-                        if (videosLinks.size() != 0) {
+                        if (videosLinks.size() != 0 || avaibleLat) {
                             Intent i = new Intent(context, PlayersActivity.class);
                             i.putExtra("videos", videosLinks);
                             i.putExtra("ep",ep);
                             i.putExtra("urlA",url);
+                            i.putExtra("epC",epC);
                             context.startActivity(i);
+                            if(AnimeActivity.dialog.state){
+                                AnimeActivity.dialog.dismissDialog();
+                            }
                         } else {
                             if(AnimeActivity.dialog.state){
                                 AnimeActivity.dialog.dismissDialog();
@@ -110,20 +115,18 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
                             alertUpdate.alert = "play";
                             alertUpdate.showDialog((Activity) context);
                             alertUpdate.setTitulo("No disponible");
-                            alertUpdate.btn_ok.setText("Solicitar");
+                            alertUpdate.btn_ok.setText("Aceptar");
                             alertUpdate.btn_ok.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    DatabaseReference dbr = FirebaseDatabase.getInstance().getReference("request");
-                                    dbr.child(anime_previous.getTitle()).setValue(0);
-                                    alertUpdate.dialog.dismiss();
+                                    alertUpdate.dismissDialog();
                                 }
                             });
                             alertUpdate.setDesc("Vaya!, no hemos encontrado este anime, pero puedes solicitarlo pulsando el boton SOLICITAR o a traves de nuestro servidor de discord, y se agregara lo mas pronto posible, puedes encontrar" +
                                     " nuestro discord en el apartado de comunidad");
                         }
                     } else {
-                        loadActivity(context,ep,url);
+                        loadActivity(context,ep,url,epC);
                     }
                 }
             }, 1000);
@@ -134,7 +137,7 @@ public class AdapterEpisodio extends RecyclerView.Adapter<AdapterEpisodio.ViewHo
             ApiVideoServer apiVideoServer = new ApiVideoServer(anime_name[anime_name.length - 1], episode);
             ArrayList<String> videos = new ArrayList<>();
             try {
-                videos = apiVideoServer.getVideoServers();
+                videos = apiVideoServer.getVideoServersSub();
                 state = 1;
             } catch (IOException e) {
                 e.printStackTrace();
